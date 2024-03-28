@@ -44,6 +44,7 @@
         <button onclick="download('test.html', 'hello')"> download </button>
 
         <input type="file" id="file-selector">
+        <script src="../js/index.js"></script>
 
         <script>
         const fileSelector = document.getElementById('file-selector');
@@ -53,11 +54,12 @@
 
             if (fileList[0].type == "application/x-zip-compressed") {
                 console.log('good');
+                testFunction();
                 // const zipFileReader = new BlobReader(file);
 
-                test = new ZipReader(new BlobReader(file))
+                // test = new ZipReader(new BlobReader(file))
                 // test = new zip.ZipReader(new zip.BlobReader(file))
-                console.log(test)
+                console.log(t)
             }
         });
         </script>
