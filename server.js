@@ -1,7 +1,9 @@
 const express = require('express');
 var http = require('http');
 var fs = require('fs'); 
+const { prototype } = require('module');
 const app = express();
+const PORT = process.env.PORT || 8080;
 
 app.get('/', (req, res) => {
   res
@@ -17,15 +19,8 @@ http.createServer(function (req, res) {
     res.write(data);
     return res.end();
   });
-}).listen(8080);
+}).listen(PORT);
 
 
-
-// Start the server
-// const PORT = process.env.PORT || 8080;
-// app.listen(PORT, () => {
-//   console.log(`App listening on port ${PORT}`);
-//   console.log('Press Ctrl+C to quit.');
-// });
 
 
