@@ -35,6 +35,13 @@ const server = http.createServer((req, res) => {
     console.log(req.url, req.method);
     // myEmitter.emit('log', `${req.url}\t${req.method}`, 'reqLog.txt');
 
+    // if (req.url)
+    console.log(req.method)
+    console.log(req.url)
+    if (req.method == "POST" && req.url.split('/')[0] == 'upload') {
+        console.log('upload test')
+    }
+
     const extension = path.extname(req.url);
 
     let contentType;
