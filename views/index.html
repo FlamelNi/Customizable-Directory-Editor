@@ -7,6 +7,7 @@
 
 
 <!-- <script src="https://deno.land/x/zipjs/index.js" type="module" crossorigin="anonymous"></script> -->
+<script src="../lib/jszip.js" type="module" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -56,13 +57,19 @@
                 console.log('good');
                 testFunction();
 
-                async function uploadFile() {
-                    let formData = new FormData(); 
-                    formData.append("fileupload", fileList[0]);
-                        await fetch('http://localhost/upload', {
-                        method: "POST", 
-                        body: formData
-                    });
+                function uploadFile() {
+                    var zip = new JSZip();
+
+                    // https://stuk.github.io/jszip/documentation/examples.html
+                    // todo:--------------------------------------------------------------
+
+
+                    // let formData = new FormData(); 
+                    // formData.append("fileupload", fileList[0]);
+                    //     await fetch('http://localhost/upload', {
+                    //     method: "POST", 
+                    //     body: formData
+                    // });
                 }
                 uploadFile();
                 //https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/JavaScript-Nodejs-File-Upload-Example-Ajax
