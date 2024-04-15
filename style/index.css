@@ -11,4 +11,47 @@
 .top-menu-bar div {
     margin-right: 20px;
 }
-  
+
+.input-row {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;            /* default value; can be omitted */
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  /* background-color: lightblue; */
+  padding: 10px;
+}
+
+
+.row-function-col {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;            /* default value; can be omitted */
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  /* background-color: lightblue; */
+}
+
+.col-function-row {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;            /* default value; can be omitted */
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  padding: 0px;
+  /* background-color: lightblue; */
+}
+/* .col-function-row button {
+  flex-basis: 50px;
+  flex-grow: 1;
+} */
+
+.col {
+  max-width: 300px;
+  min-width: 150px;
+  margin-right: 5px;
+  flex-grow: 1;
+}
+
+
+
