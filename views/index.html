@@ -25,7 +25,6 @@
 
 <script src="../js/index.js"></script>
 <link rel="stylesheet" href="../style/index.css">
-
 <div class="top-menu-bar">
     <div style="flex-basis: 200px;">
         <h2 class="display-4" style="text-align: center; font-size: 30px;">Directory editor</h1>
@@ -41,8 +40,15 @@
     </div>
     
 </div>
+<div class="row-column-menu">
+    <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick=""> Add new row </button>
+    <button class="btn btn-primary" style="flex-grow: 0.7" onclick=""> Add new column </button>
+    <button class="btn btn-danger" style="flex-grow: 0.7;" onclick=""> Delete last column </button>
+    <button class="btn btn-secondary" style="flex-grow: 0.7; margin-left: 300px;" onclick="testFunction()"> Test </button>
+    <button class="btn btn-secondary" style="flex-grow: 0.7;" onclick="render_editor()"> Render </button>
+</div>
 
-<div>   
+<div id="render_div">
     <div style="padding: 1em; margin: auto; align-self: center;">
 
 <!-- 
@@ -84,14 +90,9 @@
 
     </div> -->
 
-
-
-
     <div style="">
         <div class="input-row">
             <div class="d-grid gap-2" style="min-width: 160px; max-width: 160px;">
-                <button class="btn btn-primary" style="flex-grow: 0.7" onclick=""> Add new column </button>
-                <button class="btn btn-danger" style="flex-grow: 0.7" onclick=""> Delete last column </button>
             </div>
 
             <div class="col">
