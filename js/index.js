@@ -1,29 +1,48 @@
 
-var t = 'hello';
-function testFunction() {
-    t = 
-`
-this is test with
-multi line string
-`;
 
-    // x = `${1+2}`
-    // console.log(x);
-    // new zip.BlobReader(file);
+var directory_data = reset_data();
+
+
+var t = 'hello';
+
+function testFunction() {
+    read_HTML_to_update();
+    console.log(directory_data);
+    // console.log(directory_data.rows);
+    // console.log(JSON.stringify(directory_data));
+
+    // getTxt = function (){
+    //     $.ajax({
+    //         // url:'/js/index.js',
+    //         url:'template/index.html',
+    //         success: function (data){
+    //             console.log(data);
+    //             //parse your data here
+    //             //you can split into lines using data.split('\n') 
+    //             //an use regex functions to effectively parse it
+
+    //             let new_element = document.createRange()
+    //             .createContextualFragment(data);
+
+    //             document.body.appendChild(new_element);
+
+    //         }
+    //     });
+    // }
+    // getTxt();
 }
 
 
 
-var directory_data = reset_data();
 
 function reset_data() {
     var temp = empty_data();
     temp.column_row = ['Col 1', 'Col 2'];
-    return Object.create(temp);
+    return JSON.parse(JSON.stringify(temp));
 }
 function empty_data() {
     var temp = {
-        column_row: Object.create([]),
+        column_row: [],
     
         /*
         rows: [
@@ -31,13 +50,13 @@ function empty_data() {
             ['', ''],
         ],
         */
-        rows: Object.create([]),
+        rows: [],
         // rows: [
         //     ['ad', 'ry'],
         //     ['adf', 'wer'],
         // ],
     };
-    return Object.create(temp);
+    return JSON.parse(JSON.stringify(temp));
 }
 
 function set_test_data() {
@@ -153,13 +172,6 @@ function read_HTML_to_update() {
 
 function new_row_at(i) {
     read_HTML_to_update();
-
-    // rows = directory_data.rows
-    // rows.push([]);
-    // for (x = rows.length - 1; x > i; x--) {
-    //     rows[x] = rows[x-1];
-    // }
-    // rows[i] = [];
     
     directory_data.rows.splice(i, 0, []);
     for (const c in directory_data.column_row) {
@@ -222,5 +234,29 @@ function swap_col(i, j) {
 
 }
 
+function get_template_HTML(f) {
+    getTxt = function (){
+        $.ajax({
+            // url:'/js/index.js',
+            url:'template/index.html',
+            success: function (data){
+                f(data);
+            }
+        });
+    }
+    getTxt();
+}
+
+function export_directory_data(curr_zip) {
+    read_HTML_to_update();
+    curr_zip.file("directory", JSON.stringify(directory_data));
+}
+
+function import_directory_data(curr_zip) {
+    curr_zip.file("directory").async("string").then(function(result) {
+        directory_data = JSON.parse(result);
+        render_editor();
+    });
+}
 
 

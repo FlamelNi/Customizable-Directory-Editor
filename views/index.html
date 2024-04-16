@@ -24,6 +24,7 @@
 <!-- <div style="background-image: url('background.jpg');"> -->
 
 <script src="../js/index.js"></script>
+<script src="../js/directory.js"></script>
 <link rel="stylesheet" href="../style/index.css">
 <div class="top-menu-bar">
     <div style="flex-basis: 200px;">
@@ -152,17 +153,27 @@
     }
     function download_directory() {
         var promise = null;
+        curr_zip = new JSZip();
+        // call index.js to add something to this zip
+        export_directory_data(curr_zip);
+        export_directory_js(curr_zip);
 
-        if (curr_zip != null){
-            promise = curr_zip.generateAsync({type : "blob"}).then(function (blob) {
-                saveFile(blob, "directory.zip");
-            }, function (err) {
-                alert("error in download");
-            });
-        } else {
-            //curr_zip not initialized
-            alert("error: directory not initialized")
-        }
+        
+        get_template_HTML(function(data) {
+            curr_zip.file("index.html", data);
+            
+            if (curr_zip != null){
+                promise = curr_zip.generateAsync({type : "blob"}).then(function (blob) {
+                    saveFile(blob, "directory.zip");
+                }, function (err) {
+                    alert("error in download");
+                });
+            } else {
+                //curr_zip not initialized
+                alert("error: directory not initialized")
+            }
+        });
+        
     }
 
     function saveFile(blob, filename) {
@@ -198,6 +209,8 @@
                         // zip.file("hello.txt").async("string"); // a promise of "Hello World\n"
 
                         // curr_zip.file("test.txt", "test");
+
+                        import_directory_data(curr_zip);
                     });
                 }
                 uploadFile();
