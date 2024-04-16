@@ -7,26 +7,34 @@ this is test with
 multi line string
 `;
 
-    x = `${1+2}`
-    console.log(x);
+    // x = `${1+2}`
+    // console.log(x);
     // new zip.BlobReader(file);
+
+
+    read_HTML_to_update();
 }
 
-directory_data = {
-    // column_row: [],
-    column_row: ['test', 'test2'],
+var directory_data = empty_data();
 
-    /*
-    rows: [
-        ['', ''],
-        ['', ''],
-    ],
-    */
-   // rows: [],
-   rows: [
-        ['ad', 'ry'],
-        ['adf', 'wer'],
-    ],
+function empty_data() {
+    var temp = {
+        column_row: [],
+        column_row: ['test', 'test2'],
+    
+        /*
+        rows: [
+            ['', ''],
+            ['', ''],
+        ],
+        */
+        rows: [],
+        // rows: [
+        //     ['ad', 'ry'],
+        //     ['adf', 'wer'],
+        // ],
+    };
+    return Object.create(temp);
 }
 
 function get_HTML_column(i) {
@@ -42,7 +50,7 @@ function get_HTML_column(i) {
                 <button class="btn btn-primary" type="button" style="flex-grow: 0.2">&#9655;</button>
             </div>
             
-            <input class="form-control col" type="text" placeholder="column name" value="${col}">
+            <input id="col_${i}" class="form-control col" type="text" placeholder="column name" value="${col}">
         </div>
     `;
 
@@ -78,19 +86,20 @@ function get_HTML_row(i) {
         <div style="">
             <div class="input-row">
                 <div class="row-function-col" style="min-width: 160px; max-width: 160px;">
-                    <button class="btn btn-primary" style="flex-grow: 0.7" onclick=""> Insert </button>
+                    <button class="btn btn-primary" style="flex-grow: 0.7" onclick="new_row_at(${i+1})"> Insert </button>
                     <button class="btn btn-danger" style="flex-grow: 0.7" onclick=""> Delete </button>
                 </div>
     `;
     for (j = 0; j < directory_data.column_row.length; j++) {
         col = directory_data.column_row[j];
 
+        //row_{#col}_{#row}
         result +=
         `
             <div class="col">
-                <input class="form-control col" type="text" placeholder="${col}" value=${row[j]}>
+                <input id="row_${j}_${i}" class="form-control col" type="text" placeholder="${col}" value=${row[j]}>
             </div>
-        `
+        `;
     }
     result +=
     `
@@ -115,6 +124,37 @@ function render_editor() {
     result += get_HTML_all_rows();
     document.getElementById("render_div").innerHTML = result;
 }
+
+function read_HTML_to_update() {
+    for (i = 0; i < directory_data.column_row.length; i++) {
+        temp = document.getElementById(`col_${i}`).value;
+        directory_data.column_row[i] = temp;
+    }
+
+    for (i = 0; i < directory_data.column_row.length; i++) {
+        for (j = 0; j < directory_data.rows.length; j++) {
+            t = document.getElementById(`row_${i}_${j}`).value;
+            directory_data.rows[j][i] = t;
+        }
+    }
+}
+
+function new_row_at(i) {
+    read_HTML_to_update();
+
+    rows = directory_data.rows
+    rows.push([]);
+    for (x = rows.length - 1; x > i; x--) {
+        rows[x] = rows[x-1];
+    }
+    rows[i] = [];
+    for (c in directory_data.column_row) {
+        rows[i].push("");
+    }
+
+    render_editor();
+}
+
 
 
 

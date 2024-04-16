@@ -41,7 +41,7 @@
     
 </div>
 <div class="row-column-menu">
-    <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick=""> Add new row </button>
+    <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_row_at(0)"> Add new row </button>
     <button class="btn btn-primary" style="flex-grow: 0.7" onclick=""> Add new column </button>
     <button class="btn btn-danger" style="flex-grow: 0.7;" onclick=""> Delete last column </button>
     <button class="btn btn-secondary" style="flex-grow: 0.7; margin-left: 300px;" onclick="testFunction()"> Test </button>
@@ -140,7 +140,9 @@
     
 </div>
 
-
+<script>
+    render_editor();
+</script>
 
 <script>
     var curr_zip = null;
