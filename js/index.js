@@ -10,17 +10,20 @@ multi line string
     // x = `${1+2}`
     // console.log(x);
     // new zip.BlobReader(file);
-
-
-    read_HTML_to_update();
 }
 
-var directory_data = empty_data();
 
+
+var directory_data = reset_data();
+
+function reset_data() {
+    var temp = empty_data();
+    temp.column_row = ['Col 1', 'Col 2'];
+    return Object.create(temp);
+}
 function empty_data() {
     var temp = {
-        column_row: [],
-        column_row: ['test', 'test2'],
+        column_row: Object.create([]),
     
         /*
         rows: [
@@ -28,7 +31,7 @@ function empty_data() {
             ['', ''],
         ],
         */
-        rows: [],
+        rows: Object.create([]),
         // rows: [
         //     ['ad', 'ry'],
         //     ['adf', 'wer'],
@@ -37,17 +40,26 @@ function empty_data() {
     return Object.create(temp);
 }
 
+function set_test_data() {
+    directory_data = reset_data();
+    directory_data.rows.push(["1111", "2222"]);
+    directory_data.rows.push(["3333", "4444"]);
+    directory_data.rows.push(["5555", "6666"]);
+
+    render_editor();
+}
+
 function get_HTML_column(i) {
     col = directory_data.column_row[i];
     result = 
     `
         <div class="col">
             <div id="${i}" class="col-function-row col" style="margin-bottom: 5px;">
-                <button class="btn btn-primary" type="button" style="flex-grow: 0.2;">&#9665;</button>
+                <button class="btn btn-primary" type="button" style="flex-grow: 0.2;" onclick="swap_col(${i}, ${i-1})">&#9665;</button>
                 <div style="flex-basis: 15px;"></div>
                 <button class="btn btn-warning" type="button" style="">Sort</button>
                 <div style="flex-basis: 15px;"></div>
-                <button class="btn btn-primary" type="button" style="flex-grow: 0.2">&#9655;</button>
+                <button class="btn btn-primary" type="button" style="flex-grow: 0.2" onclick="swap_col(${i}, ${i+1})">&#9655;</button>
             </div>
             
             <input id="col_${i}" class="form-control col" type="text" placeholder="column name" value="${col}">
@@ -87,7 +99,7 @@ function get_HTML_row(i) {
             <div class="input-row">
                 <div class="row-function-col" style="min-width: 160px; max-width: 160px;">
                     <button class="btn btn-primary" style="flex-grow: 0.7" onclick="new_row_at(${i+1})"> Insert </button>
-                    <button class="btn btn-danger" style="flex-grow: 0.7" onclick=""> Delete </button>
+                    <button class="btn btn-danger" style="flex-grow: 0.7" onclick="delete_row_at(${i})"> Delete </button>
                 </div>
     `;
     for (j = 0; j < directory_data.column_row.length; j++) {
@@ -97,7 +109,7 @@ function get_HTML_row(i) {
         result +=
         `
             <div class="col">
-                <input id="row_${j}_${i}" class="form-control col" type="text" placeholder="${col}" value=${row[j]}>
+                <input id="row_${j}_${i}" class="form-control col" type="text" placeholder="${col} entry" value=${row[j]}>
             </div>
         `;
     }
@@ -142,19 +154,73 @@ function read_HTML_to_update() {
 function new_row_at(i) {
     read_HTML_to_update();
 
-    rows = directory_data.rows
-    rows.push([]);
-    for (x = rows.length - 1; x > i; x--) {
-        rows[x] = rows[x-1];
+    // rows = directory_data.rows
+    // rows.push([]);
+    // for (x = rows.length - 1; x > i; x--) {
+    //     rows[x] = rows[x-1];
+    // }
+    // rows[i] = [];
+    
+    directory_data.rows.splice(i, 0, []);
+    for (const c in directory_data.column_row) {
+        directory_data.rows[i].push("");
     }
-    rows[i] = [];
-    for (c in directory_data.column_row) {
-        rows[i].push("");
-    }
+    
 
     render_editor();
 }
 
+function delete_row_at(i) {
+    read_HTML_to_update();
+
+    directory_data.rows.splice(i, 1);
+
+    render_editor();
+}
+
+function add_col() {
+    read_HTML_to_update();
+
+    directory_data.column_row.push("New Col");
+
+    directory_data.rows.forEach(r => {
+        r.push("");
+    });
+
+    render_editor();
+}
+
+function delete_col() {
+    read_HTML_to_update();
+
+    directory_data.column_row.pop();
+    directory_data.rows.forEach(r => {
+        r.pop();
+    });
+
+    render_editor();
+}
+
+function swap_col(i, j) {
+    var col_size = directory_data.column_row.length;
+    if (i < 0 || col_size <= i || j < 0 || col_size <= j) {
+        return;
+    }
+    read_HTML_to_update();
+
+    var temp = directory_data.column_row[i];
+    directory_data.column_row[i] = directory_data.column_row[j];
+    directory_data.column_row[j] = temp;
+
+    directory_data.rows.forEach(r => {
+        var temp = r[i];
+            r[i] = r[j];
+            r[j] = temp;
+    });
+
+    render_editor()
+
+}
 
 
 
