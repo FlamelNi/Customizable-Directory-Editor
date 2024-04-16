@@ -22,7 +22,7 @@
   flex-direction: row;            /* default value; can be omitted */
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
-  justify-content: space-between;
+  /* justify-content: space-between; */
   /* background-color: lightblue; */
   padding: 10px;
 }

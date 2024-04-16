@@ -234,18 +234,6 @@ function swap_col(i, j) {
 
 }
 
-function get_template_HTML(f) {
-    getTxt = function (){
-        $.ajax({
-            // url:'/js/index.js',
-            url:'template/index.html',
-            success: function (data){
-                f(data);
-            }
-        });
-    }
-    getTxt();
-}
 
 function export_directory_data(curr_zip) {
     read_HTML_to_update();

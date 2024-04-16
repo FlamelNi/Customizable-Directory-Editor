@@ -159,19 +159,22 @@
         export_directory_js(curr_zip);
 
         
-        get_template_HTML(function(data) {
+        get_template_HTML(function (data) {
             curr_zip.file("index.html", data);
-            
-            if (curr_zip != null){
-                promise = curr_zip.generateAsync({type : "blob"}).then(function (blob) {
-                    saveFile(blob, "directory.zip");
-                }, function (err) {
-                    alert("error in download");
-                });
-            } else {
-                //curr_zip not initialized
-                alert("error: directory not initialized")
-            }
+            get_template_CSS(function (data) {
+                curr_zip.file("index.css", data);
+
+                if (curr_zip != null) {
+                    promise = curr_zip.generateAsync({type : "blob"}).then(function (blob) {
+                        saveFile(blob, "directory.zip");
+                    }, function (err) {
+                        alert("error in download");
+                    });
+                } else {
+                    //curr_zip not initialized
+                    alert("error: directory not initialized")
+                }
+            });
         });
         
     }

@@ -32,12 +32,13 @@ const serveFile = async (filePath, contentType, response) => {
 }
 
 const server = http.createServer((req, res) => {
-    console.log(req.url, req.method);
+    // console.log(req.url, req.method);
     // myEmitter.emit('log', `${req.url}\t${req.method}`, 'reqLog.txt');
 
     // if (req.url)
-    console.log(req.method)
-    console.log(req.url)
+    // console.log(req.method)
+    // console.log(req.url)
+
     if (req.method == "POST" && req.url.split('/')[0] == 'upload') {
         console.log('upload test')
     }
@@ -77,6 +78,12 @@ const server = http.createServer((req, res) => {
                 : contentType === 'text/html'
                     ? path.join(__dirname, 'views', req.url)
                     : path.join(__dirname, req.url);
+
+    // console.log(req.url)
+    // console.log(filePath)
+    if (req.url.includes("/static/")) {
+        filePath = path.join(__dirname, req.url);
+    }
 
     // makes .html extension not required in the browser
     if (!extension && req.url.slice(-1) !== '/') filePath += '.html';
