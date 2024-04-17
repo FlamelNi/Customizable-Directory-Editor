@@ -15,7 +15,7 @@
 
 .menu-bar {
   flex-grow: 1;
-  background-color: #0c2b63;
+  background-color: #0c2a63f1;
   padding: 2em;
   margin: 0px;
 
@@ -34,7 +34,7 @@
 
 .main-window {
   flex-grow: 8;
-  background-color: #103882;
+  background-color: #103882a9;
 
   display: flex;                  /* establish flex container */
   flex-direction: column;
@@ -60,7 +60,7 @@
 }
 
 .main-content {
-  height: 75%;
+  height: 80%;
 }
 
 .main-bot {
@@ -68,5 +68,35 @@
   height: 5%;
 }
 
+.col {
+}
+
+
+.col-bar {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  background-color: #081c41f1;
+
+}
+.row-1 {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  background-color: #0e2f6df1;
+
+}
+.row-2 {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  background-color: #103882f1;
+}
 
 
