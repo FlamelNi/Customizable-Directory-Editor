@@ -156,10 +156,11 @@
         curr_zip = new JSZip();
         // call index.js to add something to this zip
         export_directory_data(curr_zip);
-        export_directory_js(curr_zip);
+        // export_directory_js(curr_zip);
 
 
         template_file_names = ["index.html", "index.css", "background_1.jpg"];
+
         get_template_files(template_file_names, curr_zip, function (data) {
             get_template_file("index.js", function (data) {
                 curr_zip.file("index.js", export_directory_data_string() + data);

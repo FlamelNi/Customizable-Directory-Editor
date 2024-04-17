@@ -58,35 +58,7 @@ function get_template_file(filename, f) {
 function export_directory_js(curr_zip) {
     // result = 
     // `
-        var status = {
-            'directory': 0,
-            'news': 1,
-            'traffic': 2,
-            'weather': 3,
-        };
-        var curr_status = 0;
         
-        function render_content() {
-            if (curr_status == status.directory) {
-                get_directory_HTML();
-            } else {
-
-            }
-        }
-
-        function get_directory_HTML() {
-
-            result = 
-            `
-            `;
-            return result;
-        }
-
-        function change_curr_status(x) {
-            curr_status = x;
-            render_content();
-        }
-
 
 
     // `;

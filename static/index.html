@@ -16,8 +16,13 @@
         </div>
         
         <div class="menu-btn-div">
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick=""><h1 class="display-4">Directory</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick=""><h1 class="display-4">News</h1></button>
+            <script>
+                window.onload = function(){
+                    change_curr_status(dir_status.directory);
+                };
+            </script>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.directory)"><h1 class="display-4">Directory</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.news)"><h1 class="display-4">News</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick=""><h1 class="display-4">Local Traffic</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick=""><h1 class="display-4">Weather</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick=""><h1 class="display-4">Ammenities</h1></button>
@@ -28,7 +33,7 @@
     <div class="main-window">
         <div class="main-top">
             <div>
-                <h1 class="display-2">Directory</h1>
+                <h1 class="display-2" id="title">Directory</h1>
             </div>
             <div>
                 time
@@ -36,129 +41,16 @@
 
         </div>
 
-        <div class="main-content">
-
-
-            <div class="col-bar">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
+        <div class="main-content" >
+            <div id="news-div" style="display: none;">
+                <!-- <div style="position: absolute; background-color: black; width: 50%; z-index: 10;"><br><br></div> -->
+                <!-- <div style="position: absolute; background-color: #103882; width: 50%; z-index: 10; top: 130;"><br><br></div> -->
+                <div>
+                    <div style="position: relative; background-color: #103882; width: 40%; z-index: 10; top: 35; left: 30%"><br><br></div>
+                    <rssapp-carousel id="mObA35s7fR1nvgeg"></rssapp-carousel><script src="https://widget.rss.app/v1/carousel.js" type="text/javascript" async></script>
                 </div>
             </div>
-            <div class="row-1">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-2">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-1">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-2">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-1">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-2">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-1">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-2">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-1">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-            </div>
-            <div class="row-2">
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
-                <div class="col">
-                    <h1>col name</h1>
-                </div>
+            <div id="content-placeholder">
             </div>
         </div>
 

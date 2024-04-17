@@ -64,6 +64,14 @@ function set_test_data() {
     directory_data.rows.push(["1111", "2222"]);
     directory_data.rows.push(["3333", "4444"]);
     directory_data.rows.push(["5555", "6666"]);
+    directory_data.rows.push(["asdf", "zxcv"]);
+    directory_data.rows.push(["qwer", "uiop"]);
+    directory_data.rows.push(["hjkl", "vbnm"]);
+    directory_data.rows.push(["897987", "34535"]);
+    directory_data.rows.push(["tgbredc", "jumui"]);
+    directory_data.rows.push(["alpha", "beta"]);
+    directory_data.rows.push(["gamma", "delta"]);
+    directory_data.rows.push(["seta", "psi"]);
 
     render_editor();
 }

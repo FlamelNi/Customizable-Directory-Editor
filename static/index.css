@@ -20,6 +20,8 @@
   padding: 2em;
   margin: 0px;
 
+  min-width: 25%;
+  max-width: 25%;
 }
 
 .menu-btn-div {
@@ -92,6 +94,8 @@
   justify-content: space-between;
   /* background-color: #103882f1; */
   background-color: #103882;
+
+  height: 8%;
 }
 .row-2 {
   display: flex;                  /* establish flex container */
@@ -101,6 +105,8 @@
   justify-content: space-between;  
   /* background-color: #0e2f6df1; */
   background-color: #0e2f6d;
+  
+  height: 8%;
 }
 
 
