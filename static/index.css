@@ -15,7 +15,8 @@
 
 .menu-bar {
   flex-grow: 1;
-  background-color: #0c2a63f1;
+  /* background-color: #0c2a63f1; */
+  background-color: #0c2a63;
   padding: 2em;
   margin: 0px;
 
@@ -34,7 +35,8 @@
 
 .main-window {
   flex-grow: 8;
-  background-color: #103882a9;
+  /* background-color: #103882a9; */
+  background-color: #103882;
 
   display: flex;                  /* establish flex container */
   flex-direction: column;
@@ -78,7 +80,8 @@
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
   justify-content: space-between;
-  background-color: #081c41f1;
+  /* background-color: #081c41f1; */
+  background-color: #081c41;
 
 }
 .row-1 {
@@ -87,16 +90,17 @@
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
   justify-content: space-between;
-  background-color: #0e2f6df1;
-
+  /* background-color: #103882f1; */
+  background-color: #103882;
 }
 .row-2 {
   display: flex;                  /* establish flex container */
   flex-direction: row;
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
-  justify-content: space-between;
-  background-color: #103882f1;
+  justify-content: space-between;  
+  /* background-color: #0e2f6df1; */
+  background-color: #0e2f6d;
 }
 
 

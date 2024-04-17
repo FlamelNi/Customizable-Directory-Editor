@@ -247,4 +247,8 @@ function import_directory_data(curr_zip) {
     });
 }
 
+function export_directory_data_string() {
+    return `var directory_data = ${JSON.stringify(directory_data)}\n`;
+}
+
 
