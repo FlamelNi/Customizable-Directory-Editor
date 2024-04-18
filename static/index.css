@@ -118,11 +118,22 @@
   flex-direction: row;
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  /* background-color: #081c41f1; */
+  /* gap: 10%; */
+  padding-left: 15%;
+  padding-right: 15%;
+}
+.weather-card-div {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
   /* justify-content: space-between; */
   /* background-color: #081c41f1; */
   gap: 10%;
 }
-.weather-div div{
+.weather-card-div div{
   min-width: 20%;
 }
 
