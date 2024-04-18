@@ -1,5 +1,7 @@
 const express = require('express');
+var axios = require('axios');
 var http = require('http');
+var https = require('https');
 var url = require('url');
 var fs = require('fs');
 const fsPromises = require('fs').promises;
@@ -85,30 +87,81 @@ const server = http.createServer((req, res) => {
         filePath = path.join(__dirname, req.url);
     }
 
-    // makes .html extension not required in the browser
-    if (!extension && req.url.slice(-1) !== '/') filePath += '.html';
+    if (req.url == "/weather") {
+        
 
-    const fileExists = fs.existsSync(filePath);
+        // axios.get(`api.openweathermap.org/data/2.5/forecast?lat=37.7749&lon=122.4194&appid=94bca9a1175503686db16ec39b95265a`)
+        // .then(response => {
+        //     console.log(response.data.url);
+        //     console.log(response.data.explanation);
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // });
 
-    if (fileExists) {
-        serveFile(filePath, contentType, res);
+        console.log('test')
+        fetch(`api.openweathermap.org/data/2.5/forecast?lat=37.7749&lon=122.4194&appid=94bca9a1175503686db16ec39b95265a`)
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+            })
+            .then(data => {
+            console.log(data);
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+
+        res.writeHead(200, {"Content-Type": "text/plain"});
+        res.write("Hello World!");
+        res.end();
+        // get_weather(function (resp, body) {
+        //     res.write(resp);
+        //     res.end();
+        // });
+
     } else {
-        switch (path.parse(filePath).base) {
-            case 'old-page.html':
-                res.writeHead(301, { 'Location': '/new-page.html' });
-                res.end();
-                break;
-            case 'www-page.html':
-                res.writeHead(301, { 'Location': '/' });
-                res.end();
-                break;
-            default:
-                serveFile(path.join(__dirname, 'views', '404.html'), 'text/html', res);
+        // makes .html extension not required in the browser
+        if (!extension && req.url.slice(-1) !== '/') filePath += '.html';
+    
+        const fileExists = fs.existsSync(filePath);
+    
+        if (fileExists) {
+            serveFile(filePath, contentType, res);
+        } else {
+            switch (path.parse(filePath).base) {
+                case 'old-page.html':
+                    res.writeHead(301, { 'Location': '/new-page.html' });
+                    res.end();
+                    break;
+                case 'www-page.html':
+                    res.writeHead(301, { 'Location': '/' });
+                    res.end();
+                    break;
+                default:
+                    serveFile(path.join(__dirname, 'views', '404.html'), 'text/html', res);
+            }
         }
-    }
+    }//else
+
 });
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+var weather_data = "";
+function get_weather(f) {
+    request.get(`api.openweathermap.org/data/2.5/forecast?lat=37.7749&lon=122.4194&appid=94bca9a1175503686db16ec39b95265a`, function(err, resp, body) {
+        f(resp, body);
+    });
+    // $.ajax({
+    //     url:`api.openweathermap.org/data/2.5/forecast?lat=37.7749&lon=122.4194&appid=94bca9a1175503686db16ec39b95265a`,
+    //     success: function (data) {
+    //         f(data);
+    //     }
+    // });
 
+    return "test weather"
+}
 
 

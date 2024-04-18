@@ -108,5 +108,12 @@
   
   height: 8%;
 }
-
+.weather-div {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  /* background-color: #081c41f1; */
+}
 
