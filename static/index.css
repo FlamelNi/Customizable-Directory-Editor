@@ -52,6 +52,11 @@
   height: 100px;
   /* font-size: 50px; */
 }
+
+/* .menu-btn h1 {
+  font-size: 250%;
+} */
+
 .main-top {
   display: flex;                  /* establish flex container */
   flex-direction: row;
@@ -113,7 +118,11 @@
   flex-direction: row;
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
-  justify-content: space-between;
+  /* justify-content: space-between; */
   /* background-color: #081c41f1; */
+  gap: 10%;
+}
+.weather-div div{
+  min-width: 20%;
 }
 

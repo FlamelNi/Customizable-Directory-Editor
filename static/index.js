@@ -29,9 +29,13 @@ function render_content() {
     } else if (curr_status == dir_status.news) {
         document.getElementById("title").innerHTML = "News";
         document.getElementById("news-div").style.display = 'block';
+    } else if (curr_status == dir_status.weather) {
+        document.getElementById("title").innerHTML = "Weather";
+        set_weather_HTML();
     }
     else {
 
+        
     }
 }
 
@@ -99,6 +103,43 @@ function get_news_HTML() {
     return result;
 }
 
+function get_weather_icon_code(id) {
+    var icon = "";
+    switch (id) {
+        // Thunderstorm
+        case "2":
+            icon = "11d";
+            break;
+        // Drizzle
+        case "3":
+            icon = "09d";
+            break;
+        // Rain
+        case "5":
+            icon = "10d";
+            break;
+        // Snow
+        case "6":
+            icon = "13d";
+            break;
+        // Atmosphere
+        case "7":
+            icon = "50d";
+            break;
+        // Clouds
+        case "8":
+            icon = "02d";
+            break;
+        default:
+            icon = "01d";
+            break;
+    }
+    if (d.weather_id == 800) {
+        icon = "01d";
+    }
+    return icon;
+}
+
 function set_weather_HTML() {
     get_coord("London", function (coord) {
         get_weather(coord, function (data) {
@@ -107,65 +148,45 @@ function set_weather_HTML() {
                 <div>
             `;
     
+            var weather_div_open = false;
             for (i = 0; i < data.length; i++) {
+                if (i%3 == 0) {
+                    result += 
+                    `
+                    <div class="weather-div">
+                    `;
+                    weather_div_open = true;
+                }
+
                 d = data[i];
-                console.log(d);
-                var icon = "";
-                switch (d.weather_id.toString()[0]) {
-                    // Thunderstorm
-                    case "2":
-                        icon = "11d";
-                        break;
-                    // Drizzle
-                    case "3":
-                        icon = "09d";
-                        break;
-                    // Rain
-                    case "5":
-                        icon = "10d";
-                        break;
-                    // Snow
-                    case "6":
-                        icon = "13d";
-                        break;
-                    // Atmosphere
-                    case "7":
-                        icon = "50d";
-                        break;
-                    // Clouds
-                    case "8":
-                        icon = "02d";
-                        break;
-                    default:
-                        icon = "01d";
-                        break;
-                }
-                if (d.weather_id == 800) {
-                    icon = "01d";
-                }
-                
-                // result += 
-                // `<div style="weather-div">
-                //     <img src="https://openweathermap.org/img/wn/${icon}@2x.png"></img>
-                //     <div>
-                //         <h5 class="card-title">${d.weather}</h5>
-                //         <p class="card-text">${d.description}</p>
-                //     </div>
-                // </div>`
-                result += `
-                    <div class="card text-white bg-dark mb-3" style="background-color: #a4a4a4!important; margin: 0px">
-                        <div class="card-header">${d.day}</div>
-                        <div class="card-body">
-                            <div style="weather-div">
-                                <img src="https://openweathermap.org/img/wn/${icon}@2x.png"></img>
-                                <div>
-                                    <h5 class="card-title">${d.weather}</h5>
-                                    <p class="card-text">${d.description}</p>
-                                </div>
-                            </div>
-                        </div>
+                var icon = get_weather_icon_code(d.weather_id.toString()[0]);
+
+                result += 
+                `
+                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                    <div class="card-header" style="font">${d.day}</div>
+                    <div class="card-body">
+                        <img src="https://openweathermap.org/img/wn/${icon}@2x.png"></img>
+                        <h5 class="card-title">${d.weather}</h5>
+                        <p class="card-text">${d.description}</p>
+                    </div>
                     </div>
                 `;
+
+                if (i%3 == 2) {
+                    result += 
+                    `
+                    </div>
+                    `;
+                    weather_div_open = false;
+                }
+            }
+            if (weather_div_open) {
+                result += 
+                `
+                </div>
+                `;
+                weather_div_open = false;
             }
     
             result += `
@@ -269,7 +290,6 @@ function get_weather(coord, f) {
 
 
 function testFunc() {
-    set_weather_HTML();
     // get_coord('San Francisco', function (data) {
     //     get_weather(data, function (data) {
     //         console.log(data);
