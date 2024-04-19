@@ -265,14 +265,36 @@ function get_coord(city, f) {
       });
 }
 
+function get_tomorrow() {
+    const d = new Date();
+    var offset = -6
+    
+    // to be implemented
+    var summer_time = true;
+    if (summer_time) {
+        offset = -7
+    }
+
+    d.setTime(d.getTime() + offset * 60000 * 60);
+    d.setDate(d.getDate()+1);
+    return d.toJSON().slice(0, 10);
+    let day = d.getDate();
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+
+    return `${year}-${month}-${day}`;
+}
+
 function refine_weather_data(data) {
     result = [];
-    var tomorrow = "";
+    var tomorrow = get_tomorrow();
     var pop = 0;
     var min_temp = 10000;
     var max_temp = 0;
     var tomorrow_temp = {};
-    var is_tomorrow_set = false;
+
+    console.log(get_tomorrow());
+
     for (i = 0; i < data.list.length; i++) {
         d = data.list[i];
         var temp = d.dt_txt.split(" ");
@@ -291,11 +313,6 @@ function refine_weather_data(data) {
 
         var date_t = temp[0].split("-");
         var time = temp[1];
-
-        if(!is_tomorrow_set && time == "00:00:00") {
-            is_tomorrow_set = true;
-            tomorrow = temp[0];
-        }
 
         var result_temp = {
             "year": date_t[0],
@@ -325,7 +342,8 @@ function refine_weather_data(data) {
             if (d.main.temp < min_temp) {
                 min_temp = d.main.temp;
             }
-
+            // console.log(tomorrow_temp)
+            
             if (result_temp.time == "21:00:00") {
                 tomorrow_temp.pop = pop;
                 tomorrow_temp.max_temp = max_temp;
