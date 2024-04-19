@@ -16,17 +16,7 @@
         </div>
         
         <div class="menu-btn-div">
-            <script>
-                function initMap() {
-
-                }
-                window.onload = function(){
-                    get_coord("San Francisco", function (data) {
-                        coord = data;
-                    });
-                    change_curr_status(dir_status.directory);
-                };
-            </script>
+            
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.directory)"><h1 class="display-4">Directory</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.news)"><h1 class="display-4">News</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.traffic)"><h1 class="display-4">Local Traffic</h1></button>
@@ -71,33 +61,33 @@
                     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
                     var map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 13,
-                        center: {lat: 37.3681329, lng: -121.9161955},
+                        center: {lat: coord.lat, lng: coord.lon},
                         mapId: "4504f8b37365c3d0",
                     });
 
-
-                    // new google.maps.Marker({
-                    //     position: {lat: 37.3681329, lng: -121.9161955},
-                    //     map,
-                    //     title: "1732",
-                    // });
-
-                    const priceTag = document.createElement('div');
-                    priceTag.className = 'price-tag';
-                    priceTag.textContent = 'here';
-
-                    const marker = new AdvancedMarkerElement({
+                    const marker = new google.maps.marker.AdvancedMarkerElement({
                         map,
-                        position: { lat: 37.3681329, lng: -121.9161955 },
-                        content: priceTag,
+                        position: {lat: coord.lat, lng: coord.lon},
+                        // title: 'Uluru',
                     });
+
+                    // const priceTag = document.createElement('div');
+                    // priceTag.className = 'price-tag';
+                    // priceTag.textContent = 'here';
+
+                    // const marker = new AdvancedMarkerElement({
+                    //     map,
+                    //     position: { lat: 37.3681329, lng: -121.9161955 },
+                    //     content: priceTag,
+                    // });
 
                     var trafficLayer = new google.maps.TrafficLayer();
                     trafficLayer.setMap(map);
                 }
                 </script>
                 <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVQsG2nRYK_vGOio1LWEyuJlDJTx5n20w&callback=initMap">
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVQsG2nRYK_vGOio1LWEyuJlDJTx5n20w">
+                // src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVQsG2nRYK_vGOio1LWEyuJlDJTx5n20w&callback=initMap">
                 </script>
             </div>
 
@@ -120,7 +110,19 @@
     
 </div>
 
-
+<script>
+    window.onload = function(){
+        // get_coord("San Francisco", function (data) {
+        //     coord = data;
+        // });
+        coord = {
+            lat: 37.3681305,
+            lon: -121.9137343,
+        }
+        change_curr_status(dir_status.directory);
+        initMap();
+    };
+</script>
 
 <!-- 
 

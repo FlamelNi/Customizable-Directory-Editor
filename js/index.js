@@ -164,23 +164,115 @@ function get_HTML_all_rows() {
 }
 
 function render_editor_directory() {
-    result = ``
+    result = 
+    `
+        <div class="row-column-menu">
+            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_row_at(0)"> Add new row </button>
+            <button class="btn btn-primary" style="flex-grow: 0.7" onclick="add_col()"> Add new column </button>
+            <button class="btn btn-danger" style="flex-grow: 0.7;" onclick="delete_col()"> Delete last column </button>
+            <button class="btn btn-secondary" style="flex-grow: 0.7; margin-left: 300px;" onclick="testFunction()"> Test </button>
+            <button class="btn btn-secondary" style="flex-grow: 0.7;" onclick="set_test_data()"> Test data </button>
+        </div>
+
+        <div id="render_div">
+        </div>
+    `;
+    
+    document.getElementById("editor_div").innerHTML = result;
+    
+    result = ``;
     result += get_HTML_column_row();
     result += get_HTML_all_rows();
     document.getElementById("render_div").innerHTML = result;
 }
 
-function render_editor_directory() {
+function new_slideshow_entry(menu_name) {
+    read_HTML_to_update();
+    directory_data[menu_name].push({
+        name: "New picture",
+        title: "",
+        description: "",
+        data: null,
+    });
+    render_editor();
+}
+
+function render_editor_slideshow(menu_name) {
     result = ``;
     result += `
+        <div class="row-column-menu">
+            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}')"> Add new entry </button>
+        </div>
+
         <div>
     `;
     //todo-----------------------------------------------------------------
+
+    if (directory_data[menu_name] == undefined) {
+        directory_data[menu_name] = [];
+        /*
+        {
+            name: "",
+            title: "",
+            description: "",
+            data: "",
+        }
+        */
+    }
+    
+    i = 0;
+    while (i < directory_data[menu_name].length) {
+        result += `
+            <div class="modal fade" id="row_info_${i}" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit description</h5>
+                            <button type="button" class="close" onclick="render_editor()" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Modal body text goes here.</p>
+                            <input id="name_${i}" class="form-control col" type="text" placeholder="name" value="${directory_data[menu_name][i].name}">
+                            <input id="title_${i}" class="form-control col" type="text" placeholder="title" value="${directory_data[menu_name][i].title}">
+                            <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="save_slideshow_entry('${menu_name}', ${i})" data-dismiss="modal">Save changes</button>
+                            <button type="button" class="btn btn-secondary" onclick="render_editor()" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${i}"> Edit </button>
+                <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick=""> Delete </button>
+                <div>
+                    <h3>${directory_data[menu_name][i].name}</h3>
+                </div>
+            </div>
+        `;
+
+        i++;
+    }
+
     result += `
         </div>
     `;
+    document.getElementById("editor_div").innerHTML = result;
+}
 
+function save_slideshow_entry(menu_name, i) {
+    directory_data[menu_name][i].name = document.getElementById(`name_${i}`).value;
+    directory_data[menu_name][i].title = document.getElementById(`title_${i}`).value;
+    directory_data[menu_name][i].description = document.getElementById(`description_${i}`).value;
+    console.log(directory_data)
+}
 
+function render_editor_ammenities() {
+    render_editor_slideshow("ammenities");
 }
 
 function render_editor() {
@@ -192,6 +284,12 @@ function render_editor() {
     else {
 
     }
+}
+
+function change_editor(x) {
+    read_HTML_to_update();
+    curr_editor = x;
+    render_editor();
 }
 
 function read_HTML_to_update_dir() {
