@@ -11,6 +11,15 @@ var dir_status = {
     'traffic': 2,
     'weather': 3,
 };
+const DAYS_OF_WEEK = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+];
 
 var curr_status = dir_status.directory;
 var directory_page = 0;
@@ -20,6 +29,10 @@ var coord = {};
 // this is not very good to have here, but I see low risk for having this here at the moment
 // move this to server side in future
 const OPEN_WEATHER_API_KEY = `94bca9a1175503686db16ec39b95265a`;
+// const GOOGLE_MAP_API_KEY = 'AIzaSyAVQsG2nRYK_vGOio1LWEyuJlDJTx5n20w';
+
+// document.getElementById('traffic-map').src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API_KEY}&callback=initMap`;
+
 
 function render_content() {
     document.getElementById("news-div").style.display = 'none';
@@ -149,84 +162,108 @@ function get_weather_icon_code(id) {
 
 function set_weather_HTML() {
     get_coord("london", function (coord) {
-        get_weather(coord, function (data) {
-        // get_weather("San Francisco", function (data) {
-            var result = ``;
-            
-            var d = data[0];
-            d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
-            result += `
-                <div class="weather-div">
-                    <div class="card text-white bg-secondary mb-3" style="max-width: 60%; min-width: 60%;">
-                    
-                        <div class="card-header" style="">
-                            <h1>Tomorrow, ${d.day}, ${d.month}/${d.date}</h1>
-                        </div>
-                        <div class="card-body">
-                            <div class="weather-card-div">
-                                <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:30%; height: auto;"></img>
-                                <div>
-                                    <br>
-                                    <h1 class="card-title">${d.weather}</h1>
-                                    <h3 class="card-text">${d.description}</h3>
-                                </div>
-                            </div>
-                            <br>
-                            <h2 class="card-text">Chance of rain: ${d.pop*100}%</h3>
-                            <br>
-                            <br>
-                            <br>
-                            <h2 class="card-text">Max temperature: ${d.max_temp}&degF</h3>
-                            <h2 class="card-text">Min temperature: ${d.min_temp}&degF</h3>
-                            <br>
-                            <h2 class="card-text">Humidity: ${d.humidity}%</h3>
-                        </div>
-                    </div>
-
-                    <div>
-            `;
-            
-            for (i = 1; i < data.length; i++) {
-                var d = data[i];
+        get_today_weather(coord, function (today_data) {
+            get_weather(coord, function (data) {
+            // get_weather("San Francisco", function (data) {
+                var result = ``;
+                var d = data[0];
                 d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
+                today_data.icon = get_weather_icon_code(today_data.weather_id.toString()[0]);
+                
                 result += `
-                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                    
-                        <div class="card-header" style="">
-                            <h5>${d.day}, ${d.month}/${d.date}</h5>
-                        </div>
-                        
-                        <div class="card-body">
-                            <div class="weather-card-div">
-                                <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:30%; height: auto;"></img>
-                                <div>
-                                    <h5 class="card-title">${d.weather}</h5>
-                                    <p class="card-text">${d.description}</p>
+                    <div class="weather-div">
+                        <div style="max-width: 60%; min-width: 60%;">
+
+                            <div class="card text-white bg-secondary mb-3" style=""; height: 12%">
+                                <div class="card-header" style="">
+                                    <h4>Today, ${today_data.day}, ${today_data.month}/${today_data.date}</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="weather-card-div">
+                                        <img src="https://openweathermap.org/img/wn/${today_data.icon}@2x.png" style="width:20%; height: 20%;"></img>
+                                        <div>
+                                            <h2>${today_data.weather}</h2>
+                                            <h4>${today_data.description}</h4>
+                                        </div>
+                                        <div style="margin-top: 5%">
+                                            <p>
+                                                Temperature:<br>
+                                                ${today_data.min_temp}&degF~${today_data.max_temp}&degF
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+
+                            <div class="card text-white bg-secondary mb-3" style="">
+                                <div class="card-header" style="">
+                                    <h2>Tomorrow, ${d.day}, ${d.month}/${d.date}</h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="weather-card-div">
+                                        <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:25%; height: auto;"></img>
+                                        <div>
+                                            <br>
+                                            <h1 class="card-title">${d.weather}</h1>
+                                            <h3 class="card-text">${d.description}</h3>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <h2 class="card-text">Chance of rain: ${d.pop*100}%</h3>
+                                    <h2 class="card-text">Max temperature: ${d.max_temp}&degF</h3>
+                                    <h2 class="card-text">Min temperature: ${d.min_temp}&degF</h3>
+                                    <h2 class="card-text">Humidity: ${d.humidity}%</h3>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div>
+                `;
+                
+                for (i = 1; i < data.length; i++) {
+                    var d = data[i];
+                    d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
+                    result += `
+                        <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                        
+                            <div class="card-header" style="">
+                                <h5>${d.day}, ${d.month}/${d.date}</h5>
+                            </div>
+                            
+                            <div class="card-body">
+                                <div class="weather-card-div">
+                                    <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:30%; height: auto;"></img>
+                                    <div>
+                                        <h5 class="card-title">${d.weather}</h5>
+                                        <p class="card-text">${d.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+    
+                result += `
                         </div>
                     </div>
                 `;
-            }
-
-            result += `
-                    </div>
-                </div>
-            `;
-
-            // result += 
-            //     `
-            //         <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-            //         <div class="card-header" style="font">${d.day}</div>
-            //         <div class="card-body">
-            //             <img src="https://openweathermap.org/img/wn/${icon}@2x.png"></img>
-            //             <h5 class="card-title">${d.weather}</h5>
-            //             <p class="card-text">${d.description}</p>
-            //         </div>
-            //         </div>
-            //     `;
-            document.getElementById("content-placeholder").innerHTML = result;
-        });
+    
+                // result += 
+                //     `
+                //         <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                //         <div class="card-header" style="font">${d.day}</div>
+                //         <div class="card-body">
+                //             <img src="https://openweathermap.org/img/wn/${icon}@2x.png"></img>
+                //             <h5 class="card-title">${d.weather}</h5>
+                //             <p class="card-text">${d.description}</p>
+                //         </div>
+                //         </div>
+                //     `;
+                document.getElementById("content-placeholder").innerHTML = result;
+            });
+        });//get today weather
     });
 }
 
@@ -278,12 +315,46 @@ function get_tomorrow() {
     d.setTime(d.getTime() + offset * 60000 * 60);
     d.setDate(d.getDate()+1);
     return d.toJSON().slice(0, 10);
-    let day = d.getDate();
-    let month = d.getMonth() + 1;
-    let year = d.getFullYear();
-
-    return `${year}-${month}-${day}`;
 }
+
+
+function get_today_date() {
+    const d = new Date();
+    var offset = -6
+    
+    // to be implemented
+    var summer_time = true;
+    if (summer_time) {
+        offset = -7
+    }
+
+    d.setTime(d.getTime() + offset * 60000 * 60);
+    return d;
+}
+
+function refine_today_weather_data(d) {
+    var today_date = get_today_date();
+    
+    var result = {
+        "year": today_date.getFullYear(),
+        "month": today_date.getMonth()+1,
+        "date": today_date.getDate(),
+        "day": DAYS_OF_WEEK[today_date.getDay()],
+        "weather_id": d.weather[0].id,
+        "icon": d.weather[0].icon,
+        "weather": d.weather[0].main,
+        "description": d.weather[0].description,
+        "pop": d.pop,
+        "max_temp": d.main.temp_max,
+        "min_temp": d.main.temp_min,
+        "humidity": d.main.humidity,
+    }
+    console.log(result);
+    return result;
+}
+
+
+
 
 function refine_weather_data(data) {
     result = [];
@@ -293,21 +364,11 @@ function refine_weather_data(data) {
     var max_temp = 0;
     var tomorrow_temp = {};
 
-    console.log(get_tomorrow());
-
     for (i = 0; i < data.list.length; i++) {
         d = data.list[i];
         var temp = d.dt_txt.split(" ");
         var day_t = new Date(d.dt_txt).getDay();
-        const DAYS_OF_WEEK = [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-        ]
+       
         var day = DAYS_OF_WEEK[day_t];
         // console.log(d);
 
@@ -360,6 +421,23 @@ function refine_weather_data(data) {
     return result;
 }
 
+function get_today_weather(coord, f) {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${coord.lat}&lon=${coord.lon}&units=imperial&appid=${OPEN_WEATHER_API_KEY}`
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        f(refine_today_weather_data(data));
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
 function get_weather(coord, f) {
     const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${coord.lat}&lon=${coord.lon}&units=imperial&appid=${OPEN_WEATHER_API_KEY}`
     fetch(apiUrl)
@@ -370,7 +448,6 @@ function get_weather(coord, f) {
         return response.json();
       })
       .then(data => {
-        console.log(data);
         f(refine_weather_data(data));
       })
       .catch(error => {

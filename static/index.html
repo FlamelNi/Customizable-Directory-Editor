@@ -66,10 +66,30 @@
                 </style>
                 <div id="map"></div>
                 <script>
-                function initMap() {
+                async function initMap() {
+                    const { Map } = await google.maps.importLibrary("maps");
+                    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
                     var map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 13,
-                        center: {lat: 37.3681329, lng: -121.9161955}
+                        center: {lat: 37.3681329, lng: -121.9161955},
+                        mapId: "4504f8b37365c3d0",
+                    });
+
+
+                    // new google.maps.Marker({
+                    //     position: {lat: 37.3681329, lng: -121.9161955},
+                    //     map,
+                    //     title: "1732",
+                    // });
+
+                    const priceTag = document.createElement('div');
+                    priceTag.className = 'price-tag';
+                    priceTag.textContent = 'here';
+
+                    const marker = new AdvancedMarkerElement({
+                        map,
+                        position: { lat: 37.3681329, lng: -121.9161955 },
+                        content: priceTag,
                     });
 
                     var trafficLayer = new google.maps.TrafficLayer();
