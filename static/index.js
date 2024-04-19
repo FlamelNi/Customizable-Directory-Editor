@@ -15,6 +15,8 @@ var dir_status = {
 var curr_status = dir_status.directory;
 var directory_page = 0;
 
+var coord = {};
+
 // this is not very good to have here, but I see low risk for having this here at the moment
 // move this to server side in future
 const OPEN_WEATHER_API_KEY = `94bca9a1175503686db16ec39b95265a`;
@@ -22,7 +24,8 @@ const OPEN_WEATHER_API_KEY = `94bca9a1175503686db16ec39b95265a`;
 function render_content() {
     document.getElementById("news-div").style.display = 'none';
     document.getElementById("content-placeholder").innerHTML = "";
-    
+    document.getElementById("traffic-div").style.display = 'none';
+
     if (curr_status == dir_status.directory) {
         document.getElementById("title").innerHTML = "Directory";
         document.getElementById("content-placeholder").innerHTML = get_directory_HTML();
@@ -32,6 +35,10 @@ function render_content() {
     } else if (curr_status == dir_status.weather) {
         document.getElementById("title").innerHTML = "Weather";
         set_weather_HTML();
+    } else if (curr_status == dir_status.traffic) {
+        document.getElementById("title").innerHTML = "Local Traffic";
+        initMap();
+        document.getElementById("traffic-div").style.display = 'block';
     }
     else {
 
@@ -246,9 +253,11 @@ function get_coord(city, f) {
         return response.json();
       })
       .then(data => {
+        console.log(data[0].lat)
+        console.log(data[0].lon)
         f({
-            'lat': data[0].lat,
-            'lon': data[0].lon
+            'lat': parseInt(data[0].lat),
+            'lon': parseInt(data[0].lon),
         });
       })
       .catch(error => {

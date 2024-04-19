@@ -2,6 +2,12 @@
 
 var directory_data = reset_data();
 
+const ALL_EDITORS = {
+    "DIRECTORY": 0,
+    "AMMENITIES": 1,
+    "LEASING": 2,
+};
+var curr_editor = ALL_EDITORS.DIRECTORY;
 
 var t = 'hello';
 
@@ -157,14 +163,38 @@ function get_HTML_all_rows() {
     return result;
 }
 
-function render_editor() {
+function render_editor_directory() {
     result = ``
     result += get_HTML_column_row();
     result += get_HTML_all_rows();
     document.getElementById("render_div").innerHTML = result;
 }
 
-function read_HTML_to_update() {
+function render_editor_directory() {
+    result = ``;
+    result += `
+        <div>
+    `;
+    //todo-----------------------------------------------------------------
+    result += `
+        </div>
+    `;
+
+
+}
+
+function render_editor() {
+    if (curr_editor == ALL_EDITORS.DIRECTORY) {
+        render_editor_directory();
+    } else if (curr_editor == ALL_EDITORS.AMMENITIES) {
+        render_editor_ammenities();
+    }
+    else {
+
+    }
+}
+
+function read_HTML_to_update_dir() {
     for (i = 0; i < directory_data.column_row.length; i++) {
         temp = document.getElementById(`col_${i}`).value;
         directory_data.column_row[i] = temp;
@@ -175,6 +205,21 @@ function read_HTML_to_update() {
             t = document.getElementById(`row_${i}_${j}`).value;
             directory_data.rows[j][i] = t;
         }
+    }
+}
+
+function read_HTML_to_update_ammenities() {
+
+}
+
+function read_HTML_to_update() {
+    if (curr_editor == ALL_EDITORS.DIRECTORY) {
+        read_HTML_to_update_dir();
+    } else if (curr_editor == ALL_EDITORS.AMMENITIES) {
+        read_HTML_to_update_ammenities();
+    }
+    else {
+
     }
 }
 

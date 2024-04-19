@@ -12,6 +12,19 @@
   margin-right: 20px;
 }
 
+.editor-select {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;            /* default value; can be omitted */
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  /* justify-content: space-between; */
+  background-color: lightblue;
+}
+.editor-select button {
+  margin-right: 25px;
+  margin-left: 10px;
+}
+
 .row-column-menu {
   background-color: lightblue;
   padding: 10px;
@@ -58,5 +71,12 @@
   flex-grow: 1;
 }
 
-
+.file-row {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;            /* default value; can be omitted */
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  /* background-color: lightblue; */
+}
 

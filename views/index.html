@@ -3,14 +3,11 @@
     
 </script>
 
-
-
-
 <!-- <script src="https://deno.land/x/zipjs/index.js" type="module" crossorigin="anonymous"></script> -->
 <script src="../lib/jszip.js" type="module" crossorigin="anonymous"></script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -39,7 +36,13 @@
     <div style="flex-basis: 300px;">
         <input class="form-control" type="file" id="file-selector">
     </div>
-    
+</div>
+
+<div class="editor-select">
+    <button class="btn btn-secondary" style="width: 120px;" onclick=""> Directory </button>
+    <button class="btn btn-secondary" style="width: 120px;" onclick=""> Leasing </button>
+    <button class="btn btn-secondary" style="width: 120px;" onclick=""> Ammenities </button>
+    <button class="btn btn-secondary" style="width: 150px;" onclick=""> Other settings </button>
 </div>
 <div class="row-column-menu">
     <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_row_at(0)"> Add new row </button>
@@ -49,47 +52,9 @@
     <button class="btn btn-secondary" style="flex-grow: 0.7;" onclick="set_test_data()"> Test data </button>
 </div>
 
+
 <div id="render_div">
     <div style="padding: 1em; margin: auto; align-self: center;">
-
-<!-- 
-
-        <div class="two-columns" style="margin-bottom: 25px; margin-top: 75px;">
-            <div class="name float-left">
-                <h1 class="display-6" style="font-size: 35px;">OFFICE TENANTS</h1>
-            </div>
-            <div class="info float-right">
-                <h1 class="display-6 float-right" style="font-size: 35px;">SUITE</h1>
-            </div>
-        </div>
-
-        <div class="modal fade" id="row_info_0" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Modal body text goes here.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-                </div>
-            </div>
-        </div>
-        <script>
-        function on_info_clicked_0() {
-            alert('test_0')
-        }
-        </script>
-
-
-    </div> -->
 
     <div style="">
         <div class="input-row">

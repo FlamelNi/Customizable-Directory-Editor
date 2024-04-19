@@ -17,13 +17,19 @@
         
         <div class="menu-btn-div">
             <script>
+                function initMap() {
+
+                }
                 window.onload = function(){
+                    get_coord("San Francisco", function (data) {
+                        coord = data;
+                    });
                     change_curr_status(dir_status.directory);
                 };
             </script>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.directory)"><h1 class="display-4">Directory</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.news)"><h1 class="display-4">News</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick=""><h1 class="display-4">Local Traffic</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.traffic)"><h1 class="display-4">Local Traffic</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.weather)"><h1 class="display-4">Weather</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick=""><h1 class="display-4">Ammenities</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="testFunc()"><h1 class="display-4">Leasing</h1></button>
@@ -41,7 +47,40 @@
 
         </div>
 
+
         <div class="main-content" >
+            <div id="traffic-div" style="display: none;">
+                <style>
+                    /* Always set the map height explicitly to define the size of the div
+                    * element that contains the map. */
+                    #map {
+                        height: 80%;
+                        /* width: 70%; */
+                    }
+                    /* Optional: Makes the sample page fill the window. */
+                    /* html, body {
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    } */
+                </style>
+                <div id="map"></div>
+                <script>
+                function initMap() {
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 13,
+                        center: {lat: 37.7790262, lng: -122.419906}
+                    });
+
+                    var trafficLayer = new google.maps.TrafficLayer();
+                    trafficLayer.setMap(map);
+                }
+                </script>
+                <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVQsG2nRYK_vGOio1LWEyuJlDJTx5n20w&callback=initMap">
+                </script>
+            </div>
+
             <div id="news-div" style="display: none;">
                 <!-- <div style="position: absolute; background-color: black; width: 50%; z-index: 10;"><br><br></div> -->
                 <!-- <div style="position: absolute; background-color: #103882; width: 50%; z-index: 10; top: 130;"><br><br></div> -->
