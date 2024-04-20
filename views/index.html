@@ -130,14 +130,38 @@
 
         template_file_names = ["index.html", "index.css", "background_1.jpg"];
 
+
         get_template_files(template_file_names, curr_zip, function (data) {
             get_template_file("index.js", function (data) {
                 curr_zip.file("index.js", export_directory_data_string() + data);
+
+                for (k in SLIDESHOW_FIELD_NAME) {
+                    const menu_name = SLIDESHOW_FIELD_NAME[k];
+                    if (directory_data[menu_name] != undefined) {
+                        
+                        i = 0;
+                        while (i < directory_data[menu_name].length) {
+                            data_i = directory_data[menu_name][i].data;
+                            
+                            if (data_i != null) {
+                                if (directory_data[menu_name][i].is_new) {
+                                    curr_zip.file(data_i.name, data_i);
+                                } else {
+                                    //todo--------------------------------------------------------------
+                                }
+                            }
+                            
+                            i++;
+                        }
+                    }
+                }
+
 
                 if (curr_zip != null) {
                     promise = curr_zip.generateAsync({type : "blob"}).then(function (blob) {
                         saveFile(blob, "directory.zip");
                     }, function (err) {
+                        console.log(err);
                         alert("error in download");
                     });
                 } else {

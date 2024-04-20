@@ -10,6 +10,8 @@ var dir_status = {
     'news': 1,
     'traffic': 2,
     'weather': 3,
+    'ammenities': 4,
+    'leasing': 5,
 };
 const DAYS_OF_WEEK = [
     "Sunday",
@@ -52,6 +54,9 @@ function render_content() {
         document.getElementById("title").innerHTML = "Local Traffic";
         initMap();
         document.getElementById("traffic-div").style.display = 'block';
+    } else if (curr_status == dir_status.ammenities) {
+        document.getElementById("title").innerHTML = "Ammenities";
+        document.getElementById("content-placeholder").innerHTML = get_ammenities_HTML();
     }
     else {
 
@@ -116,6 +121,44 @@ function get_directory_HTML() {
 
     return result;
 }
+
+function get_ammenities_HTML() {
+    result = `
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+    `;
+
+    i = 0;
+    while (i < directory_data.ammenities.length) {
+        const entry = directory_data.ammenities[i];
+
+        console.log(entry);
+
+        if (i == 0) {
+            result += `
+                <div class="carousel-item active">
+                <img class="d-block w-100" src="${entry.name}" style="width: 40%" alt="First slide">
+                </div>
+            `
+        } else {
+            result += `
+                <div class="carousel-item">
+                <img class="d-block w-100" src="${entry.name}" style="width: 40%" alt="Second slide">
+                </div>
+            `;
+        }
+        i++;
+    }
+
+    result += `
+            </div>
+        </div>
+    `;
+
+    console.log(result);
+    return result;
+}
+
 function get_news_HTML() {
     result = `
         <rssapp-list id="mObA35s7fR1nvgeg"></rssapp-list><script src="https://widget.rss.app/v1/list.js" type="text/javascript" async></script>

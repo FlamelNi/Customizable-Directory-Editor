@@ -7,8 +7,15 @@ const ALL_EDITORS = {
     "AMMENITIES": 1,
     "LEASING": 2,
 };
+
+SLIDESHOW_FIELD_NAME = {};
+
+SLIDESHOW_FIELD_NAME[ALL_EDITORS.AMMENITIES] = "ammenities";
+SLIDESHOW_FIELD_NAME[ALL_EDITORS.LEASING] = "leasing";
+
 var curr_editor = ALL_EDITORS.DIRECTORY;
 
+var temp_image = null;
 var t = 'hello';
 
 function testFunction() {
@@ -189,11 +196,17 @@ function render_editor_directory() {
 function new_slideshow_entry(menu_name) {
     read_HTML_to_update();
     directory_data[menu_name].push({
-        name: "New picture",
-        title: "",
+        title: "New picture",
         description: "",
+        name: "no file selected",
         data: null,
     });
+    render_editor();
+}
+
+function delete_slideshow_entry(menu_name, i) {
+    read_HTML_to_update();
+    directory_data[menu_name].splice(i, 1);
     render_editor();
 }
 
@@ -228,19 +241,30 @@ function render_editor_slideshow(menu_name) {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Edit description</h5>
-                            <button type="button" class="close" onclick="render_editor()" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" onclick="close_modal()" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Modal body text goes here.</p>
-                            <input id="name_${i}" class="form-control col" type="text" placeholder="name" value="${directory_data[menu_name][i].name}">
                             <input id="title_${i}" class="form-control col" type="text" placeholder="title" value="${directory_data[menu_name][i].title}">
                             <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
+            `;
+            if (directory_data[menu_name][i].data == null) {
+                result += `
+                    <input class="form-control" type="file" id="image-selector_${i}" placeholder="test">
+                `;
+            } else {
+                result += `
+                    <div id="name_${i}">
+                        <h4>${directory_data[menu_name][i].name}</h4>
+                    </div>
+                `;
+            }
+            result += `
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" onclick="save_slideshow_entry('${menu_name}', ${i})" data-dismiss="modal">Save changes</button>
-                            <button type="button" class="btn btn-secondary" onclick="render_editor()" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" onclick="close_modal()" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -248,11 +272,12 @@ function render_editor_slideshow(menu_name) {
 
             <div class="input-row">
                 <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${i}"> Edit </button>
-                <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick=""> Delete </button>
+                <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick="delete_slideshow_entry('${menu_name}', ${i})"> Delete </button>
                 <div>
-                    <h3>${directory_data[menu_name][i].name}</h3>
+                    <h3>${directory_data[menu_name][i].title}</h3>
                 </div>
             </div>
+
         `;
 
         i++;
@@ -261,14 +286,42 @@ function render_editor_slideshow(menu_name) {
     result += `
         </div>
     `;
-    document.getElementById("editor_div").innerHTML = result;
+    var editor_div = document.getElementById("editor_div")
+    editor_div.innerHTML = result;
+
+    i = 0;
+    while (i < directory_data[menu_name].length) {
+        imageSelector = document.getElementById(`image-selector_${i}`);
+        if (imageSelector) {
+            imageSelector.addEventListener('change', (event) => {
+                const fileList = event.target.files;
+                temp_image = fileList[0];
+            });
+        }
+        
+        i++;
+    }
 }
 
 function save_slideshow_entry(menu_name, i) {
-    directory_data[menu_name][i].name = document.getElementById(`name_${i}`).value;
-    directory_data[menu_name][i].title = document.getElementById(`title_${i}`).value;
-    directory_data[menu_name][i].description = document.getElementById(`description_${i}`).value;
-    console.log(directory_data)
+    if (temp_image != null) {
+        directory_data[menu_name][i].title = document.getElementById(`title_${i}`).value;
+        directory_data[menu_name][i].description = document.getElementById(`description_${i}`).value;
+        
+        directory_data[menu_name][i].data = temp_image;
+        directory_data[menu_name][i].name = temp_image.name;
+        directory_data[menu_name][i].is_new = true;
+    } else {
+        // directory_data[menu_name][i].name = "New picture";
+        alert("Please upload an image file if you wish to save this entry");
+    }
+
+    render_editor();
+}
+
+function close_modal() {
+    temp_image = null;
+    render_editor();
 }
 
 function render_editor_ammenities() {
@@ -391,9 +444,33 @@ function export_directory_data(curr_zip) {
     curr_zip.file("directory", JSON.stringify(directory_data));
 }
 
+function import_image_files() {
+    for (k in SLIDESHOW_FIELD_NAME) {
+        const menu_name = SLIDESHOW_FIELD_NAME[k];
+        if (directory_data[menu_name] != undefined) {
+            
+            i = 0;
+            while (i < directory_data[menu_name].length) {
+                var data_i = directory_data[menu_name][i];
+                if (data_i != null) {
+                    f_name = directory_data[menu_name][i].name;
+                    curr_zip.file(f_name).async("blob").then(function(result) {
+                        data_i.data = new File([result], f_name);
+                    });
+                }
+                
+                i++;
+            }
+        }
+    }
+}
+
 function import_directory_data(curr_zip) {
     curr_zip.file("directory").async("string").then(function(result) {
         directory_data = JSON.parse(result);
+        
+        import_image_files();
+
         render_editor();
     });
 }
