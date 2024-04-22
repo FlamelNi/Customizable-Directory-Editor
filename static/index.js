@@ -169,13 +169,28 @@ function set_slideshow_HTML(menu_name) {
     while (i < directory_data[menu_name].length) {
         result += `
             <div class="carousel-section" style="max-height: 70vh">
-                <img src="${directory_data[menu_name][i].name}" style="max-width:100%; height: 65vh;">
-                <h5>${directory_data[menu_name][i].title}</h5>
-                <p>${directory_data[menu_name][i].description}</p>
+                <img src="${directory_data[menu_name][i].name}" style="max-width:100%; max-width: 60vw;">
+                <div class="card text-white bg-secondary mb-3" style="width:20vw; opacity: .8; position: absolute; top: 5%; left: ${70*i + 45}vw;">
+                    <div class="card-header"><h5 class="card-title">${directory_data[menu_name][i].title}</h5></div>
+                    <div class="card-body" style="text-align: left">
+                        <p>${directory_data[menu_name][i].description}</p>
+                    </div>
+                </div>
+
             </div>
         `;
         i++;
     }
+
+
+    
+/* <div class="carousel-details" style="max-height: 40vh; width:25vw; margin: 10px;">
+<h5>${directory_data[menu_name][i].title}</h5>
+<div style="text-align: left">
+    <p>${directory_data[menu_name][i].description}</p>
+</div>
+</div> */
+
 
     result += `
                     </div>
