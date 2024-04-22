@@ -56,10 +56,10 @@ function render_content() {
         document.getElementById("traffic-div").style.display = 'block';
     } else if (curr_status == dir_status.ammenities) {
         document.getElementById("title").innerHTML = "Ammenities";
-        document.getElementById("content-placeholder").innerHTML = get_slideshow_HTML("ammenities");
+        set_slideshow_HTML("ammenities");
     } else if (curr_status == dir_status.leasing) {
         document.getElementById("title").innerHTML = "Leasing";
-        document.getElementById("content-placeholder").innerHTML = get_slideshow_HTML("leasing");
+        set_slideshow_HTML("leasing");
     }
     else {
 
@@ -96,11 +96,38 @@ function get_directory_HTML() {
 
         for (j = 0; j < directory_data.column_row.length; j++) {
             if (index < directory_data.rows.length) {
-                result += `
-                    <div class="col">
-                        <h1>${directory_data.rows[index][j]}</h1>
-                    </div>
-                `;
+
+                if (directory_data.rows[index][j].length > 30) {
+                    var s = directory_data.rows[index][j];
+                    
+                    var index = 0;
+
+                    if (s.length < 40) {
+                        index = s.length;
+                    } else {
+                        var temp = s.substr(0, 30);
+                        index = temp.lastIndexOf(" ");
+                        if (index == -1) {
+                            index = 35;
+                        }
+                    }
+                    
+                    result += 
+                    `
+                        <div class="col">
+                            <h1 style="font-size: 22px; margin-bottom: 0">${s.substr(0, index)}</h1>
+                            <h1 style="font-size: 22px;">${s.substr(index)}</h1>
+                        </div>
+                    `;
+
+                } else {
+                    result += `
+                        <div class="col">
+                            <h1>${directory_data.rows[index][j]}</h1>
+                        </div>
+                    `;
+                }
+
             } else {
                 result += `
                     <div class="col">
@@ -125,75 +152,64 @@ function get_directory_HTML() {
     return result;
 }
 
-function get_slideshow_HTML(menu_name) {
+function set_slideshow_HTML(menu_name) {
     result = `
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="max-width: 95%; max-height: 95%">
+        <div>
+            <div class="carousel" style="max-height: 70vh">
+                <div class="prev-arrow"></div>
 
-            <ol class="carousel-indicators">
+                <div class="carousel-sections-scroll" style="max-height: 70vh">
+                    <div class="carousel-sections" style="max-height: 70vh">
     `;
+
+    console.log(directory_data);
+    console.log(menu_name);
+    
     i = 0;
     while (i < directory_data[menu_name].length) {
-        if (i == 0) {
-            result += `<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>`;
-        } else {
-            result += `<li data-target="#carouselExampleIndicators" data-slide-to="${i}"></li>`;
-        }
+        result += `
+            <div class="carousel-section" style="max-height: 70vh">
+                <img src="${directory_data[menu_name][i].name}" style="max-width:100%; height: 65vh;">
+                <h5>${directory_data[menu_name][i].title}</h5>
+                <p>${directory_data[menu_name][i].description}</p>
+            </div>
+        `;
         i++;
     }
 
     result += `
-            </ol>
-
-            <div class="carousel-inner" style="height: 90%">
+                    </div>
+                </div>
+                
+                <div class="next-arrow"></div>
+        
+            </div>
+            <div class="carousel-dots">
     `;
-
     i = 0;
     while (i < directory_data[menu_name].length) {
-        const entry = directory_data[menu_name][i];
-
-        console.log(entry);
-
-        if (i == 0) {
-            result += `
-                <div class="carousel-item active">
-                    <img class="d-block w-100" src="${entry.name}" alt="First slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>${entry.title}</h5>
-                        <p${entry.description}</p>
-                    </div>
-                </div>
-            `
-        } else {
-            result += `
-                <div class="carousel-item">
-                    <img class="d-block w-100" src="${entry.name}" alt="Second slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>${entry.title}</h5>
-                        <p${entry.description}</p>
-                    </div>
-                </div>
-            `;
-        }
+        result += `<div class="carousel-dot"></div>`;
         i++;
     }
 
     result += `
             </div>
-
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-
         </div>
     `;
 
-    console.log(result);
-    return result;
+
+    result += `
+        <script>
+            
+        </script>
+
+    `;
+
+
+    
+    document.getElementById("content-placeholder").innerHTML = result;
+    init_slide();
+    // return result;
 }
 
 function get_news_HTML() {
@@ -567,6 +583,9 @@ function displayTime() {
   s = d.getSeconds();
   ampm = h >= 12 ? 'pm' : 'am';
   h = h % 12;
+  if (h == 0) {
+    h = 12;
+  }
 
   // Adds zeros to single digit times
   if (h <= 9) {
@@ -597,9 +616,70 @@ function displayTime() {
 // Run your baller clock!
 // displayTime();
 
+prevBtn = null;
+nextBtn = null;
+sectionContainer = null;
 
 
+let currentIndex = 0;
+let slides = [];
+let dots = [];
 
+function render() {
+    let offset = 0;
+    slides.forEach((slide, index) => {
+        if (index < currentIndex) {
+        offset += slide.offsetWidth;
+        }
+    });
+
+    sectionContainer.style.transform = `translateX(-${offset}px)`;
+    dots.forEach((dot, index) => {
+        index === currentIndex
+        ? dot.classList.add("active")
+        : dot.classList.remove("active");
+    });
+}
+
+function prev() {
+    if (currentIndex < 0) return;
+    currentIndex -= 1;
+    render();
+}
+
+function next() {
+    if (currentIndex === slides.length - 1) return;
+    currentIndex += 1;
+    render();
+}
+
+function goto(newIndex) {
+    if (newIndex < 0 || newIndex > slides.length - 1) return;
+    currentIndex = newIndex;
+    render();
+}
+
+function init_slide() {
+    currentIndex = 0;
+    prevBtn = document.querySelector("div.prev-arrow");
+    nextBtn = document.querySelector("div.next-arrow");
+    sectionContainer = document.querySelector("div.carousel-sections");
+
+    prevBtn.onclick = prev;
+    nextBtn.onclick = next;
+
+
+    const newSlides = document.querySelectorAll("div.carousel-sections > div");
+    slides = newSlides;
+
+    const newDots = document.querySelectorAll("div.carousel-dots > div");
+    newDots.forEach((dot, index) => {
+        dot.onclick = () => goto(index);
+    });
+    dots = newDots;
+
+    render();
+}
 
 
 function testFunc() {

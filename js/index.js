@@ -142,14 +142,14 @@ function get_HTML_row(i) {
                     <button class="btn btn-danger" style="flex-grow: 0.7" onclick="delete_row_at(${i})"> Delete </button>
                 </div>
     `;
+    
     for (j = 0; j < directory_data.column_row.length; j++) {
         col = directory_data.column_row[j];
-
         //row_{#col}_{#row}
         result +=
         `
             <div class="col">
-                <input id="row_${j}_${i}" class="form-control col" type="text" placeholder="${col} entry" value=${row[j]}>
+                <input id="row_${j}_${i}" class="form-control col" type="text" placeholder="${col} entry" value="${row[j]}">
             </div>
         `;
     }
@@ -158,7 +158,7 @@ function get_HTML_row(i) {
             </div>
         </div>
     `;
-
+    
     return result;
 }
 
@@ -470,6 +470,7 @@ function import_image_files() {
 function import_directory_data(curr_zip) {
     curr_zip.file("directory").async("string").then(function(result) {
         directory_data = JSON.parse(result);
+        console.log(directory_data)
         
         import_image_files();
 
