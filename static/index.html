@@ -32,7 +32,12 @@
                 <h1 class="display-2" id="title">Directory</h1>
             </div>
             <div>
-                time
+                  <!-- <div class='date-container'>
+                </div> -->
+                <div class='date'></div>
+                <div class='day'></div>
+                <!-- <div class='date-day'></div> -->
+                <div class='time'></div>
             </div>
 
         </div>
@@ -103,15 +108,14 @@
             </div>
         </div>
 
-        <div class="main-bot">
-            text
-        </div>
+        <rssapp-ticker id="mObA35s7fR1nvgeg"></rssapp-ticker><script src="https://widget.rss.app/v1/ticker.js" type="text/javascript" async></script>
     </div>
     
 </div>
 
 <script>
-    window.onload = function(){
+    window.onload = function() {
+        displayTime();
         // get_coord("San Francisco", function (data) {
         //     coord = data;
         // });

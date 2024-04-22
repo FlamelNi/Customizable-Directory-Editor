@@ -536,6 +536,71 @@ function get_weather(coord, f) {
 }
 
 
+// A simple vanilla JS clock
+
+// Initilize variables for date, hour, minute, second, am or pm, and the final displayed time
+var d, h, m, s, ampm, time;
+
+// Your clock!
+function displayTime() {
+  d = new Date();
+
+  d.setHours(d.getHours());
+
+  days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
+  day = days[d.getDay()];
+  month = d.getMonth()+1;
+  date = d.getDate();
+  year = d.getFullYear();
+
+  h = d.getHours();
+  m = d.getMinutes();
+  s = d.getSeconds();
+  ampm = h >= 12 ? 'pm' : 'am';
+  h = h % 12;
+
+  // Adds zeros to single digit times
+  if (h <= 9) {
+    h = '0' + h;
+  }
+  if (m <= 9) {
+    m = '0' + m;
+  }
+  if (s <= 9) {
+    s = '0' + s;
+  }
+
+  // Assign time format to variable. If you want to change how time is displayed do it here
+  // Example time = h + ":" + m;
+  time = h + ":" + m + ":" + s + " " + ampm;
+
+  // Print your clock to an element.
+  document.getElementsByClassName("time")[0].innerHTML = time;
+  document.getElementsByClassName("day")[0].innerHTML = day;
+  document.getElementsByClassName("date")[0].innerHTML = month + "/" + date + "/" + year;
+  // document.getElementsByClassName("date-day")[0].innerHTML = month + "/" + date + "/" + year + ", " + day;
+
+  // Refreshes clock every second. If you're just using minutes change to 60000
+  setTimeout(displayTime, 1000);
+}
+
+// code below moved to onLoad
+// Run your baller clock!
+// displayTime();
+
+
+
+
+
 
 function testFunc() {
     // get_coord('San Francisco', function (data) {
