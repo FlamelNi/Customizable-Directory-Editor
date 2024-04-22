@@ -56,7 +56,10 @@ function render_content() {
         document.getElementById("traffic-div").style.display = 'block';
     } else if (curr_status == dir_status.ammenities) {
         document.getElementById("title").innerHTML = "Ammenities";
-        document.getElementById("content-placeholder").innerHTML = get_ammenities_HTML();
+        document.getElementById("content-placeholder").innerHTML = get_slideshow_HTML("ammenities");
+    } else if (curr_status == dir_status.leasing) {
+        document.getElementById("title").innerHTML = "Leasing";
+        document.getElementById("content-placeholder").innerHTML = get_slideshow_HTML("leasing");
     }
     else {
 
@@ -122,28 +125,52 @@ function get_directory_HTML() {
     return result;
 }
 
-function get_ammenities_HTML() {
+function get_slideshow_HTML(menu_name) {
     result = `
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="max-width: 95%; max-height: 95%">
+
+            <ol class="carousel-indicators">
+    `;
+    i = 0;
+    while (i < directory_data[menu_name].length) {
+        if (i == 0) {
+            result += `<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>`;
+        } else {
+            result += `<li data-target="#carouselExampleIndicators" data-slide-to="${i}"></li>`;
+        }
+        i++;
+    }
+
+    result += `
+            </ol>
+
+            <div class="carousel-inner" style="height: 90%">
     `;
 
     i = 0;
-    while (i < directory_data.ammenities.length) {
-        const entry = directory_data.ammenities[i];
+    while (i < directory_data[menu_name].length) {
+        const entry = directory_data[menu_name][i];
 
         console.log(entry);
 
         if (i == 0) {
             result += `
                 <div class="carousel-item active">
-                <img class="d-block w-100" src="${entry.name}" style="width: 40%" alt="First slide">
+                    <img class="d-block w-100" src="${entry.name}" alt="First slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>${entry.title}</h5>
+                        <p${entry.description}</p>
+                    </div>
                 </div>
             `
         } else {
             result += `
                 <div class="carousel-item">
-                <img class="d-block w-100" src="${entry.name}" style="width: 40%" alt="Second slide">
+                    <img class="d-block w-100" src="${entry.name}" alt="Second slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>${entry.title}</h5>
+                        <p${entry.description}</p>
+                    </div>
                 </div>
             `;
         }
@@ -152,6 +179,16 @@ function get_ammenities_HTML() {
 
     result += `
             </div>
+
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+
         </div>
     `;
 

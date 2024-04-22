@@ -324,15 +324,13 @@ function close_modal() {
     render_editor();
 }
 
-function render_editor_ammenities() {
-    render_editor_slideshow("ammenities");
-}
-
 function render_editor() {
     if (curr_editor == ALL_EDITORS.DIRECTORY) {
         render_editor_directory();
     } else if (curr_editor == ALL_EDITORS.AMMENITIES) {
-        render_editor_ammenities();
+        render_editor_slideshow("ammenities");
+    } else if (curr_editor == ALL_EDITORS.LEASING) {
+        render_editor_slideshow("leasing");
     }
     else {
 
@@ -441,6 +439,7 @@ function swap_col(i, j) {
 
 function export_directory_data(curr_zip) {
     read_HTML_to_update();
+
     curr_zip.file("directory", JSON.stringify(directory_data));
 }
 
@@ -454,6 +453,9 @@ function import_image_files() {
                 var data_i = directory_data[menu_name][i];
                 if (data_i != null) {
                     f_name = directory_data[menu_name][i].name;
+                    console.log(menu_name);
+                    console.log(i);
+                    console.log(f_name);
                     curr_zip.file(f_name).async("blob").then(function(result) {
                         data_i.data = new File([result], f_name);
                     });
@@ -476,6 +478,18 @@ function import_directory_data(curr_zip) {
 }
 
 function export_directory_data_string() {
+    for (k in SLIDESHOW_FIELD_NAME) {
+        const menu_name = SLIDESHOW_FIELD_NAME[k];
+        if (directory_data[menu_name] != undefined) {
+            
+            i = 0;
+            while (i < directory_data[menu_name].length) {
+                directory_data[menu_name][i].data_name = directory_data[menu_name][i].data.name;
+                i++;
+            }
+        }
+    }
+    console.log(directory_data);
     return `var directory_data = ${JSON.stringify(directory_data)}\n`;
 }
 

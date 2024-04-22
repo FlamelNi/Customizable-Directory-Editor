@@ -120,56 +120,85 @@
     function new_directory() {
         alert("todo");
     }
+
+    async function upload_image_file(f) {
+        var temp_zip = new JSZip();
+        for (k in SLIDESHOW_FIELD_NAME) {
+            const menu_name = SLIDESHOW_FIELD_NAME[k];
+            if (directory_data[menu_name] != undefined) {
+                
+                i = 0;
+                while (i < directory_data[menu_name].length) {
+                    data_i = directory_data[menu_name][i].data;
+                    data_name = directory_data[menu_name][i].name;
+                    
+                    if (data_i != null) {
+                        if (directory_data[menu_name][i].is_new) {
+                            temp_zip.file(data_i.name, data_i);
+                            directory_data[menu_name][i].is_new = false;
+                        } else {
+                            //todo--------------------------------------------------------------
+                            console.log(temp_zip);
+                            console.log(data_i);
+                            console.log(data_name);
+                            console.log(curr_zip);
+
+                            temp_zip.files[data_name] = curr_zip.files[data_name];
+                            // temp_zip.files[data_name] = structuredClone(curr_zip.files[data_name]);
+
+                            // temp = await curr_zip.file(data_name).async("string");
+                            // temp_zip.file(data_name, temp);
+                        }
+                    }
+                    
+                    i++;
+                }
+            }
+        }
+
+        f(temp_zip);
+    }
+
+
     function download_directory() {
         var promise = null;
-        curr_zip = new JSZip();
         // call index.js to add something to this zip
-        export_directory_data(curr_zip);
-        // export_directory_js(curr_zip);
+
+        // export_directory_js(temp_zip);
 
 
         template_file_names = ["index.html", "index.css", "background_1.jpg"];
 
+        upload_image_file(function (temp_zip) {
+                    console.log(curr_zip)
+                    // x_zip = curr_zip;
 
-        get_template_files(template_file_names, curr_zip, function (data) {
-            get_template_file("index.js", function (data) {
-                curr_zip.file("index.js", export_directory_data_string() + data);
 
-                for (k in SLIDESHOW_FIELD_NAME) {
-                    const menu_name = SLIDESHOW_FIELD_NAME[k];
-                    if (directory_data[menu_name] != undefined) {
-                        
-                        i = 0;
-                        while (i < directory_data[menu_name].length) {
-                            data_i = directory_data[menu_name][i].data;
-                            
-                            if (data_i != null) {
-                                if (directory_data[menu_name][i].is_new) {
-                                    curr_zip.file(data_i.name, data_i);
-                                } else {
-                                    //todo--------------------------------------------------------------
-                                }
+                    // curr_zip = temp_zip;
+            
+                    export_directory_data(temp_zip);
+            
+                    get_template_files(template_file_names, temp_zip, function (data) {
+                        get_template_file("index.js", function (data) {
+                            temp_zip.file("index.js", export_directory_data_string() + data);
+            
+                            if (temp_zip != null) {
+                                console.log(temp_zip)
+                                promise = temp_zip.generateAsync({type : "blob"}).then(function (blob) {
+                                    saveFile(blob, "directory.zip");
+                                }, function (err) {
+                                    console.log(err);
+                                    alert("error in download");
+                                });
+                            } else {
+                                //temp_zip not initialized
+                                alert("error: directory not initialized")
                             }
-                            
-                            i++;
-                        }
-                    }
-                }
-
-
-                if (curr_zip != null) {
-                    promise = curr_zip.generateAsync({type : "blob"}).then(function (blob) {
-                        saveFile(blob, "directory.zip");
-                    }, function (err) {
-                        console.log(err);
-                        alert("error in download");
+                        });
                     });
-                } else {
-                    //curr_zip not initialized
-                    alert("error: directory not initialized")
-                }
-            });
+
         });
+
         
         // get_template_HTML(function (data) {
         //     curr_zip.file("index.html", data);

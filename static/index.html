@@ -22,7 +22,7 @@
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.traffic)"><h1 class="display-4">Local Traffic</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.weather)"><h1 class="display-4">Weather</h1></button>
             <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.ammenities)"><h1 class="display-4">Ammenities</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="testFunc()"><h1 class="display-4">Leasing</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.leasing)"><h1 class="display-4">Leasing</h1></button>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
         </div>
 
 
-        <div class="main-content" >
+        <div class="main-content" style="max-height: 75%">
             <div id="traffic-div" style="display: none;">
                 <style>
                     /* Always set the map height explicitly to define the size of the div
@@ -122,6 +122,11 @@
         change_curr_status(dir_status.directory);
         initMap();
     };
+
+
+    $('.carousel').carousel({
+        interval: 2000
+    })
 </script>
 
 <!-- 
