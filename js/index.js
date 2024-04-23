@@ -158,7 +158,7 @@ function get_HTML_row(i) {
             </div>
         </div>
     `;
-    
+
     return result;
 }
 
@@ -247,8 +247,10 @@ function render_editor_slideshow(menu_name) {
                         </div>
                         <div class="modal-body">
                             <input id="title_${i}" class="form-control col" type="text" placeholder="title" value="${directory_data[menu_name][i].title}">
-                            <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
+                            <textarea id="description_${i}" class="form-control col" placeholder="description">${directory_data[menu_name][i].description}</textarea>
             `;
+            
+            // <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
             if (directory_data[menu_name][i].data == null) {
                 result += `
                     <input class="form-control" type="file" id="image-selector_${i}" placeholder="test">
@@ -311,6 +313,9 @@ function save_slideshow_entry(menu_name, i) {
         directory_data[menu_name][i].data = temp_image;
         directory_data[menu_name][i].name = temp_image.name;
         directory_data[menu_name][i].is_new = true;
+    } else if(directory_data[menu_name][i].name != undefined && directory_data[menu_name][i].name != "" && directory_data[menu_name][i].name != null) {
+        directory_data[menu_name][i].title = document.getElementById(`title_${i}`).value;
+        directory_data[menu_name][i].description = document.getElementById(`description_${i}`).value;
     } else {
         // directory_data[menu_name][i].name = "New picture";
         alert("Please upload an image file if you wish to save this entry");
