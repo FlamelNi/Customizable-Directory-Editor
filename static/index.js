@@ -167,9 +167,6 @@ function set_slideshow_HTML(menu_name) {
     
     i = 0;
     while (i < directory_data[menu_name].length) {
-
-        console.log(directory_data[menu_name][i].description)
-        console.log(directory_data[menu_name][i].description.replaceAll('\n', '&#013; &#010;'))
         
         result += `
             <div class="carousel-section" style="max-height: 70vh">
@@ -177,7 +174,7 @@ function set_slideshow_HTML(menu_name) {
                 <div class="card text-white bg-secondary mb-3" style="width:20vw; opacity: .8; position: absolute; top: 5%; left: ${70*i + 45}vw;">
                     <div class="card-header"><h5 class="card-title">${directory_data[menu_name][i].title}</h5></div>
                     <div class="card-body" style="text-align: left">
-                        <p>${directory_data[menu_name][i].description.replaceAll('\n', '&#013; &#010;')}</p>
+                        <p id="slideshow_text_${i}">${directory_data[menu_name][i].description}</p>
                     </div>
                 </div>
 
@@ -227,6 +224,11 @@ function set_slideshow_HTML(menu_name) {
 
     
     document.getElementById("content-placeholder").innerHTML = result;
+    i = 0;
+    while (i < directory_data[menu_name].length) {
+        document.getElementById(`slideshow_text_${i}`).innerText = `${directory_data[menu_name][i].description}`;
+        i++;
+    }
     init_slide();
     // return result;
 }
