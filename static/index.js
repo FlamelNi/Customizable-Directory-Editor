@@ -41,7 +41,7 @@ function render_content() {
     document.getElementById("news-div").style.display = 'none';
     document.getElementById("content-placeholder").innerHTML = "";
     document.getElementById("traffic-div").style.display = 'none';
-
+    auto_counter = -1;
 
     if (curr_status == dir_status.testing) {
         document.getElementById("title").innerHTML = "Testing";
@@ -361,8 +361,10 @@ function set_slideshow_HTML(menu_name) {
         while (j < directory_data[menu_name][i].files.length) {
             file = directory_data[menu_name][i].files[j];
             result += `
-                    <div class="card" style="width: 18rem; margin: 5px">
-                        <img class="card-img-top" src="${file.name}" alt="Card image cap">
+                    <div class="card" style="width: 25vw; max-height: 50vh; margin: 5px">
+                        <div style="height:40vh; background-color: grey">
+                            <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title">${file.title}</h5>
                             <p class="card-text">${file.description}</p>
@@ -848,7 +850,10 @@ let currentIndex = 0;
 let slides = [];
 let dots = [];
 
-function render() {
+const AUTO_COUNTER_INIT = 3;
+let auto_counter = -1;
+
+function render_carousel() {
     let offset = 0;
     slides.forEach((slide, index) => {
         if (index < currentIndex) {
@@ -864,22 +869,48 @@ function render() {
     });
 }
 
+function manual_prev() {
+    auto_counter = AUTO_COUNTER_INIT;
+    prev();
+}
+function manual_next() {
+    auto_counter = AUTO_COUNTER_INIT;
+    next();
+}
+
 function prev() {
-    if (currentIndex < 0) return;
+    if (currentIndex <= 0) {
+        currentIndex = slides.length;
+    };
     currentIndex -= 1;
-    render();
+    render_carousel();
 }
 
 function next() {
-    if (currentIndex === slides.length - 1) return;
+    if (currentIndex === slides.length - 1) {
+        currentIndex = -1;
+    };
     currentIndex += 1;
-    render();
+    render_carousel();
 }
 
 function goto(newIndex) {
     if (newIndex < 0 || newIndex > slides.length - 1) return;
     currentIndex = newIndex;
-    render();
+    render_carousel();
+}
+
+function carousel_timer() {
+    console.log(`carousel timer`);
+    if (auto_counter > 0) {
+        auto_counter--;
+    } else if (auto_counter == -1) {
+        //do nothing
+    } else {
+        next();
+    }
+    
+    setTimeout(carousel_timer, 5000);
 }
 
 function init_slide() {
@@ -888,8 +919,8 @@ function init_slide() {
     nextBtn = document.querySelector("div.next-arrow");
     sectionContainer = document.querySelector("div.carousel-sections");
 
-    prevBtn.onclick = prev;
-    nextBtn.onclick = next;
+    prevBtn.onclick = manual_prev;
+    nextBtn.onclick = manual_next;
 
 
     const newSlides = document.querySelectorAll("div.carousel-sections > div");
@@ -901,7 +932,8 @@ function init_slide() {
     });
     dots = newDots;
 
-    render();
+    auto_counter = 3;
+    render_carousel();
 }
 
 
