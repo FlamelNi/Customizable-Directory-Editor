@@ -193,9 +193,19 @@ function render_editor_directory() {
     document.getElementById("render_div").innerHTML = result;
 }
 
-function new_slideshow_entry(menu_name) {
+function new_slideshow_section(menu_name) {
     read_HTML_to_update();
     directory_data[menu_name].push({
+        "section_name": "new section",
+        "files": [],
+    });
+    render_editor();
+}
+
+
+function new_slideshow_entry(menu_name, i) {
+    read_HTML_to_update();
+    directory_data[menu_name][i].files.push({
         title: "New picture",
         description: "",
         name: "no file selected",
@@ -204,17 +214,70 @@ function new_slideshow_entry(menu_name) {
     render_editor();
 }
 
-function delete_slideshow_entry(menu_name, i) {
+function delete_slideshow_section(menu_name, section_i) {
     read_HTML_to_update();
-    directory_data[menu_name].splice(i, 1);
+    directory_data[menu_name].splice(section_i, 1);
+    render_editor();
+}
+
+function delete_slideshow_entry(menu_name, section_i, i) {
+    read_HTML_to_update();
+    directory_data[menu_name][section_i].files.splice(i, 1);
     render_editor();
 }
 
 function render_editor_slideshow(menu_name) {
+    if (directory_data[menu_name] == undefined) {
+        directory_data[menu_name] = [];
+    }
     result = ``;
     result += `
         <div class="row-column-menu">
-            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}')"> Add new entry </button>
+            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_section('${menu_name}')"> Add new section </button>
+        </div>
+
+        <div>
+    `;
+    var section_i = 0
+    while (section_i < directory_data[menu_name].length) {
+        // result += `
+        //     <div id="slideshow_section_div_${section_i}">
+        // `;
+        result += get_render_editor_slideshow_section(menu_name, section_i);
+        section_i++;
+    }
+    result += `
+        </div>
+    `;
+
+    var editor_div = document.getElementById("editor_div")
+    editor_div.innerHTML = result;
+
+    i = 0;
+    while (i < directory_data[menu_name].length) {
+        j = 0;
+        while (j < directory_data[menu_name][i].files.length) {
+            imageSelector = document.getElementById(`image-selector_${i}_${j}`);
+            if (imageSelector) {
+                imageSelector.addEventListener('change', (event) => {
+                    const fileList = event.target.files;
+                    temp_image = fileList[0];
+                });
+            }
+            j++;
+        }
+        i++;
+    }
+
+
+}
+function get_render_editor_slideshow_section(menu_name, section_i) {
+    result = ``;
+    result += `
+        <div style="background-color: Grey">
+            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}', ${section_i})"> Add new entry </button>
+            <button class="btn btn-danger" style="flex-grow: 0.7; margin-right: 30px;" onclick="delete_slideshow_section('${menu_name}', ${section_i})"> Delete this section </button>
+            <h3>${directory_data[menu_name][section_i].section_name}</h3>
         </div>
 
         <div>
@@ -223,6 +286,12 @@ function render_editor_slideshow(menu_name) {
 
     if (directory_data[menu_name] == undefined) {
         directory_data[menu_name] = [];
+    }
+    if (directory_data[menu_name][section_i] == undefined) {
+        directory_data[menu_name][section_i] = {
+            "section_name": "",
+            "files": [],
+        };
         /*
         {
             name: "",
@@ -234,9 +303,10 @@ function render_editor_slideshow(menu_name) {
     }
     
     i = 0;
-    while (i < directory_data[menu_name].length) {
+    var files = directory_data[menu_name][section_i].files;
+    while (i < files.length) {
         result += `
-            <div class="modal fade" id="row_info_${i}" tabindex="-1" role="dialog">
+            <div class="modal fade" id="row_info_${section_i}_${i}" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -246,26 +316,26 @@ function render_editor_slideshow(menu_name) {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <input id="title_${i}" class="form-control col" type="text" placeholder="title" value="${directory_data[menu_name][i].title}">
-                            <textarea id="description_${i}" class="form-control col" placeholder="description">${directory_data[menu_name][i].description}</textarea>
-            `;
+                            <input id="title_${section_i}_${i}" class="form-control col" type="text" placeholder="title" value="${files[i].title}">
+                            <textarea id="description_${section_i}_${i}" class="form-control col" placeholder="description">${files[i].description}</textarea>
+        `;
             
-            // <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
-            if (directory_data[menu_name][i].data == null) {
-                result += `
-                    <input class="form-control" type="file" id="image-selector_${i}" placeholder="test">
-                `;
-            } else {
-                result += `
-                    <div id="name_${i}">
-                        <h4>${directory_data[menu_name][i].name}</h4>
-                    </div>
-                `;
-            }
+        // <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
+        if (files[i].data == null) {
             result += `
+                <input class="form-control" type="file" id="image-selector_${section_i}_${i}" placeholder="test">
+            `;
+        } else {
+            result += `
+                <div id="name_${section_i}_${i}">
+                    <h4>${files[i].name}</h4>
+                </div>
+            `;
+        }
+        result += `
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="save_slideshow_entry('${menu_name}', ${i})" data-dismiss="modal">Save changes</button>
+                            <button type="button" class="btn btn-primary" onclick="save_slideshow_entry('${menu_name}', ${section_i}, ${i})" data-dismiss="modal">Save changes</button>
                             <button type="button" class="btn btn-secondary" onclick="close_modal()" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -273,10 +343,10 @@ function render_editor_slideshow(menu_name) {
             </div>
 
             <div class="input-row">
-                <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${i}"> Edit </button>
-                <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick="delete_slideshow_entry('${menu_name}', ${i})"> Delete </button>
+                <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${section_i}_${i}"> Edit </button>
+                <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick="delete_slideshow_entry('${menu_name}', ${section_i}, ${i})"> Delete </button>
                 <div>
-                    <h3>${directory_data[menu_name][i].title}</h3>
+                    <h3>${files[i].title}</h3>
                 </div>
             </div>
 
@@ -288,36 +358,24 @@ function render_editor_slideshow(menu_name) {
     result += `
         </div>
     `;
-    var editor_div = document.getElementById("editor_div")
-    editor_div.innerHTML = result;
-
-    i = 0;
-    while (i < directory_data[menu_name].length) {
-        imageSelector = document.getElementById(`image-selector_${i}`);
-        if (imageSelector) {
-            imageSelector.addEventListener('change', (event) => {
-                const fileList = event.target.files;
-                temp_image = fileList[0];
-            });
-        }
-        
-        i++;
-    }
+    return result;
 }
 
-function save_slideshow_entry(menu_name, i) {
+function save_slideshow_entry(menu_name, section_i, i) {
     if (temp_image != null) {
-        directory_data[menu_name][i].title = document.getElementById(`title_${i}`).value;
-        directory_data[menu_name][i].description = document.getElementById(`description_${i}`).value;
+        file = directory_data[menu_name][section_i].files[i];
+
+        file.title = document.getElementById(`title_${section_i}_${i}`).value;
+        file.description = document.getElementById(`description_${section_i}_${i}`).value;
         
-        directory_data[menu_name][i].data = temp_image;
-        directory_data[menu_name][i].name = temp_image.name;
-        directory_data[menu_name][i].is_new = true;
-    } else if(directory_data[menu_name][i].name != undefined && directory_data[menu_name][i].name != "" && directory_data[menu_name][i].name != null) {
-        directory_data[menu_name][i].title = document.getElementById(`title_${i}`).value;
-        directory_data[menu_name][i].description = document.getElementById(`description_${i}`).value;
+        file.data = temp_image;
+        file.name = temp_image.name;
+        file.is_new = true;
+    } else if(file.name != undefined && file.name != "" && file.name != null) {
+        file.title = document.getElementById(`title_${section_i}_${i}`).value;
+        file.description = document.getElementById(`description_${section_i}_${i}`).value;
     } else {
-        // directory_data[menu_name][i].name = "New picture";
+        // files.name = "New picture";
         alert("Please upload an image file if you wish to save this entry");
     }
 
@@ -455,17 +513,21 @@ function import_image_files() {
             
             i = 0;
             while (i < directory_data[menu_name].length) {
-                var data_i = directory_data[menu_name][i];
-                if (data_i != null) {
-                    f_name = directory_data[menu_name][i].name;
-                    console.log(menu_name);
-                    console.log(i);
-                    console.log(f_name);
-                    curr_zip.file(f_name).async("blob").then(function(result) {
-                        data_i.data = new File([result], f_name);
-                    });
+                j = 0;
+                while (j < directory_data[menu_name][i].files.length) {
+                    var data_i = directory_data[menu_name][i].files[j];
+                    if (data_i != null) {
+                        f_name = data_i.name;
+                        console.log(menu_name);
+                        console.log(i);
+                        console.log(f_name);
+                        curr_zip.file(f_name).async("blob").then(function(result) {
+                            data_i.data = new File([result], f_name);
+                        });
+                    }
+
+                    j++;
                 }
-                
                 i++;
             }
         }
@@ -490,7 +552,13 @@ function export_directory_data_string() {
             
             i = 0;
             while (i < directory_data[menu_name].length) {
-                directory_data[menu_name][i].data_name = directory_data[menu_name][i].data.name;
+                j = 0;
+                while (j < directory_data[menu_name][i].files.length) {
+                    file = directory_data[menu_name][i].files[j];
+                    file.data_name = file.data.name;
+
+                    j++;
+                }
                 i++;
             }
         }

@@ -6,6 +6,7 @@
 // };
 
 var dir_status = {
+    'testing': -1,
     'directory': 0,
     'news': 1,
     'traffic': 2,
@@ -41,7 +42,11 @@ function render_content() {
     document.getElementById("content-placeholder").innerHTML = "";
     document.getElementById("traffic-div").style.display = 'none';
 
-    if (curr_status == dir_status.directory) {
+
+    if (curr_status == dir_status.testing) {
+        document.getElementById("title").innerHTML = "Testing";
+        set_testing_HTML();
+    } else if (curr_status == dir_status.directory) {
         document.getElementById("title").innerHTML = "Directory";
         document.getElementById("content-placeholder").innerHTML = get_directory_HTML();
     } else if (curr_status == dir_status.news) {
@@ -65,6 +70,187 @@ function render_content() {
 
         
     }
+}
+
+function set_testing_HTML() {
+
+    // pictures = ["sample1.jpg", "sample2.jpg", "sample3.jpg"];
+    
+    var pictures = [
+        "sample3.jpg",
+        "sample2.jpg",
+        "sample1.jpg",
+        "sample4.png",
+        "sample2.jpg",
+        "sample5.png",
+        "sample4.png",
+        "sample5.png",
+        "sample1.jpg",
+        "sample2.jpg",
+        "sample3.jpg",
+        "sample4.png",
+        "sample1.jpg",
+        "sample3.jpg",
+        "sample1.jpg",
+        "sample5.png",
+        "sample2.jpg",
+        "sample3.jpg",
+    ];
+    
+
+    var result = `
+        <section class="image-grid">
+            <div class="container-xxl">
+                <div class="row gy-4">
+    `;
+
+    var t = 0;
+    var i = 0;
+    while (t < 3) {
+        result += `
+                    <div class="col-12 col-sm-6 col-md-4">
+        `;
+        var end_cond = pictures.length * (t+1) / 3;
+        if (t == 2) {
+            end_cond = pictures.length;
+        }
+        while (i < end_cond) {
+            result += `
+                            <figure>
+                            <div class="d-block" href="">
+                                <img width="1920" height="1280" src="${pictures[i]}" class="img-fluid">
+                            </div>
+                            </figure>
+            `;
+            i++;
+        }
+        result += `
+                    </div>
+        `;
+
+        t++;
+    }
+    result += `
+                <!-- more columns here -->
+                </div>
+            </div>
+        </section>
+    `;
+
+    //result reset
+    // result = ``;
+
+    // result += `
+    //     <div>
+    // `;
+    // i = 0;
+    // while (i < 3) {
+    //     result += `
+    //         <div class="modal fade" id="slideshow_modal_${i}" tabindex="-1" role="dialog">
+    //             <div class="modal-dialog" role="document">
+    //                 <div class="modal-content">
+    //                     <div class="modal-header">
+    //                         <h5 class="modal-title">Edit description</h5>
+    //                         <button type="button" class="close" onclick="" data-dismiss="modal" aria-label="Close">
+    //                         <span aria-hidden="true">&times;</span>
+    //                         </button>
+    //                     </div>
+    //                     <div class="modal-body">
+    //                         <p>test</p>
+    //                     </div>
+    //                     <div class="modal-footer">
+    //                         <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     `;
+    //     i++;
+    // }
+    // result += `
+    //     </div>
+    // `;
+
+
+    result = ``;
+    result += `
+        <div>
+            <div class="carousel" style="max-height: 70vh">
+                <div class="prev-arrow"></div>
+
+                <div class="carousel-sections-scroll" style="max-height: 70vh">
+                    <div class="carousel-sections" style="max-height: 70vh">
+    `;
+    
+    i = 0;
+    while (i < 3) {
+        result += `
+            <div class="carousel-section" style="max-height: 70vh">
+                
+                <div class="card" style="width: 18rem; margin: 5px">
+                    <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Ammenity name</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
+
+                    </div>
+                </div>
+
+                <div class="card" style="width: 18rem; margin: 5px">
+                <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Ammenity name</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
+
+                </div>
+            </div>
+            
+            <div class="card" style="width: 18rem; margin: 5px">
+            <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">Ammenity name</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
+
+            </div>
+        </div>
+
+            </div>
+            
+        `;
+        i++;
+    }
+
+    result += `
+                    </div>
+                </div>
+                
+                <div class="next-arrow"></div>
+        
+            </div>
+            <div class="carousel-dots">
+    `;
+    i = 0;
+    while (i < 3) {
+        result += `<div class="carousel-dot"></div>`;
+        i++;
+    }
+
+    result += `
+            </div>
+        </div>
+    `;
+
+
+    
+    document.getElementById("content-placeholder").innerHTML = result;
+    init_slide();
+
+    var iframe = `<iframe id="gallery" src="gallery.html" title="description" style="width: 70vw; height: 70vh;"></iframe>`;
+
+    // document.getElementById("content-placeholder").innerHTML = iframe;
 }
 
 function get_directory_HTML() {
@@ -170,14 +356,30 @@ function set_slideshow_HTML(menu_name) {
         
         result += `
             <div class="carousel-section" style="max-height: 70vh">
-                <img src="${directory_data[menu_name][i].name}" style="max-width:100%; max-width: 60vw;">
-                <div class="card text-white bg-secondary mb-3" style="width:20vw; opacity: .8; position: absolute; top: 5%; left: ${70*i + 45}vw;">
-                    <div class="card-header"><h5 class="card-title">${directory_data[menu_name][i].title}</h5></div>
-                    <div class="card-body" style="text-align: left">
-                        <p id="slideshow_text_${i}">${directory_data[menu_name][i].description}</p>
+        `;
+        j = 0;
+        while (j < directory_data[menu_name][i].files.length) {
+            file = directory_data[menu_name][i].files[j];
+            result += `
+                    <div class="card" style="width: 18rem; margin: 5px">
+                        <img class="card-img-top" src="${file.name}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">${file.title}</h5>
+                            <p class="card-text">${file.description}</p>
+                        </div>
                     </div>
-                </div>
+            `;
 
+            j++
+        }
+        // <img src="${directory_data[menu_name][i].name}" style="max-width:100%; max-width: 60vw;">
+        // <div class="card text-white bg-secondary mb-3" style="width:20vw; opacity: .8; position: absolute; top: 5%; left: ${70*i + 45}vw;">
+        //     <div class="card-header"><h5 class="card-title">${directory_data[menu_name][i].title}</h5></div>
+        //     <div class="card-body" style="text-align: left">
+        //         <p id="slideshow_text_${i}">${directory_data[menu_name][i].description}</p>
+        //     </div>
+        // </div>
+        result += `
             </div>
         `;
         i++;
@@ -225,10 +427,10 @@ function set_slideshow_HTML(menu_name) {
     
     document.getElementById("content-placeholder").innerHTML = result;
     i = 0;
-    while (i < directory_data[menu_name].length) {
-        document.getElementById(`slideshow_text_${i}`).innerText = `${directory_data[menu_name][i].description}`;
-        i++;
-    }
+    // while (i < directory_data[menu_name].length) {
+    //     document.getElementById(`slideshow_text_${i}`).innerText = `${directory_data[menu_name][i].description}`;
+    //     i++;
+    // }
     init_slide();
     // return result;
 }
