@@ -299,8 +299,8 @@ function get_directory_HTML() {
                     result += 
                     `
                         <div class="col">
-                            <h1 style="font-size: 22px; margin-bottom: 0">${s.substr(0, index)}</h1>
-                            <h1 style="font-size: 22px;">${s.substr(index)}</h1>
+                            <h1 style="font-size: 22px; margin-bottom: 0">${s.substr(0, temp_index)}</h1>
+                            <h1 style="font-size: 22px;">${s.substr(temp_index)}</h1>
                         </div>
                     `;
 
