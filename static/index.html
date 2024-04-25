@@ -12,7 +12,7 @@
     <div class="menu-bar">
         <div style="max-height: 100px; min-height: 100px;">
             <h1>Welcome to</h1>
-            <h1>1732 sdf</h1>
+            <h1>1732 N First St</h1>
         </div>
         
         <div class="menu-btn-div">
@@ -26,24 +26,43 @@
         </div>
     </div>
 
-    <div class="main-window" style="max-width: 75%;">
-        <div class="main-top">
-            <div>
+    <div class="border-div" style="width: 1%;">
+    </div>
+
+    <div class="main-window" style="max-width: 74%;">
+        <div class="main-top" style="height: 15%;">
+            <div style="margin: 2%;">
                 <h1 class="display-2" id="title">Directory</h1>
             </div>
-            <div>
-                  <!-- <div class='date-container'>
-                </div> -->
-                <div class='date'></div>
-                <div class='day'></div>
-                <!-- <div class='date-day'></div> -->
-                <div class='time'></div>
+            
+            <!-- <div style="width: 60%"> -->
+            <div class="time-date-div" style="width: 47vw;">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" preserveAspectRatio="none" style="width: 10%">
+                    <!-- <polygon points="100 0 100 10 0 10" /> -->
+                    <polygon points="100 0 0 0 0 10" fill="#103882" />
+                </svg>
+                <!-- <div id="weather_icon_div" style="position: absolute; left: 95vh; top: 5vh;"> -->
+                <div id="weather_icon_div" style="">
+                </div>
+
+                <div class='time' style="margin-top: 2%;"></div>
+                <div style="margin-top: 2%; margin-right: 2%;">
+                      <!-- <div class='date-container'>
+                    </div> -->
+                    <div class='date'></div>
+                    <div class='day'></div>
+                    <!-- <div class='date-day'></div> -->
+                </div>
             </div>
 
         </div>
+        <div class="border-div" style="max-height: 2%;">
+            <p></p><br>
+        </div>
 
 
-        <div class="main-content" style="max-height: 75%; max-width: 100%">
+        <div class="main-content" style="max-height: 78%; max-width: 100%">
             <div id="traffic-div" style="display: none;">
                 <style>
                     /* Always set the map height explicitly to define the size of the div
@@ -123,8 +142,10 @@
             lat: 37.3681305,
             lon: -121.9137343,
         }
+        console.log('weather icon2')
+        // set_today_weather_icon();
         change_curr_status(dir_status.directory);
-        // change_curr_status(dir_status.testing);
+        change_curr_status(dir_status.testing);
         carousel_timer();
         initMap();
     };

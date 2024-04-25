@@ -24,6 +24,10 @@
   max-width: 25%;
 }
 
+.border-div {
+  background-color: #061530;
+}
+
 .menu-btn-div {
   margin-top: 10%;
   height: 80%;
@@ -64,8 +68,14 @@
   /* switched from default (flex-start, see below) */
   justify-content: space-between;
 
-  padding: 2%;
-
+}
+.time-date-div {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  background-color: #4285F4;
 }
 
 .main-content {

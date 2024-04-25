@@ -27,8 +27,6 @@ const DAYS_OF_WEEK = [
 var curr_status = dir_status.directory;
 var directory_page = 0;
 
-var coord = {};
-
 // this is not very good to have here, but I see low risk for having this here at the moment
 // move this to server side in future
 const OPEN_WEATHER_API_KEY = `94bca9a1175503686db16ec39b95265a`;
@@ -286,15 +284,15 @@ function get_directory_HTML() {
                 if (directory_data.rows[index][j].length > 30) {
                     var s = directory_data.rows[index][j];
                     
-                    var index = 0;
+                    var temp_index = 0;
 
                     if (s.length < 40) {
-                        index = s.length;
+                        temp_index = s.length;
                     } else {
                         var temp = s.substr(0, 30);
-                        index = temp.lastIndexOf(" ");
-                        if (index == -1) {
-                            index = 35;
+                        temp_index = temp.lastIndexOf(" ");
+                        if (temp_index == -1) {
+                            temp_index = 35;
                         }
                     }
                     
@@ -361,7 +359,7 @@ function set_slideshow_HTML(menu_name) {
         while (j < directory_data[menu_name][i].files.length) {
             file = directory_data[menu_name][i].files[j];
             result += `
-                    <div class="card" style="width: 25vw; max-height: 50vh; margin: 5px">
+                    <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
                         <div style="height:40vh; background-color: grey">
                             <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
                         </div>
@@ -492,7 +490,7 @@ function set_weather_HTML() {
                 today_data.icon = get_weather_icon_code(today_data.weather_id.toString()[0]);
                 
                 result += `
-                    <div class="weather-div">
+                    <div class="weather-div" style="margin-top: 10px">
                         <div style="max-width: 60%; min-width: 60%;">
 
                             <div class="card text-white bg-secondary mb-3" style=""; height: 12%">
@@ -658,6 +656,17 @@ function get_today_date() {
 
     d.setTime(d.getTime() + offset * 60000 * 60);
     return d;
+}
+
+function set_today_weather_icon() {
+    get_today_weather(window.coord, function (data) {
+        console.log('weather icon')
+        var icon = get_weather_icon_code(data.weather_id.toString()[0]);
+    
+        document.getElementById('weather_icon_div').innerHTML = `
+            <img src="https://openweathermap.org/img/wn/${icon}@2x.png">
+        `;
+    });
 }
 
 function refine_today_weather_data(d) {
@@ -835,9 +844,9 @@ function displayTime() {
   time = h + ":" + m + ":" + s + " " + ampm;
 
   // Print your clock to an element.
-  document.getElementsByClassName("time")[0].innerHTML = time;
-  document.getElementsByClassName("day")[0].innerHTML = day;
-  document.getElementsByClassName("date")[0].innerHTML = month + "/" + date + "/" + year;
+  document.getElementsByClassName("time")[0].innerHTML = `<h1 style="font-size: 3vw">${time}</h1>`;
+  document.getElementsByClassName("day")[0].innerHTML = `<h1 style="">${day}</h1>`;
+  document.getElementsByClassName("date")[0].innerHTML = `<h1 style="">${month}/${date}/${year}</h1>`;
   // document.getElementsByClassName("date-day")[0].innerHTML = month + "/" + date + "/" + year + ", " + day;
 
   // Refreshes clock every second. If you're just using minutes change to 60000
@@ -904,6 +913,7 @@ function next() {
 function goto(newIndex) {
     if (newIndex < 0 || newIndex > slides.length - 1) return;
     currentIndex = newIndex;
+    auto_counter = AUTO_COUNTER_INIT;
     render_carousel();
 }
 
