@@ -331,8 +331,8 @@ function get_directory_HTML() {
     }
 
     result += `
-        <button class="btn btn-primary" type="button" onclick="page_change(-1)">&#9665;</button>
-        <button class="btn btn-primary" type="button" onclick="page_change(1)">&#9655;</button>
+        <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(-1)">&#9665;</button>
+        <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(1)">&#9655;</button>
     `;
 
     return result;
@@ -367,7 +367,7 @@ function set_slideshow_HTML(menu_name) {
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${file.title}</h5>
-                            <p class="card-text">${file.description}</p>
+                            <p class="card-text">${file.description.replace("\n", "<br>")}</p>
                         </div>
                     </div>
             `;
@@ -590,6 +590,13 @@ function set_weather_HTML() {
 
 function page_change(i) {
     directory_page += i;
+    if (directory_page < 0) {
+        directory_page = Math.floor(directory_data.rows.length / 10);
+    }
+    if (directory_page > Math.floor(directory_data.rows.length / 10)) {
+        directory_page = 0;
+    }
+
     render_content();
 }
 
