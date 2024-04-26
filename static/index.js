@@ -340,7 +340,6 @@ function set_slideshow_HTML(menu_name) {
     result = `
         <div>
             <div class="carousel" style="max-height: 70vh">
-                <div class="prev-arrow"></div>
 
                 <div class="carousel-sections-scroll" style="max-height: 70vh">
                     <div class="carousel-sections" style="max-height: 70vh">
@@ -398,10 +397,15 @@ function set_slideshow_HTML(menu_name) {
     result += `
                     </div>
                 </div>
-                
-                <div class="next-arrow"></div>
         
             </div>
+
+            <div class="carousel-btn-div">
+                <button id="carousel_prev" class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;">&#9665;</button>
+                <button id="carousel_next" class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;">&#9655;</button>
+            </div>
+
+
             <div class="carousel-dots">
     `;
     i = 0;
@@ -932,8 +936,12 @@ function carousel_timer() {
 
 function init_slide() {
     currentIndex = 0;
-    prevBtn = document.querySelector("div.prev-arrow");
-    nextBtn = document.querySelector("div.next-arrow");
+    
+    prevBtn = document.getElementById("carousel_prev");
+    nextBtn = document.getElementById("carousel_next");
+
+    // prevBtn = document.querySelector("div.prev-arrow");
+    // nextBtn = document.querySelector("div.next-arrow");
     sectionContainer = document.querySelector("div.carousel-sections");
 
     prevBtn.onclick = manual_prev;

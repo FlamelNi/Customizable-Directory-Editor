@@ -1,4 +1,9 @@
 
+const CURR_VERSION = {
+    "id": "1.0",
+    "date": "04/25/2024",
+};
+
 
 var directory_data = reset_data();
 
@@ -68,6 +73,9 @@ function empty_data() {
         //     ['ad', 'ry'],
         //     ['adf', 'wer'],
         // ],
+
+        last_change_date: null,
+        version: CURR_VERSION,
     };
     return JSON.parse(JSON.stringify(temp));
 }
@@ -425,6 +433,8 @@ function read_HTML_to_update_ammenities() {
 }
 
 function read_HTML_to_update() {
+    directory_data.last_change_date = new Date();
+
     if (curr_editor == ALL_EDITORS.DIRECTORY) {
         read_HTML_to_update_dir();
     } else if (curr_editor == ALL_EDITORS.AMMENITIES) {

@@ -210,6 +210,12 @@
   margin-left: 10px;
 }
 
+.carousel-btn-div {
+  /* height: 300px; */
+  display: flex;
+  justify-content: space-evenly;
+}
+
 /* .carousel-sections > div {
   min-width: 100%;
   height: 100%;
@@ -221,7 +227,7 @@
   flex-direction: column;
 } */
 
-.prev-arrow,
+/* .prev-arrow,
 .next-arrow {
   z-index: 10;
   position: relative;
@@ -276,7 +282,7 @@
 .next-arrow:before {
   top: 10px;
   transform: rotate(45deg);
-}
+} */
 
 .carousel-dots {
   margin-bottom: 24px;
