@@ -12,7 +12,9 @@
     <div class="menu-bar">
         <div style="max-height: 100px; min-height: 100px;">
             <h1>Welcome to</h1>
-            <h1>1732 N First St</h1>
+            <div id="site_name_div">
+                <h1></h1>
+            </div>
         </div>
         
         <div class="menu-btn-div">
@@ -80,7 +82,7 @@
                 </style>
                 <div id="map"></div>
                 <script>
-                async function initMap() {
+                async function initMap(coord) {
                     const { Map } = await google.maps.importLibrary("maps");
                     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
                     var map = new google.maps.Map(document.getElementById('map'), {
@@ -134,20 +136,26 @@
 
 <script>
     window.onload = function() {
+        document.getElementById("site_name_div").innerHTML = `
+            <h1>
+                ${directory_data.setting.site_name}
+            </h1>
+        `;
+
         displayTime();
         // get_coord("San Francisco", function (data) {
         //     coord = data;
         // });
         coord = {
-            lat: 37.3681305,
-            lon: -121.9137343,
+            lat: Number(directory_data.setting.coord.lat),
+            lon: Number(directory_data.setting.coord.lon),
         }
         // console.log('weather icon2')
         set_today_weather_icon();
         change_curr_status(dir_status.directory);
         // change_curr_status(dir_status.testing);
         carousel_timer();
-        initMap();
+        initMap(coord);
     };
 
     // $('.carousel').carousel({

@@ -252,83 +252,105 @@ function set_testing_HTML() {
 }
 
 function get_directory_HTML() {
-    result = 
-    `
-        <div class="col-bar">
+    result = `
+        <div class="directory-div">
     `;
 
-    for (const c in directory_data.column_row) {
-        result += 
-        `
-            <div class="col">
-                <h1>${directory_data.column_row[c]}</h1>
-            </div>
+    // for (const c in directory_data.column_row) {
+    //     result += 
+    //     `
+    //         <div class="col">
+    //             <h1>${directory_data.column_row[c]}</h1>
+    //         </div>
+    //     `;
+    // }
+    // result += 
+    // `
+    //     </div>
+    // `;
+
+    // for (const c in directory_data.column_row) {
+    for (var c = 0; c < directory_data.column_row.length; c++) {
+        // var col_size = directory_data.column_size;
+        var col_size = 1;
+
+        result += `
+            <div class="col" style="padding: 0px; flex-grow:${col_size}">
+
+                <div class="col-bar">
+                    <h1>${directory_data.column_row[c]}</h1>
+                </div>
         `;
-    }
-    result += 
-    `
-        </div>
-    `;
 
-    for (i = 0; i < 10; i++) {
-        index = directory_page*10 + i;
+        for (i = 0; i < directory_data.rows.length + (10 - directory_data.rows.length%10); i++) {
+            index = directory_page*10 + i;
+            var row_style = `display: none;`;
+            if (directory_page*10 <= i && i < (directory_page+1)*10) {
+                row_style = ``;
+            }
 
-        result += 
-        `
-            <div class="row-${i%2 + 1}">
-        `;
+            result += 
+            `
+                <div class="row-${i%2 + 1}" style="${row_style}">
+            `;
 
-        for (j = 0; j < directory_data.column_row.length; j++) {
-            if (index < directory_data.rows.length) {
+            if (i < directory_data.rows.length) {
 
-                if (directory_data.rows[index][j].length > 30) {
-                    var s = directory_data.rows[index][j];
-                    
-                    var temp_index = 0;
-
-                    if (s.length < 40) {
-                        temp_index = s.length;
-                    } else {
-                        var temp = s.substr(0, 30);
-                        temp_index = temp.lastIndexOf(" ");
-                        if (temp_index == -1) {
-                            temp_index = 35;
-                        }
-                    }
-                    
+                if (directory_data.rows[i][c].length > 30) {
                     result += 
                     `
-                        <div class="col">
-                            <h1 style="font-size: 22px; margin-bottom: 0">${s.substr(0, temp_index)}</h1>
-                            <h1 style="font-size: 22px;">${s.substr(temp_index)}</h1>
-                        </div>
+                        <h1 style="font-size: 22px;">${directory_data.rows[i][c]}</h1>
                     `;
 
                 } else {
                     result += `
-                        <div class="col">
-                            <h1>${directory_data.rows[index][j]}</h1>
-                        </div>
+                        <h1>${directory_data.rows[i][c]}</h1>
                     `;
                 }
 
-            } else {
-                result += `
-                    <div class="col">
-                        <h1>\t</h1>
-                    </div>
-                `;
+                // if (directory_data.rows[index][c].length > 30) {
+                //     var s = directory_data.rows[index][c];
+                    
+                //     var temp_index = 0;
+
+                //     if (s.length < 40) {
+                //         temp_index = s.length;
+                //     } else {
+                //         var temp = s.substr(0, 30);
+                //         temp_index = temp.lastIndexOf(" ");
+                //         if (temp_index == -1) {
+                //             temp_index = 35;
+                //         }
+                //     }
+                    
+                //     result += 
+                //     `
+                //         <h1 style="font-size: 22px; margin-bottom: 0">${s.substr(0, temp_index)}</h1>
+                //         <h1 style="font-size: 22px;">${s.substr(temp_index)}</h1>
+                //     `;
+
+                // } else {
+                //     result += `
+                //         <h1>${directory_data.rows[index][c]}</h1>
+                //     `;
+                // }
+
             }
             
+            result += `
+                </div>
+            `;
         }
         
-        result += 
-        `
+        result += `
             </div>
         `;
     }
+    
 
     result += `
+        </div>
+
         <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(-1)">&#9665;</button>
         <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(1)">&#9655;</button>
     `;
@@ -663,7 +685,7 @@ function get_today_date() {
 }
 
 function set_today_weather_icon() {
-    get_today_weather(window.coord, function (data) {
+    get_today_weather(directory_data.setting.coord, function (data) {
         console.log('weather icon')
         var icon = get_weather_icon_code(data.weather_id.toString()[0]);
     

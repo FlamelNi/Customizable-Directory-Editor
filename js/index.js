@@ -1,7 +1,7 @@
 
 const CURR_VERSION = {
-    "id": "1.0",
-    "date": "04/25/2024",
+    "id": "1.1",
+    "date": "04/29/2024",
 };
 
 
@@ -76,6 +76,13 @@ function empty_data() {
 
         last_change_date: null,
         version: CURR_VERSION,
+        setting: {
+            site_name: "",
+            coord: {
+                lat: "",
+                lon: "",
+            }
+        }
     };
     return JSON.parse(JSON.stringify(temp));
 }
@@ -390,6 +397,45 @@ function save_slideshow_entry(menu_name, section_i, i) {
     render_editor();
 }
 
+function save_setting() {
+    directory_data.setting.site_name = document.getElementById("site_name").value;
+    directory_data.setting.coord = {
+        lat: document.getElementById("lat").value,
+        lon: document.getElementById("lon").value,
+    }
+}
+
+function render_others() {
+    result = `
+        <div class="modal fade" id="setting" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit description</h5>
+                        <button type="button" class="close" onclick="close_modal()" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label>Site Name</lable>
+                        <input id="site_name" class="form-control col" type="text" placeholder="" value="${directory_data.setting.site_name}">
+                        
+                        <label>Latitude</lable>
+                        <input id="lat" class="form-control col" type="text" placeholder="" value="${directory_data.setting.coord.lat}">
+                        <label>Longtitude</lable>
+                        <input id="lon" class="form-control col" type="text" placeholder="" value="${directory_data.setting.coord.lon}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="save_setting()" data-dismiss="modal">Save changes</button>
+                        <button type="button" class="btn btn-secondary" onclick="close_modal()" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById("setting-modal-div").innerHTML = result;
+}
+
 function close_modal() {
     temp_image = null;
     render_editor();
@@ -406,6 +452,7 @@ function render_editor() {
     else {
 
     }
+    render_others();
 }
 
 function change_editor(x) {
@@ -574,7 +621,11 @@ function export_directory_data_string() {
         }
     }
     console.log(directory_data);
-    return `var directory_data = ${JSON.stringify(directory_data)}\n`;
+    return `
+        <script>
+            var directory_data = ${JSON.stringify(directory_data)};
+        </script>
+    `;
 }
 
 

@@ -40,11 +40,13 @@
     </div>
 </div>
 
+<div id="setting-modal-div"></div>
+
 <div class="editor-select">
     <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.DIRECTORY)"> Directory </button>
     <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.LEASING)"> Leasing </button>
     <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.AMMENITIES)"> Ammenities </button>
-    <button class="btn btn-secondary" style="width: 150px;" onclick=""> Other settings </button>
+    <button class="btn btn-secondary" style="width: 150px;" onclick="" data-toggle="modal" data-target="#setting"> Other settings </button>
 </div>
 
 <div id="editor_div">
@@ -172,7 +174,7 @@
         // export_directory_js(temp_zip);
 
 
-        template_file_names = ["index.html", "index.css", "background_1.jpg"];
+        template_file_names = ["index.js", "index.css", "background_1.jpg"];
 
         upload_image_file(function (temp_zip) {
                     console.log(curr_zip)
@@ -184,8 +186,8 @@
                     export_directory_data(temp_zip);
             
                     get_template_files(template_file_names, temp_zip, function (data) {
-                        get_template_file("index.js", function (data) {
-                            temp_zip.file("index.js", export_directory_data_string() + data);
+                        get_template_file("index.html", function (data) {
+                            temp_zip.file("index.html", export_directory_data_string() + data);
             
                             if (temp_zip != null) {
                                 console.log(temp_zip)

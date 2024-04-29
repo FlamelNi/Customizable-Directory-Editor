@@ -87,42 +87,44 @@
   height: 5%;
 }
 
-.col {
-}
-
-
-.col-bar {
-  display: flex;                  /* establish flex container */
-  flex-direction: row;
-  flex-wrap: nowrap;              /* default value; can be omitted */
-  /* switched from default (flex-start, see below) */
-  justify-content: space-between;
-  /* background-color: #081c41f1; */
-  background-color: #081c41;
-
-}
-.row-1 {
-  display: flex;                  /* establish flex container */
-  flex-direction: row;
-  flex-wrap: nowrap;              /* default value; can be omitted */
-  /* switched from default (flex-start, see below) */
-  justify-content: space-between;
-  /* background-color: #103882f1; */
-  background-color: #103882;
-
-  height: 8%;
-}
-.row-2 {
+.directory-div {
   display: flex;                  /* establish flex container */
   flex-direction: row;
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
   justify-content: space-between;  
+}
+
+.col {
+  display: flex;                  /* establish flex container */
+  flex-direction: column;
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  padding: 0px;
+  flex: 0 1 auto;
+}
+
+.col-bar {
+  /* background-color: #081c41f1; */
+  background-color: #081c41;
+  height: 6vh;
+  padding-left: 20px;
+}
+
+.row-1 {
+  /* background-color: #103882f1; */
+  background-color: #103882;
+  height: 6vh;
+  padding-left: 20px;
+}
+.row-2 {
   /* background-color: #0e2f6df1; */
   background-color: #0e2f6d;
-  
-  height: 8%;
+  height: 6vh;
+  padding-left: 20px;
 }
+
 .weather-div {
   display: flex;                  /* establish flex container */
   flex-direction: row;
