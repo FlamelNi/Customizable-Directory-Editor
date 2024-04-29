@@ -386,7 +386,7 @@ function set_slideshow_HTML(menu_name) {
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${file.title}</h5>
-                            <p class="card-text">${file.description.replace("\n", "<br>")}</p>
+                            <p class="card-text">${file.description.replaceAll("\n", "<br>")}</p>
                         </div>
                     </div>
             `;

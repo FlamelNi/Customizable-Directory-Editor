@@ -242,6 +242,7 @@
                 document.body.removeChild(a);
             }, 0)
         }
+        if(!alert('This page will be refreshed. To continue editing, please re-upload the zip file that you just downloaded.')){window.location.reload();}
     }
     const fileSelector = document.getElementById('file-selector');
     fileSelector.addEventListener('change', (event) => {

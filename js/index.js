@@ -377,8 +377,8 @@ function get_render_editor_slideshow_section(menu_name, section_i) {
 }
 
 function save_slideshow_entry(menu_name, section_i, i) {
+    file = directory_data[menu_name][section_i].files[i];
     if (temp_image != null) {
-        file = directory_data[menu_name][section_i].files[i];
 
         file.title = document.getElementById(`title_${section_i}_${i}`).value;
         file.description = document.getElementById(`description_${section_i}_${i}`).value;
@@ -394,6 +394,7 @@ function save_slideshow_entry(menu_name, section_i, i) {
         alert("Please upload an image file if you wish to save this entry");
     }
 
+    temp_image = null;
     render_editor();
 }
 
