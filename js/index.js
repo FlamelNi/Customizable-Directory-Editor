@@ -1,3 +1,4 @@
+var previous_directory_data = null;
 
 const CURR_VERSION = {
     "id": "1.1",
@@ -7,10 +8,16 @@ const CURR_VERSION = {
 
 var directory_data = reset_data();
 
+const SLIDESHOW_TYPE = {
+    IMAGE: 0,
+    QR_CODE: 1,
+    TEXT: 2,
+};
+
 const ALL_EDITORS = {
-    "DIRECTORY": 0,
-    "AMMENITIES": 1,
-    "LEASING": 2,
+    DIRECTORY: 0,
+    AMMENITIES: 1,
+    LEASING: 2,
 };
 
 SLIDESHOW_FIELD_NAME = {};
@@ -225,6 +232,20 @@ function new_slideshow_entry(menu_name, i) {
         description: "",
         name: "no file selected",
         data: null,
+        type: SLIDESHOW_TYPE.IMAGE,
+    });
+    render_editor();
+}
+
+function new_slideshow_QR(menu_name, i) {
+    read_HTML_to_update();
+    directory_data[menu_name][i].files.push({
+        title: "New QR code",
+        description: "",
+        url: "",
+        name: "no file selected",
+        data: null,
+        type: SLIDESHOW_TYPE.QR_CODE,
     });
     render_editor();
 }
@@ -290,7 +311,8 @@ function get_render_editor_slideshow_section(menu_name, section_i) {
     result = ``;
     result += `
         <div style="background-color: Grey">
-            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}', ${section_i})"> Add new entry </button>
+            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}', ${section_i})"> Add new image </button>
+            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_QR('${menu_name}', ${section_i})"> Add new QR code </button>
             <button class="btn btn-danger" style="flex-grow: 0.7; margin-right: 30px;" onclick="delete_slideshow_section('${menu_name}', ${section_i})"> Delete this section </button>
             <h3>${directory_data[menu_name][section_i].section_name}</h3>
         </div>
@@ -320,21 +342,36 @@ function get_render_editor_slideshow_section(menu_name, section_i) {
     i = 0;
     var files = directory_data[menu_name][section_i].files;
     while (i < files.length) {
-        result += `
-            <div class="modal fade" id="row_info_${section_i}_${i}" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Edit description</h5>
-                            <button type="button" class="close" onclick="close_modal()" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <input id="title_${section_i}_${i}" class="form-control col" type="text" placeholder="title" value="${files[i].title}">
-                            <textarea id="description_${section_i}_${i}" class="form-control col" placeholder="description">${files[i].description}</textarea>
-        `;
-            
+        result += get_slideshow_modal_HTML(menu_name, section_i, i);
+        i++;
+    }
+
+    result += `
+        </div>
+    `;
+    return result;
+}
+
+function get_slideshow_modal_HTML(menu_name, section_i, i) {
+    var files = directory_data[menu_name][section_i].files;
+    result = `
+        <div class="modal fade" id="row_info_${section_i}_${i}" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit description</h5>
+                        <button type="button" class="close" onclick="close_modal()" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+    `;
+    result += `
+                        <input id="title_${section_i}_${i}" class="form-control col" type="text" placeholder="title" value="${files[i].title}">
+                        <textarea id="description_${section_i}_${i}" class="form-control col" placeholder="description">${files[i].description}</textarea>
+    `;
+    
+    if (files[i].type == SLIDESHOW_TYPE.IMAGE) {
         // <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
         if (files[i].data == null) {
             result += `
@@ -347,54 +384,60 @@ function get_render_editor_slideshow_section(menu_name, section_i) {
                 </div>
             `;
         }
+    } else if (files[i].type == SLIDESHOW_TYPE.QR_CODE) {
         result += `
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="save_slideshow_entry('${menu_name}', ${section_i}, ${i})" data-dismiss="modal">Save changes</button>
-                            <button type="button" class="btn btn-secondary" onclick="close_modal()" data-dismiss="modal">Close</button>
-                        </div>
+            <input id="qr_code_${section_i}_${i}" class="form-control col" type="text" placeholder="QR code url" value="${files[i].url}">
+        `;
+    }
+
+
+    result += `
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="save_slideshow_entry('${menu_name}', ${section_i}, ${i})" data-dismiss="modal">Save changes</button>
+                        <button type="button" class="btn btn-secondary" onclick="close_modal()" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-
-            <div class="input-row">
-                <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${section_i}_${i}"> Edit </button>
-                <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick="delete_slideshow_entry('${menu_name}', ${section_i}, ${i})"> Delete </button>
-                <div>
-                    <h3>${files[i].title}</h3>
-                </div>
-            </div>
-
-        `;
-
-        i++;
-    }
-
-    result += `
         </div>
+
+        <div class="input-row">
+            <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${section_i}_${i}"> Edit </button>
+            <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick="delete_slideshow_entry('${menu_name}', ${section_i}, ${i})"> Delete </button>
+            <div>
+                <h3>${files[i].title}</h3>
+            </div>
+        </div>
+
     `;
     return result;
 }
 
+
 function save_slideshow_entry(menu_name, section_i, i) {
     file = directory_data[menu_name][section_i].files[i];
-    if (temp_image != null) {
-
+    if (file.type == SLIDESHOW_TYPE.IMAGE) {
+        if (temp_image != null) {
+            file.title = document.getElementById(`title_${section_i}_${i}`).value;
+            file.description = document.getElementById(`description_${section_i}_${i}`).value;
+            
+            file.data = temp_image;
+            file.name = temp_image.name;
+            file.is_new = true;
+        } else if(file.name != undefined && file.name != "" && file.name != null) {
+            file.title = document.getElementById(`title_${section_i}_${i}`).value;
+            file.description = document.getElementById(`description_${section_i}_${i}`).value;
+        } else {
+            // files.name = "New picture";
+            alert("Please upload an image file if you wish to save this entry");
+        }
+        temp_image = null;
+    } else if (file.type == SLIDESHOW_TYPE.QR_CODE) {
         file.title = document.getElementById(`title_${section_i}_${i}`).value;
         file.description = document.getElementById(`description_${section_i}_${i}`).value;
-        
-        file.data = temp_image;
-        file.name = temp_image.name;
-        file.is_new = true;
-    } else if(file.name != undefined && file.name != "" && file.name != null) {
-        file.title = document.getElementById(`title_${section_i}_${i}`).value;
-        file.description = document.getElementById(`description_${section_i}_${i}`).value;
-    } else {
-        // files.name = "New picture";
-        alert("Please upload an image file if you wish to save this entry");
+        file.url = document.getElementById(`qr_code_${section_i}_${i}`).value;
     }
 
-    temp_image = null;
     render_editor();
 }
 
@@ -575,13 +618,12 @@ function import_image_files() {
                 while (j < directory_data[menu_name][i].files.length) {
                     var data_i = directory_data[menu_name][i].files[j];
                     if (data_i != null) {
-                        f_name = data_i.name;
-                        console.log(menu_name);
-                        console.log(i);
-                        console.log(f_name);
-                        curr_zip.file(f_name).async("blob").then(function(result) {
-                            data_i.data = new File([result], f_name);
-                        });
+                        if (data_i.type == SLIDESHOW_TYPE.IMAGE) {
+                            f_name = data_i.name;
+                            curr_zip.file(f_name).async("blob").then(function(result) {
+                                data_i.data = new File([result], f_name);
+                            });
+                        }
                     }
 
                     j++;
@@ -599,6 +641,8 @@ function import_directory_data(curr_zip) {
         
         import_image_files();
 
+        update_version();
+
         render_editor();
     });
 }
@@ -613,7 +657,9 @@ function export_directory_data_string() {
                 j = 0;
                 while (j < directory_data[menu_name][i].files.length) {
                     file = directory_data[menu_name][i].files[j];
-                    file.data_name = file.data.name;
+                    if (file.type == SLIDESHOW_TYPE.IMAGE) {
+                        file.data_name = file.data.name;
+                    }
 
                     j++;
                 }
@@ -628,5 +674,44 @@ function export_directory_data_string() {
         </script>
     `;
 }
+
+function foreach_slideshow(f) {
+    for (x in SLIDESHOW_FIELD_NAME) {
+        f(directory_data[SLIDESHOW_FIELD_NAME[x]]);
+    }
+}
+
+function update_version() {
+    switch (directory_data.version.id) {
+        case "1.0":
+            foreach_slideshow(function (slideshow) {
+                if (slideshow == undefined) {
+                    return;
+                }
+                for (i = 0; i < slideshow.length; i++) {
+                    section = slideshow[i];
+
+                    for (j = 0; j < slideshow[i].files.length; j++) {
+                        f = slideshow[i].files[j];
+                        f.type = SLIDESHOW_TYPE.IMAGE;
+                    }
+                }
+            });
+            directory_data.setting = {
+                setting: {
+                    site_name: "",
+                    coord: {
+                        lat: "",
+                        lon: "",
+                    }
+                }
+            }
+        case "1.1":
+
+    }
+    previous_directory_data = JSON.parse(JSON.stringify(directory_data));
+    directory_data.version = CURR_VERSION;
+}
+
 
 

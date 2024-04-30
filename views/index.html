@@ -24,6 +24,7 @@
 
 <script src="../js/index.js"></script>
 <script src="../js/directory.js"></script>
+<script type="module" src="../js/version_control.js"></script>
 <link rel="stylesheet" href="../style/index.css">
 <div class="top-menu-bar">
     <div style="flex-basis: 200px;">
@@ -149,10 +150,6 @@
                                 console.log(curr_zip);
     
                                 temp_zip.files[data_name] = curr_zip.files[data_name];
-                                // temp_zip.files[data_name] = structuredClone(curr_zip.files[data_name]);
-    
-                                // temp = await curr_zip.file(data_name).async("string");
-                                // temp_zip.file(data_name, temp);
                             }
                         }
 

@@ -24,6 +24,13 @@ const DAYS_OF_WEEK = [
     "Saturday",
 ];
 
+
+const SLIDESHOW_TYPE = {
+    IMAGE: 0,
+    QR_CODE: 1,
+    TEXT: 2,
+};
+
 var curr_status = dir_status.directory;
 var directory_page = 0;
 
@@ -367,8 +374,7 @@ function set_slideshow_HTML(menu_name) {
                     <div class="carousel-sections" style="max-height: 70vh">
     `;
 
-    console.log(directory_data);
-    console.log(menu_name);
+    qrcode_queue = [];
     
     i = 0;
     while (i < directory_data[menu_name].length) {
@@ -379,18 +385,36 @@ function set_slideshow_HTML(menu_name) {
         j = 0;
         while (j < directory_data[menu_name][i].files.length) {
             file = directory_data[menu_name][i].files[j];
-            result += `
-                    <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
-                        <div style="height:40vh; background-color: grey">
-                            <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">${file.title}</h5>
-                            <p class="card-text">${file.description.replaceAll("\n", "<br>")}</p>
-                        </div>
-                    </div>
-            `;
 
+            if (file.type == SLIDESHOW_TYPE.IMAGE) {
+                result += `
+                        <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
+                            <div style="height:40vh; background-color: grey">
+                                <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${file.title}</h5>
+                                <p class="card-text">${file.description.replaceAll("\n", "<br>")}</p>
+                            </div>
+                        </div>
+                `;
+            } else if (file.type == SLIDESHOW_TYPE.QR_CODE) {
+                
+                // width: 240,
+                // height: 240,
+                result += `
+                        <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
+                            <div style="height:40vh; background-color: grey">
+                                <div id="qrcode_${i}_${j}" class="qr-code-div"></div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${file.title}</h5>
+                                <p class="card-text">${file.description.replaceAll("\n", "<br>")}</p>
+                            </div>
+                        </div>
+                `;
+                qrcode_queue.push([menu_name, i, j]);
+            }
             j++
         }
         // <img src="${directory_data[menu_name][i].name}" style="max-width:100%; max-width: 60vw;">
@@ -457,6 +481,18 @@ function set_slideshow_HTML(menu_name) {
     //     document.getElementById(`slideshow_text_${i}`).innerText = `${directory_data[menu_name][i].description}`;
     //     i++;
     // }
+
+    for (const index in qrcode_queue) {
+        var menu_name = qrcode_queue[index][0];
+        var i = qrcode_queue[index][1];
+        var j = qrcode_queue[index][2];
+        new QRCode(document.getElementById(`qrcode_${i}_${j}`), {
+            text: `${directory_data[menu_name][i].files[j].url}`,
+        });
+
+    }
+
+
     init_slide();
     // return result;
 }

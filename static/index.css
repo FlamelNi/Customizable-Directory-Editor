@@ -170,7 +170,9 @@
   border-top: 8px solid #4285F4;
 }
 
-
+.qr-code-div img {
+  /* width: 100%; */
+}
 
 
 .carousel {
