@@ -6,13 +6,13 @@
 // };
 
 var dir_status = {
-    'testing': -1,
-    'directory': 0,
-    'news': 1,
-    'traffic': 2,
-    'weather': 3,
-    'ammenities': 4,
-    'leasing': 5,
+    testing: -1,
+    directory: 0,
+    news: 1,
+    traffic: 2,
+    weather: 3,
+    ammenities: 4,
+    leasing: 5,
 };
 const DAYS_OF_WEEK = [
     "Sunday",
@@ -33,8 +33,6 @@ const SLIDESHOW_TYPE = {
 
 var curr_status = dir_status.directory;
 var directory_page = 0;
-
-var last_user_action = new Date();
 
 // this is not very good to have here, but I see low risk for having this here at the moment
 // move this to server side in future
@@ -685,6 +683,7 @@ function page_change(i) {
         directory_page = 0;
     }
 
+    user_action();
     render_content();
 }
 
@@ -693,6 +692,7 @@ function change_curr_status(x) {
     if (x == dir_status.directory) {
         directory_page = 0;
     }
+    user_action();
     render_content();
 }
 
@@ -956,7 +956,7 @@ let currentIndex = 0;
 let slides = [];
 let dots = [];
 
-const AUTO_COUNTER_INIT = 3;
+const AUTO_COUNTER_INIT = 6;
 let auto_counter = -1;
 
 function render_carousel() {
@@ -978,10 +978,12 @@ function render_carousel() {
 function manual_prev() {
     auto_counter = AUTO_COUNTER_INIT;
     prev();
+    user_action();
 }
 function manual_next() {
     auto_counter = AUTO_COUNTER_INIT;
     next();
+    user_action();
 }
 
 function prev() {
@@ -1043,16 +1045,23 @@ function init_slide() {
     });
     dots = newDots;
 
-    auto_counter = 3;
+    auto_counter = AUTO_COUNTER_INIT;
     render_carousel();
 }
 
+var last_user_action = Number(new Date());
+const INACTIVITY_TIME = 60000;
+
 function user_action() {
-    last_user_action = new Date();
+    last_user_action = Number(new Date());
 }
 
 function check_user_actiivity() {
-
+    var curr_time = Number(new Date());
+    if (last_user_action + INACTIVITY_TIME < curr_time) {
+        change_curr_status(dir_status.directory);
+    }
+    setTimeout(check_user_actiivity, 30000);
 }
 
 function testFunc() {
