@@ -88,13 +88,13 @@
                     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
                     var map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 13,
-                        center: {lat: coord.lat, lng: coord.lon},
+                        center: {lat: Number(directory_data.setting.coord.lat), lng: Number(directory_data.setting.coord.lon)},
                         mapId: "4504f8b37365c3d0",
                     });
 
                     const marker = new google.maps.marker.AdvancedMarkerElement({
                         map,
-                        position: {lat: coord.lat, lng: coord.lon},
+                        position: {lat: Number(directory_data.setting.coord.lat), lng: Number(directory_data.setting.coord.lon)},
                         // title: 'Uluru',
                     });
 

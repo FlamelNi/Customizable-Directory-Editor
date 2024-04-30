@@ -357,9 +357,13 @@ function get_directory_HTML() {
 
     result += `
         </div>
-
-        <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(-1)">&#9665;</button>
-        <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(1)">&#9655;</button>
+        <div class="directory-btn-div">
+            <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(-1)">&#9665;</button>
+            <div>
+                <h1>${directory_page+1}</h1>
+            </div>
+            <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(1)">&#9655;</button>
+        </div>
     `;
 
     return result;
@@ -476,11 +480,6 @@ function set_slideshow_HTML(menu_name) {
 
     
     document.getElementById("content-placeholder").innerHTML = result;
-    i = 0;
-    // while (i < directory_data[menu_name].length) {
-    //     document.getElementById(`slideshow_text_${i}`).innerText = `${directory_data[menu_name][i].description}`;
-    //     i++;
-    // }
 
     for (const index in qrcode_queue) {
         var menu_name = qrcode_queue[index][0];
@@ -489,12 +488,11 @@ function set_slideshow_HTML(menu_name) {
         new QRCode(document.getElementById(`qrcode_${i}_${j}`), {
             text: `${directory_data[menu_name][i].files[j].url}`,
         });
-
+        document.getElementById(`qrcode_${i}_${j}`).getElementsByTagName("img")[0].style.margin = "auto";
     }
 
 
     init_slide();
-    // return result;
 }
 
 function get_news_HTML() {

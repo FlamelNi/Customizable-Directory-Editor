@@ -125,6 +125,12 @@
   padding-left: 20px;
 }
 
+.directory-btn-div {
+  /* height: 300px; */
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .weather-div {
   display: flex;                  /* establish flex container */
   flex-direction: row;
