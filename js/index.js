@@ -1,7 +1,7 @@
 var previous_directory_data = null;
 
 const CURR_VERSION = {
-    "id": "1.1",
+    "id": "1.1.1",
     "date": "04/29/2024",
 };
 
@@ -63,11 +63,13 @@ function testFunction() {
 function reset_data() {
     var temp = empty_data();
     temp.column_row = ['Col 1', 'Col 2'];
+    temp.column_size = ["", ""];
     return JSON.parse(JSON.stringify(temp));
 }
 function empty_data() {
     var temp = {
         column_row: [],
+        column_size: [],
     
         /*
         rows: [
@@ -113,6 +115,7 @@ function set_test_data() {
 
 function get_HTML_column(i) {
     col = directory_data.column_row[i];
+    col_size = directory_data.column_size[i];
     result = 
     `
         <div class="col">
@@ -125,6 +128,7 @@ function get_HTML_column(i) {
             </div>
             
             <input id="col_${i}" class="form-control col" type="text" placeholder="column name" value="${col}">
+            <input id="col_size_${i}" class="form-control col" type="text" placeholder="1" value="${col_size}">
         </div>
     `;
 
@@ -137,6 +141,9 @@ function get_HTML_column_row() {
         <div style="">
             <div class="input-row">
                 <div class="d-grid gap-2" style="min-width: 160px; max-width: 160px;">
+                    <h4>Control</h4>
+                    <h4>Column Name</h4>
+                    <h4>Column size</h4>
                 </div>
     `;
 
@@ -509,6 +516,8 @@ function read_HTML_to_update_dir() {
     for (i = 0; i < directory_data.column_row.length; i++) {
         temp = document.getElementById(`col_${i}`).value;
         directory_data.column_row[i] = temp;
+        
+        directory_data.column_size[i] = document.getElementById(`col_size_${i}`).value;
     }
 
     for (i = 0; i < directory_data.column_row.length; i++) {
@@ -560,6 +569,7 @@ function add_col() {
     read_HTML_to_update();
 
     directory_data.column_row.push("New Col");
+    directory_data.column_size.push("");
 
     directory_data.rows.forEach(r => {
         r.push("");
@@ -589,6 +599,10 @@ function swap_col(i, j) {
     var temp = directory_data.column_row[i];
     directory_data.column_row[i] = directory_data.column_row[j];
     directory_data.column_row[j] = temp;
+
+    temp = directory_data.column_size[i];
+    directory_data.column_size[i] = directory_data.column_size[j];
+    directory_data.column_size[j] = temp;
 
     directory_data.rows.forEach(r => {
         var temp = r[i];
@@ -707,6 +721,16 @@ function update_version() {
                 }
             }
         case "1.1":
+            directory_data.column_size = [];
+            for (const c in directory_data.column_row) {
+                directory_data.column_size.push("");
+            }
+        case "1.1.1":
+            break;
+        case "1.1.2":
+            break;
+        case "1.1.2":
+            break;
 
     }
     previous_directory_data = JSON.parse(JSON.stringify(directory_data));

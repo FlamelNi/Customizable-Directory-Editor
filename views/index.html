@@ -24,7 +24,6 @@
 
 <script src="../js/index.js"></script>
 <script src="../js/directory.js"></script>
-<script type="module" src="../js/version_control.js"></script>
 <link rel="stylesheet" href="../style/index.css">
 <div class="top-menu-bar">
     <div style="flex-basis: 200px;">
@@ -138,20 +137,23 @@
                         data_i = directory_data[menu_name][i].files[j].data;
                         data_name = directory_data[menu_name][i].files[j].name;
                         
-                        if (data_i != null) {
-                            if (directory_data[menu_name][i].files[j].is_new) {
-                                temp_zip.file(data_i.name, data_i);
-                                directory_data[menu_name][i].files[j].is_new = false;
-                            } else {
-                                //todo--------------------------------------------------------------
-                                console.log(temp_zip);
-                                console.log(data_i);
-                                console.log(data_name);
-                                console.log(curr_zip);
-    
-                                temp_zip.files[data_name] = curr_zip.files[data_name];
+                        if (directory_data[menu_name][i].files[j].type == SLIDESHOW_TYPE.IMAGE) {
+                            if (data_i != null) {
+                                if (directory_data[menu_name][i].files[j].is_new) {
+                                    temp_zip.file(data_i.name, data_i);
+                                    directory_data[menu_name][i].files[j].is_new = false;
+                                } else {
+                                    //todo--------------------------------------------------------------
+                                    console.log(temp_zip);
+                                    console.log(data_i);
+                                    console.log(data_name);
+                                    console.log(curr_zip);
+        
+                                    temp_zip.files[data_name] = curr_zip.files[data_name];
+                                }
                             }
                         }
+                        
 
                         j++;
                     }//while j

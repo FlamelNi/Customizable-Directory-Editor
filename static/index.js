@@ -278,8 +278,15 @@ function get_directory_HTML() {
 
     // for (const c in directory_data.column_row) {
     for (var c = 0; c < directory_data.column_row.length; c++) {
-        // var col_size = directory_data.column_size;
-        var col_size = 1;
+        var col_size = directory_data.column_size[c];
+        if (col_size == '') {
+            col_size = 1;
+        } else {
+            col_size = Number(col_size);
+        }
+
+
+        // var col_size = 1;
 
         result += `
             <div class="col" style="padding: 0px; flex-grow:${col_size}">
