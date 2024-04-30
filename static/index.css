@@ -176,8 +176,8 @@
   border-top: 8px solid #4285F4;
 }
 
-.qr-code-div img {
-  /* width: 100%; */
+.qr-code-div {
+  /* transform: translate(0, 20%); */
 }
 
 

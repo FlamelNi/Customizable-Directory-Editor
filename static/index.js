@@ -34,6 +34,8 @@ const SLIDESHOW_TYPE = {
 var curr_status = dir_status.directory;
 var directory_page = 0;
 
+var last_user_action = new Date();
+
 // this is not very good to have here, but I see low risk for having this here at the moment
 // move this to server side in future
 const OPEN_WEATHER_API_KEY = `94bca9a1175503686db16ec39b95265a`;
@@ -79,183 +81,204 @@ function render_content() {
 
 function set_testing_HTML() {
 
-    // pictures = ["sample1.jpg", "sample2.jpg", "sample3.jpg"];
+    // // pictures = ["sample1.jpg", "sample2.jpg", "sample3.jpg"];
     
-    var pictures = [
-        "sample3.jpg",
-        "sample2.jpg",
-        "sample1.jpg",
-        "sample4.png",
-        "sample2.jpg",
-        "sample5.png",
-        "sample4.png",
-        "sample5.png",
-        "sample1.jpg",
-        "sample2.jpg",
-        "sample3.jpg",
-        "sample4.png",
-        "sample1.jpg",
-        "sample3.jpg",
-        "sample1.jpg",
-        "sample5.png",
-        "sample2.jpg",
-        "sample3.jpg",
-    ];
+    // var pictures = [
+    //     "sample3.jpg",
+    //     "sample2.jpg",
+    //     "sample1.jpg",
+    //     "sample4.png",
+    //     "sample2.jpg",
+    //     "sample5.png",
+    //     "sample4.png",
+    //     "sample5.png",
+    //     "sample1.jpg",
+    //     "sample2.jpg",
+    //     "sample3.jpg",
+    //     "sample4.png",
+    //     "sample1.jpg",
+    //     "sample3.jpg",
+    //     "sample1.jpg",
+    //     "sample5.png",
+    //     "sample2.jpg",
+    //     "sample3.jpg",
+    // ];
     
 
-    var result = `
-        <section class="image-grid">
-            <div class="container-xxl">
-                <div class="row gy-4">
-    `;
+    // var result = `
+    //     <section class="image-grid">
+    //         <div class="container-xxl">
+    //             <div class="row gy-4">
+    // `;
 
-    var t = 0;
-    var i = 0;
-    while (t < 3) {
-        result += `
-                    <div class="col-12 col-sm-6 col-md-4">
-        `;
-        var end_cond = pictures.length * (t+1) / 3;
-        if (t == 2) {
-            end_cond = pictures.length;
-        }
-        while (i < end_cond) {
-            result += `
-                            <figure>
-                            <div class="d-block" href="">
-                                <img width="1920" height="1280" src="${pictures[i]}" class="img-fluid">
-                            </div>
-                            </figure>
-            `;
-            i++;
-        }
-        result += `
-                    </div>
-        `;
+    // var t = 0;
+    // var i = 0;
+    // while (t < 3) {
+    //     result += `
+    //                 <div class="col-12 col-sm-6 col-md-4">
+    //     `;
+    //     var end_cond = pictures.length * (t+1) / 3;
+    //     if (t == 2) {
+    //         end_cond = pictures.length;
+    //     }
+    //     while (i < end_cond) {
+    //         result += `
+    //                         <figure>
+    //                         <div class="d-block" href="">
+    //                             <img width="1920" height="1280" src="${pictures[i]}" class="img-fluid">
+    //                         </div>
+    //                         </figure>
+    //         `;
+    //         i++;
+    //     }
+    //     result += `
+    //                 </div>
+    //     `;
 
-        t++;
-    }
-    result += `
-                <!-- more columns here -->
-                </div>
-            </div>
-        </section>
-    `;
+    //     t++;
+    // }
+    // result += `
+    //             <!-- more columns here -->
+    //             </div>
+    //         </div>
+    //     </section>
+    // `;
 
-    //result reset
+    // //result reset
+    // // result = ``;
+
+    // // result += `
+    // //     <div>
+    // // `;
+    // // i = 0;
+    // // while (i < 3) {
+    // //     result += `
+    // //         <div class="modal fade" id="slideshow_modal_${i}" tabindex="-1" role="dialog">
+    // //             <div class="modal-dialog" role="document">
+    // //                 <div class="modal-content">
+    // //                     <div class="modal-header">
+    // //                         <h5 class="modal-title">Edit description</h5>
+    // //                         <button type="button" class="close" onclick="" data-dismiss="modal" aria-label="Close">
+    // //                         <span aria-hidden="true">&times;</span>
+    // //                         </button>
+    // //                     </div>
+    // //                     <div class="modal-body">
+    // //                         <p>test</p>
+    // //                     </div>
+    // //                     <div class="modal-footer">
+    // //                         <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+    // //                     </div>
+    // //                 </div>
+    // //             </div>
+    // //         </div>
+    // //     `;
+    // //     i++;
+    // // }
+    // // result += `
+    // //     </div>
+    // // `;
+
+
     // result = ``;
-
     // result += `
     //     <div>
+    //         <div class="carousel" style="max-height: 70vh">
+    //             <div class="prev-arrow"></div>
+
+    //             <div class="carousel-sections-scroll" style="max-height: 70vh">
+    //                 <div class="carousel-sections" style="max-height: 70vh">
     // `;
+    
     // i = 0;
     // while (i < 3) {
     //     result += `
-    //         <div class="modal fade" id="slideshow_modal_${i}" tabindex="-1" role="dialog">
-    //             <div class="modal-dialog" role="document">
-    //                 <div class="modal-content">
-    //                     <div class="modal-header">
-    //                         <h5 class="modal-title">Edit description</h5>
-    //                         <button type="button" class="close" onclick="" data-dismiss="modal" aria-label="Close">
-    //                         <span aria-hidden="true">&times;</span>
-    //                         </button>
-    //                     </div>
-    //                     <div class="modal-body">
-    //                         <p>test</p>
-    //                     </div>
-    //                     <div class="modal-footer">
-    //                         <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
-    //                     </div>
+    //         <div class="carousel-section" style="max-height: 70vh">
+                
+    //             <div class="card" style="width: 18rem; margin: 5px">
+    //                 <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
+    //                 <div class="card-body">
+    //                     <h5 class="card-title">Ammenity name</h5>
+    //                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    //                     <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
+
     //                 </div>
     //             </div>
+
+    //             <div class="card" style="width: 18rem; margin: 5px">
+    //             <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
+    //             <div class="card-body">
+    //                 <h5 class="card-title">Ammenity name</h5>
+    //                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    //                 <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
+
+    //             </div>
     //         </div>
+            
+    //         <div class="card" style="width: 18rem; margin: 5px">
+    //         <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
+    //         <div class="card-body">
+    //             <h5 class="card-title">Ammenity name</h5>
+    //             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    //             <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
+
+    //         </div>
+    //     </div>
+
+    //         </div>
+            
     //     `;
     //     i++;
     // }
+
     // result += `
+    //                 </div>
+    //             </div>
+                
+    //             <div class="next-arrow"></div>
+        
+    //         </div>
+    //         <div class="carousel-dots">
+    // `;
+    // i = 0;
+    // while (i < 3) {
+    //     result += `<div class="carousel-dot"></div>`;
+    //     i++;
+    // }
+
+    // result += `
+    //         </div>
     //     </div>
     // `;
 
 
-    result = ``;
-    result += `
-        <div>
-            <div class="carousel" style="max-height: 70vh">
-                <div class="prev-arrow"></div>
-
-                <div class="carousel-sections-scroll" style="max-height: 70vh">
-                    <div class="carousel-sections" style="max-height: 70vh">
-    `;
     
-    i = 0;
-    while (i < 3) {
-        result += `
-            <div class="carousel-section" style="max-height: 70vh">
-                
-                <div class="card" style="width: 18rem; margin: 5px">
-                    <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">Ammenity name</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
+    // document.getElementById("content-placeholder").innerHTML = result;
+    // init_slide();
 
-                    </div>
-                </div>
-
-                <div class="card" style="width: 18rem; margin: 5px">
-                <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Ammenity name</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
-
-                </div>
-            </div>
-            
-            <div class="card" style="width: 18rem; margin: 5px">
-            <img class="card-img-top" src="sample1.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Ammenity name</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <button class="btn btn-primary" data-toggle="modal" data-target="#slideshow_modal_${i}"> More info </button>
-
-            </div>
-        </div>
-
-            </div>
-            
-        `;
-        i++;
-    }
-
-    result += `
-                    </div>
-                </div>
-                
-                <div class="next-arrow"></div>
-        
-            </div>
-            <div class="carousel-dots">
-    `;
-    i = 0;
-    while (i < 3) {
-        result += `<div class="carousel-dot"></div>`;
-        i++;
-    }
-
-    result += `
-            </div>
-        </div>
-    `;
-
-
-    
-    document.getElementById("content-placeholder").innerHTML = result;
-    init_slide();
-
-    var iframe = `<iframe id="gallery" src="gallery.html" title="description" style="width: 70vw; height: 70vh;"></iframe>`;
+    // var iframe = `<iframe id="gallery" src="gallery.html" title="description" style="width: 70vw; height: 70vh;"></iframe>`;
 
     // document.getElementById("content-placeholder").innerHTML = iframe;
+
+    result = `
+        <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
+            <div style="height:40vh; background-color: grey; display: flex; align-items: center; justify-content: center;">
+                <div id="qrcode" class="qr-code-div">
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">test</h5>
+                <p class="card-text">test</p>
+            </div>
+        </div>
+    `;
+    document.getElementById("content-placeholder").innerHTML = result;
+
+    new QRCode(document.getElementById(`qrcode`), {
+        text: `https://google.com`,
+    });
+    // document.getElementById(`qrcode`).getElementsByTagName("img")[0].style.margin = "auto";
+
+
 }
 
 function get_directory_HTML() {
@@ -415,7 +438,7 @@ function set_slideshow_HTML(menu_name) {
                 // height: 240,
                 result += `
                         <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
-                            <div style="height:40vh; background-color: grey">
+                            <div style="height:40vh; background-color: grey; display: flex; align-items: center; justify-content: center;">
                                 <div id="qrcode_${i}_${j}" class="qr-code-div"></div>
                             </div>
                             <div class="card-body">
@@ -495,7 +518,7 @@ function set_slideshow_HTML(menu_name) {
         new QRCode(document.getElementById(`qrcode_${i}_${j}`), {
             text: `${directory_data[menu_name][i].files[j].url}`,
         });
-        document.getElementById(`qrcode_${i}_${j}`).getElementsByTagName("img")[0].style.margin = "auto";
+        // document.getElementById(`qrcode_${i}_${j}`).getElementsByTagName("img")[0].style.margin = "auto";
     }
 
 
@@ -1024,6 +1047,13 @@ function init_slide() {
     render_carousel();
 }
 
+function user_action() {
+    last_user_action = new Date();
+}
+
+function check_user_actiivity() {
+
+}
 
 function testFunc() {
     // get_coord('San Francisco', function (data) {
