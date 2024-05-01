@@ -122,7 +122,7 @@ function get_HTML_column(i) {
             <div id="${i}" class="col-function-row col" style="margin-bottom: 5px;">
                 <button class="btn btn-primary" type="button" style="flex-grow: 0.2;" onclick="swap_col(${i}, ${i-1})">&#9665;</button>
                 <div style="flex-basis: 15px;"></div>
-                <button class="btn btn-warning" type="button" style="">Sort</button>
+                <button class="btn btn-warning" type="button" style="" onclick="sort_col(${i})">Sort</button>
                 <div style="flex-basis: 15px;"></div>
                 <button class="btn btn-primary" type="button" style="flex-grow: 0.2" onclick="swap_col(${i}, ${i+1})">&#9655;</button>
             </div>
@@ -610,10 +610,23 @@ function swap_col(i, j) {
             r[j] = temp;
     });
 
-    render_editor()
+    render_editor();
 
 }
 
+function sort_col(i) {
+    read_HTML_to_update();
+    directory_data.rows.sort(function (a, b) {
+        if (a[i] < b[i]) {
+            return -1;
+        } else if (a[i] == b[i]) {
+            return 0;
+        } else {
+            return 1;
+        }
+    });
+    render_editor();
+}
 
 function export_directory_data(curr_zip) {
     read_HTML_to_update();
