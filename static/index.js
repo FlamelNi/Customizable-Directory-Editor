@@ -1045,7 +1045,7 @@ function init_slide() {
     });
     dots = newDots;
 
-    auto_counter = AUTO_COUNTER_INIT;
+    auto_counter = 0;
     render_carousel();
 }
 
@@ -1053,6 +1053,7 @@ var last_user_action = Number(new Date());
 const INACTIVITY_TIME = 60000;
 
 function user_action() {
+    console.log("user action");
     last_user_action = Number(new Date());
 }
 
