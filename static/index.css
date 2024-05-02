@@ -75,6 +75,9 @@
   flex-wrap: nowrap;              /* default value; can be omitted */
   /* switched from default (flex-start, see below) */
   justify-content: space-between;
+}
+
+.sky-blue {
   background-color: #4285F4;
 }
 
@@ -129,6 +132,10 @@
   /* height: 300px; */
   display: flex;
   justify-content: space-evenly;
+}
+
+.weather-color {
+  background-color: #48444c;
 }
 
 .weather-div {

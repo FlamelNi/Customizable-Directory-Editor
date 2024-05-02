@@ -12,10 +12,12 @@
 <div class="main-div" style="background-image: url('background_1.jpg'); background-size: cover;" onclick="user_action()">
     <div class="menu-bar">
         <div style="max-height: 100px; min-height: 100px;">
-            <h1>Welcome to</h1>
-            <div id="site_name_div">
+            
+            <div id="greeting_div">
+                <h1></h1>
                 <h1></h1>
             </div>
+
         </div>
         
         <div class="menu-btn-div">
@@ -39,7 +41,7 @@
             </div>
             
             <!-- <div style="width: 60%"> -->
-            <div class="time-date-div" style="width: 47vw;">
+            <div class="time-date-div sky-blue" style="width: 47vw;">
                 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" preserveAspectRatio="none" style="width: 10%">
                     <!-- <polygon points="100 0 100 10 0 10" /> -->
@@ -137,9 +139,12 @@
 
 <script>
     window.onload = function() {
-        document.getElementById("site_name_div").innerHTML = `
+        document.getElementById("greeting_div").innerHTML = `
             <h1>
-                ${directory_data.setting.site_name}
+                ${directory_data.setting.greeting_1}
+            </h1>
+            <h1>
+                ${directory_data.setting.greeting_2}
             </h1>
         `;
 

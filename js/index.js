@@ -1,8 +1,8 @@
 var previous_directory_data = null;
 
 const CURR_VERSION = {
-    "id": "1.1.1",
-    "date": "04/29/2024",
+    "id": "1.1.2",
+    "date": "05/01/2024",
 };
 
 
@@ -86,7 +86,8 @@ function empty_data() {
         last_change_date: null,
         version: CURR_VERSION,
         setting: {
-            site_name: "",
+            greeting_1: "",
+            greeting_2: "",
             coord: {
                 lat: "",
                 lon: "",
@@ -449,7 +450,8 @@ function save_slideshow_entry(menu_name, section_i, i) {
 }
 
 function save_setting() {
-    directory_data.setting.site_name = document.getElementById("site_name").value;
+    directory_data.setting.greeting_1 = document.getElementById("greeting_1").value;
+    directory_data.setting.greeting_2 = document.getElementById("greeting_2").value;
     directory_data.setting.coord = {
         lat: document.getElementById("lat").value,
         lon: document.getElementById("lon").value,
@@ -469,7 +471,8 @@ function render_others() {
                     </div>
                     <div class="modal-body">
                         <label>Site Name</lable>
-                        <input id="site_name" class="form-control col" type="text" placeholder="" value="${directory_data.setting.site_name}">
+                        <input id="greeting_1" class="form-control col" type="text" placeholder="" value="${directory_data.setting.greeting_1}">
+                        <input id="greeting_2" class="form-control col" type="text" placeholder="" value="${directory_data.setting.greeting_2}">
                         
                         <label>Latitude</lable>
                         <input id="lat" class="form-control col" type="text" placeholder="" value="${directory_data.setting.coord.lat}">
@@ -725,21 +728,21 @@ function update_version() {
                 }
             });
             directory_data.setting = {
-                setting: {
-                    site_name: "",
-                    coord: {
-                        lat: "",
-                        lon: "",
-                    }
+                site_name: "",
+                coord: {
+                    lat: "",
+                    lon: "",
                 }
-            }
+            };
         case "1.1":
             directory_data.column_size = [];
             for (const c in directory_data.column_row) {
                 directory_data.column_size.push("");
             }
         case "1.1.1":
-            break;
+            directory_data.setting.greeting_2 = directory_data.setting.site_name;
+            directory_data.setting.greeting_1 = "Welcome to";
+            delete directory_data.setting['site_name'];
         case "1.1.2":
             break;
         case "1.1.2":
