@@ -81,6 +81,12 @@
   background-color: #4285F4;
 }
 
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .main-content {
   height: 80%;
 }

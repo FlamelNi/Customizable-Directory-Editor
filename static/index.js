@@ -259,7 +259,7 @@ function set_testing_HTML() {
 
     result = `
         <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
-            <div style="height:40vh; background-color: grey; display: flex; align-items: center; justify-content: center;">
+            <div class="center" style="height:40vh; background-color: grey;">
                 <div id="qrcode" class="qr-code-div">
                 </div>
             </div>
@@ -421,7 +421,7 @@ function set_slideshow_HTML(menu_name) {
             if (file.type == SLIDESHOW_TYPE.IMAGE) {
                 result += `
                         <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
-                            <div style="height:40vh; background-color: grey">
+                            <div class="center" style="height:40vh; background-color: grey">
                                 <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
                             </div>
                             <div class="card-body">
@@ -436,7 +436,7 @@ function set_slideshow_HTML(menu_name) {
                 // height: 240,
                 result += `
                         <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
-                            <div style="height:40vh; background-color: grey; display: flex; align-items: center; justify-content: center;">
+                            <div class="center" style="height:40vh; background-color: grey;">
                                 <div id="qrcode_${i}_${j}" class="qr-code-div"></div>
                             </div>
                             <div class="card-body">
