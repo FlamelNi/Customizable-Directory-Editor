@@ -1,8 +1,8 @@
 var previous_directory_data = null;
 
 const CURR_VERSION = {
-    "id": "1.1.2",
-    "date": "05/01/2024",
+    "id": "1.1.3",
+    "date": "05/02/2024",
 };
 
 
@@ -16,13 +16,13 @@ const SLIDESHOW_TYPE = {
 
 const ALL_EDITORS = {
     DIRECTORY: 0,
-    AMMENITIES: 1,
+    AMENITIES: 1,
     LEASING: 2,
 };
 
 SLIDESHOW_FIELD_NAME = {};
 
-SLIDESHOW_FIELD_NAME[ALL_EDITORS.AMMENITIES] = "ammenities";
+SLIDESHOW_FIELD_NAME[ALL_EDITORS.AMENITIES] = "amenities";
 SLIDESHOW_FIELD_NAME[ALL_EDITORS.LEASING] = "leasing";
 
 var curr_editor = ALL_EDITORS.DIRECTORY;
@@ -498,8 +498,8 @@ function close_modal() {
 function render_editor() {
     if (curr_editor == ALL_EDITORS.DIRECTORY) {
         render_editor_directory();
-    } else if (curr_editor == ALL_EDITORS.AMMENITIES) {
-        render_editor_slideshow("ammenities");
+    } else if (curr_editor == ALL_EDITORS.AMENITIES) {
+        render_editor_slideshow("amenities");
     } else if (curr_editor == ALL_EDITORS.LEASING) {
         render_editor_slideshow("leasing");
     }
@@ -526,7 +526,7 @@ function read_HTML_to_update_dir() {
     for (i = 0; i < directory_data.column_row.length; i++) {
         for (j = 0; j < directory_data.rows.length; j++) {
             t = document.getElementById(`row_${i}_${j}`).value;
-            if (!isNaN(Number(t))) {
+            if (!isNaN(Number(t)) && t != '') {
                 t = Number(t);
             }
             directory_data.rows[j][i] = t;
@@ -534,7 +534,7 @@ function read_HTML_to_update_dir() {
     }
 }
 
-function read_HTML_to_update_ammenities() {
+function read_HTML_to_update_amenities() {
 
 }
 
@@ -543,8 +543,8 @@ function read_HTML_to_update() {
 
     if (curr_editor == ALL_EDITORS.DIRECTORY) {
         read_HTML_to_update_dir();
-    } else if (curr_editor == ALL_EDITORS.AMMENITIES) {
-        read_HTML_to_update_ammenities();
+    } else if (curr_editor == ALL_EDITORS.AMENITIES) {
+        read_HTML_to_update_amenities();
     }
     else {
 
@@ -747,8 +747,15 @@ function update_version() {
             directory_data.setting.greeting_1 = "Welcome to";
             delete directory_data.setting['site_name'];
         case "1.1.2":
+            if (directory_data.ammenities != undefined) {
+                directory_data.amenities = directory_data.ammenities;
+                delete directory_data.ammenities;
+            }
+        case "1.1.3":
             break;
-        case "1.1.2":
+        case "1.1.4":
+            break;
+        case "1.1.5":
             break;
 
     }

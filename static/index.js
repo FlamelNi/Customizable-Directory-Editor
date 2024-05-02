@@ -11,7 +11,7 @@ var dir_status = {
     news: 1,
     traffic: 2,
     weather: 3,
-    ammenities: 4,
+    amenities: 4,
     leasing: 5,
 };
 const DAYS_OF_WEEK = [
@@ -64,11 +64,11 @@ function render_content() {
         document.getElementById("title").innerHTML = "Local Traffic";
         initMap();
         document.getElementById("traffic-div").style.display = 'block';
-    } else if (curr_status == dir_status.ammenities) {
-        document.getElementById("title").innerHTML = "Ammenities";
-        set_slideshow_HTML("ammenities");
+    } else if (curr_status == dir_status.amenities) {
+        document.getElementById("title").innerHTML = "Amenities";
+        set_slideshow_HTML("amenities");
     } else if (curr_status == dir_status.leasing) {
-        document.getElementById("title").innerHTML = "Leasing";
+        document.getElementById("title").innerHTML = "Building Info";
         set_slideshow_HTML("leasing");
     }
     else {
@@ -622,8 +622,8 @@ function set_weather_HTML() {
                                 </div>
                                 <br>
                                 <h2 class="card-text">Chance of rain: ${d.pop*100}%</h3>
-                                <h2 class="card-text">Max temperature: ${d.max_temp}&degF</h3>
                                 <h2 class="card-text">Min temperature: ${d.min_temp}&degF</h3>
+                                <h2 class="card-text">Max temperature: ${d.max_temp}&degF</h3>
                                 <h2 class="card-text">Humidity: ${d.humidity}%</h3>
                             </div>
                         </div>
@@ -1063,6 +1063,12 @@ function check_user_actiivity() {
     var curr_time = Number(new Date());
     if (last_user_action + INACTIVITY_TIME < curr_time) {
         change_curr_status(dir_status.directory);
+
+        // var t = curr_status+1;
+        // if (t > 5) {
+        //     t = 0;
+        // }
+        // change_curr_status(t);
     }
     setTimeout(check_user_actiivity, 30000);
 }
