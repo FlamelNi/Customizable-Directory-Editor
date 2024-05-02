@@ -568,110 +568,108 @@ function get_weather_icon_code(id) {
 }
 
 function set_weather_HTML() {
-    get_coord("london", function (coord) {
-        get_today_weather(coord, function (today_data) {
-            get_weather(coord, function (data) {
-            // get_weather("San Francisco", function (data) {
-                var result = ``;
-                var d = data[0];
-                d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
-                today_data.icon = get_weather_icon_code(today_data.weather_id.toString()[0]);
-                
-                result += `
-                    <div class="weather-div" style="margin-top: 10px">
-                        <div style="max-width: 60%; min-width: 60%;">
+    get_today_weather(directory_data.setting.coord, function (today_data) {
+        get_weather(coord, function (data) {
+        // get_weather("San Francisco", function (data) {
+            var result = ``;
+            var d = data[0];
+            d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
+            today_data.icon = get_weather_icon_code(today_data.weather_id.toString()[0]);
+            
+            result += `
+                <div class="weather-div" style="margin-top: 10px">
+                    <div style="max-width: 60%; min-width: 60%;">
 
-                            <div class="card text-white bg-secondary mb-3" style=""; height: 12%">
-                                <div class="card-header" style="">
-                                    <h4>Today, ${today_data.day}, ${today_data.month}/${today_data.date}</h4>
-                                </div>
-
-                                <div class="card-body">
-                                    <div class="weather-card-div">
-                                        <img src="https://openweathermap.org/img/wn/${today_data.icon}@2x.png" style="width:20%; height: 20%;"></img>
-                                        <div>
-                                            <h2>${today_data.weather}</h2>
-                                            <h4>${today_data.description}</h4>
-                                        </div>
-                                        <div style="margin-top: 5%">
-                                            <p>
-                                                Temperature:<br>
-                                                ${today_data.min_temp}&degF~${today_data.max_temp}&degF
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="card text-white bg-secondary mb-3" style="">
-                                <div class="card-header" style="">
-                                    <h2>Tomorrow, ${d.day}, ${d.month}/${d.date}</h2>
-                                </div>
-                                <div class="card-body">
-                                    <div class="weather-card-div">
-                                        <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:25%; height: auto;"></img>
-                                        <div>
-                                            <br>
-                                            <h1 class="card-title">${d.weather}</h1>
-                                            <h3 class="card-text">${d.description}</h3>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <h2 class="card-text">Chance of rain: ${d.pop*100}%</h3>
-                                    <h2 class="card-text">Max temperature: ${d.max_temp}&degF</h3>
-                                    <h2 class="card-text">Min temperature: ${d.min_temp}&degF</h3>
-                                    <h2 class="card-text">Humidity: ${d.humidity}%</h3>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div>
-                `;
-                
-                for (i = 1; i < data.length; i++) {
-                    var d = data[i];
-                    d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
-                    result += `
-                        <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                        
+                        <div class="card text-white bg-secondary mb-3" style=""; height: 12%">
                             <div class="card-header" style="">
-                                <h5>${d.day}, ${d.month}/${d.date}</h5>
+                                <h4>Today, ${today_data.day}, ${today_data.month}/${today_data.date}</h4>
                             </div>
-                            
+
                             <div class="card-body">
                                 <div class="weather-card-div">
-                                    <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:30%; height: auto;"></img>
+                                    <img src="https://openweathermap.org/img/wn/${today_data.icon}@2x.png" style="width:20%; height: 20%;"></img>
                                     <div>
-                                        <h5 class="card-title">${d.weather}</h5>
-                                        <p class="card-text">${d.description}</p>
+                                        <h2>${today_data.weather}</h2>
+                                        <h4>${today_data.description}</h4>
+                                    </div>
+                                    <div style="margin-top: 5%">
+                                        <p>
+                                            Temperature:<br>
+                                            ${today_data.min_temp}&degF~${today_data.max_temp}&degF
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    `;
-                }
-    
+
+
+                        <div class="card text-white bg-secondary mb-3" style="">
+                            <div class="card-header" style="">
+                                <h2>Tomorrow, ${d.day}, ${d.month}/${d.date}</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="weather-card-div">
+                                    <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:25%; height: auto;"></img>
+                                    <div>
+                                        <br>
+                                        <h1 class="card-title">${d.weather}</h1>
+                                        <h3 class="card-text">${d.description}</h3>
+                                    </div>
+                                </div>
+                                <br>
+                                <h2 class="card-text">Chance of rain: ${d.pop*100}%</h3>
+                                <h2 class="card-text">Max temperature: ${d.max_temp}&degF</h3>
+                                <h2 class="card-text">Min temperature: ${d.min_temp}&degF</h3>
+                                <h2 class="card-text">Humidity: ${d.humidity}%</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+            `;
+            
+            for (i = 1; i < data.length; i++) {
+                var d = data[i];
+                d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
                 result += `
+                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                    
+                        <div class="card-header" style="">
+                            <h5>${d.day}, ${d.month}/${d.date}</h5>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="weather-card-div">
+                                <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" style="width:30%; height: auto;"></img>
+                                <div>
+                                    <h5 class="card-title">${d.weather}</h5>
+                                    <p class="card-text">${d.description}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
-    
-                // result += 
-                //     `
-                //         <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                //         <div class="card-header" style="font">${d.day}</div>
-                //         <div class="card-body">
-                //             <img src="https://openweathermap.org/img/wn/${icon}@2x.png"></img>
-                //             <h5 class="card-title">${d.weather}</h5>
-                //             <p class="card-text">${d.description}</p>
-                //         </div>
-                //         </div>
-                //     `;
-                document.getElementById("content-placeholder").innerHTML = result;
-            });
-        });//get today weather
-    });
+            }
+
+            result += `
+                    </div>
+                </div>
+            `;
+
+            // result += 
+            //     `
+            //         <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+            //         <div class="card-header" style="font">${d.day}</div>
+            //         <div class="card-body">
+            //             <img src="https://openweathermap.org/img/wn/${icon}@2x.png"></img>
+            //             <h5 class="card-title">${d.weather}</h5>
+            //             <p class="card-text">${d.description}</p>
+            //         </div>
+            //         </div>
+            //     `;
+            document.getElementById("content-placeholder").innerHTML = result;
+        });
+    });//get today weather
 }
 
 function page_change(i) {
