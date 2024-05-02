@@ -331,17 +331,21 @@ function get_directory_HTML() {
 
             if (i < directory_data.rows.length) {
 
-                if (directory_data.rows[i][c].length > 30) {
-                    result += 
-                    `
-                        <h1 style="font-size: 22px;">${directory_data.rows[i][c]}</h1>
-                    `;
+                result += `
+                    <h1>${directory_data.rows[i][c]}</h1>
+                `;
 
-                } else {
-                    result += `
-                        <h1>${directory_data.rows[i][c]}</h1>
-                    `;
-                }
+                // if (directory_data.rows[i][c].length > 30) {
+                //     result += 
+                //     `
+                //         <h1 style="font-size: 22px;">${directory_data.rows[i][c]}</h1>
+                //     `;
+
+                // } else {
+                //     result += `
+                //         <h1>${directory_data.rows[i][c]}</h1>
+                //     `;
+                // }
 
                 // if (directory_data.rows[index][c].length > 30) {
                 //     var s = directory_data.rows[index][c];

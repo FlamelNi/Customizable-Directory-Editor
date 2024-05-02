@@ -22,12 +22,12 @@
         
         <div class="menu-btn-div">
             
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.directory)"><h1 class="display-4">Directory</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.news)"><h1 class="display-4">News</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.traffic)"><h1 class="display-4">Local Traffic</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.weather)"><h1 class="display-4">Weather</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.ammenities)"><h1 class="display-4">Ammenities</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.leasing)"><h1 class="display-4">Leasing</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.directory)"><h1 class="display-4 directory-btn-font">Directory</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.news)"><h1 class="display-4 directory-btn-font">News</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.traffic)"><h1 class="display-4 directory-btn-font">Local Traffic</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.weather)"><h1 class="display-4 directory-btn-font">Weather</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.ammenities)"><h1 class="display-4 directory-btn-font">Ammenities</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.leasing)"><h1 class="display-4 directory-btn-font">Leasing</h1></button>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
     <div class="main-window" style="max-width: 74%;">
         <div class="main-top" style="height: 15%;">
             <div style="margin: 2%;">
-                <h1 class="display-2" id="title">Directory</h1>
+                <h1 class="display-2 directory-btn-font" id="title">Directory</h1>
             </div>
             
             <!-- <div style="width: 60%"> -->
@@ -140,10 +140,10 @@
 <script>
     window.onload = function() {
         document.getElementById("greeting_div").innerHTML = `
-            <h1>
+            <h1 class="welcome-text-font">
                 ${directory_data.setting.greeting_1}
             </h1>
-            <h1>
+            <h1 class="welcome-text-font">
                 ${directory_data.setting.greeting_2}
             </h1>
         `;

@@ -1,4 +1,8 @@
 
+.body {
+  font-family: tahoma;
+}
+
 .main-div {
   padding: 0px;
   margin: 0px;
@@ -79,6 +83,14 @@
 
 .sky-blue {
   background-color: #4285F4;
+}
+
+.welcome-text-font {
+  font-family: serif;
+}
+
+.directory-btn-font {
+  font-family: tahoma;
 }
 
 .center {
