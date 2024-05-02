@@ -526,6 +526,9 @@ function read_HTML_to_update_dir() {
     for (i = 0; i < directory_data.column_row.length; i++) {
         for (j = 0; j < directory_data.rows.length; j++) {
             t = document.getElementById(`row_${i}_${j}`).value;
+            if (Number(t) != NaN) {
+                t = Number(t);
+            }
             directory_data.rows[j][i] = t;
         }
     }
