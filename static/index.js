@@ -14,6 +14,9 @@ var dir_status = {
     amenities: 4,
     leasing: 5,
 };
+
+const dir_status_len = 6;
+
 const DAYS_OF_WEEK = [
     "Sunday",
     "Monday",
@@ -281,7 +284,8 @@ function set_testing_HTML() {
 
 function get_directory_HTML() {
     result = `
-        <div class="directory-div">
+        <div class="directory-all-div">
+            <div class="directory-div">
     `;
 
     // for (const c in directory_data.column_row) {
@@ -388,13 +392,16 @@ function get_directory_HTML() {
     
 
     result += `
-        </div>
-        <div class="directory-btn-div">
-            <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(-1)">&#9665;</button>
-            <div>
-                <h1>${directory_page+1}</h1>
             </div>
-            <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(1)">&#9655;</button>
+            <div class="center" style="flex-grow: 1; flex-shrink: 0;">
+                <div class="directory-btn-div">
+                    <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(-1)">&#9665;</button>
+                    <div>
+                        <h1>${directory_page+1}</h1>
+                    </div>
+                    <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(1)">&#9655;</button>
+                </div>
+            </div>
         </div>
     `;
 
@@ -403,7 +410,8 @@ function get_directory_HTML() {
 
 function set_slideshow_HTML(menu_name) {
     result = `
-        <div>
+    <div class="center" style="width:100%; height:100%">
+        <div style="width:100%;">
             <div class="carousel" style="max-height: 70vh">
 
                 <div class="carousel-sections-scroll" style="max-height: 70vh">
@@ -499,6 +507,7 @@ function set_slideshow_HTML(menu_name) {
     result += `
             </div>
         </div>
+    </div>
     `;
 
 
@@ -581,10 +590,10 @@ function set_weather_HTML() {
             today_data.icon = get_weather_icon_code(today_data.weather_id.toString()[0]);
             
             result += `
-                <div class="weather-div" style="margin-top: 10px">
-                    <div style="max-width: 60%; min-width: 60%;">
+                <div class="weather-div center" style="">
+                    <div class="weather-col" style="max-width: 60%; min-width: 60%;">
 
-                        <div class="card text-white bg-secondary mb-3" style=""; height: 12%">
+                        <div class="card text-white bg-secondary mb-3" style="margin-bottom:0 !important;">
                             <div class="card-header" style="">
                                 <h4>Today, ${today_data.day}, ${today_data.month}/${today_data.date}</h4>
                             </div>
@@ -606,8 +615,7 @@ function set_weather_HTML() {
                             </div>
                         </div>
 
-
-                        <div class="card text-white bg-secondary mb-3" style="">
+                        <div class="card text-white bg-secondary mb-3" style="margin-bottom:0 !important;">
                             <div class="card-header" style="">
                                 <h2>Tomorrow, ${d.day}, ${d.month}/${d.date}</h2>
                             </div>
@@ -629,14 +637,14 @@ function set_weather_HTML() {
                         </div>
                     </div>
 
-                    <div>
+                    <div class="weather-col">
             `;
             
             for (i = 1; i < data.length; i++) {
                 var d = data[i];
                 d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
                 result += `
-                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem; margin-bottom:0 !important;">
                     
                         <div class="card-header" style="">
                             <h5>${d.day}, ${d.month}/${d.date}</h5>
@@ -685,7 +693,6 @@ function page_change(i) {
         directory_page = 0;
     }
 
-    user_action();
     render_content();
 }
 
@@ -694,7 +701,7 @@ function change_curr_status(x) {
     if (x == dir_status.directory) {
         directory_page = 0;
     }
-    user_action();
+    
     render_content();
 }
 
@@ -980,12 +987,10 @@ function render_carousel() {
 function manual_prev() {
     auto_counter = AUTO_COUNTER_INIT;
     prev();
-    user_action();
 }
 function manual_next() {
     auto_counter = AUTO_COUNTER_INIT;
     next();
-    user_action();
 }
 
 function prev() {
@@ -1052,25 +1057,33 @@ function init_slide() {
 }
 
 var last_user_action = Number(new Date());
-const INACTIVITY_TIME = 60000;
+var is_active = true;
+const ROTATE_TIME = 30000;
+const INACTIVITY_TIME = 5*60000;
 
 function user_action() {
     console.log("user action");
     last_user_action = Number(new Date());
+    is_active = true;
 }
 
 function check_user_actiivity() {
     var curr_time = Number(new Date());
-    if (last_user_action + INACTIVITY_TIME < curr_time) {
-        change_curr_status(dir_status.directory);
 
-        // var t = curr_status+1;
-        // if (t > 5) {
-        //     t = 0;
-        // }
-        // change_curr_status(t);
+    if ( (is_active && last_user_action + INACTIVITY_TIME < curr_time) ||
+        (!is_active && last_user_action + ROTATE_TIME < curr_time) ) {
+        // change_curr_status(dir_status.directory);
+
+        var t = curr_status+1;
+        if (t >= dir_status_len) {
+            t = 0;
+        }
+        change_curr_status(t);
+        last_user_action = Number(new Date());
+        is_active = false;
     }
-    setTimeout(check_user_actiivity, 30000);
+
+    setTimeout(check_user_actiivity, 5000);
 }
 
 function testFunc() {
