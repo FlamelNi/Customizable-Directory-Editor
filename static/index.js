@@ -61,6 +61,7 @@ function render_content() {
         document.getElementById("content-placeholder").style.display = 'block';
     } else if (curr_status == dir_status.news) {
         document.getElementById("title").innerHTML = "News";
+        set_news_HTML();
         document.getElementById("news-div").style.display = 'block';
     } else if (curr_status == dir_status.weather) {
         document.getElementById("title").innerHTML = "Weather";
@@ -411,6 +412,13 @@ function get_directory_HTML() {
     `;
 
     return result;
+}
+
+function set_news_HTML() {
+    var style_temp = document.createElement('style');
+    style_temp.innerHTML = '.rssapp-carousel-container a {pointer-events: none}';
+    // .source a {pointer-events: none}
+    document.getElementById("news-div").querySelectorAll('rssapp-carousel#mObA35s7fR1nvgeg')[0].shadowRoot.appendChild(style_temp);
 }
 
 function set_slideshow_HTML(menu_name) {
@@ -1031,16 +1039,16 @@ function goto(newIndex) {
 }
 
 function carousel_timer() {
-    console.log(`carousel timer`);
-    if (auto_counter > 0) {
-        auto_counter--;
-    } else if (auto_counter == -1) {
-        //do nothing
-    } else {
-        next();
-    }
+    // console.log(`carousel timer`);
+    // if (auto_counter > 0) {
+    //     auto_counter--;
+    // } else if (auto_counter == -1) {
+    //     //do nothing
+    // } else {
+    //     next();
+    // }
     
-    setTimeout(carousel_timer, 5000);
+    // setTimeout(carousel_timer, 5000);
 }
 
 function init_slide() {
@@ -1070,22 +1078,29 @@ function init_slide() {
     render_carousel();
 }
 
-var last_user_action = Number(new Date());
-var is_active = true;
-const ROTATE_TIME = 30000;
-const INACTIVITY_TIME = 5*60000;
+var last_user_action_content = Number(new Date());
+var last_user_action_slideshow = Number(new Date());
+var is_active_content = true;
+var is_active_slideshow = true;
+const CONTENT_ROTATE_TIME = 30000;
+const CONTENT_INACTIVITY_TIME = 5*60000;
+
+const SLIDESHOW_ROTATE_TIME = 5000;
+const SLIDESHOW_INACTIVITY_TIME = 60000;
 
 function user_action() {
     console.log("user action");
-    last_user_action = Number(new Date());
-    is_active = true;
+    last_user_action_content = Number(new Date());
+    last_user_action_slideshow = Number(new Date());
+    is_active_content = true;
+    is_active_slideshow = true;
 }
 
 function check_user_actiivity() {
     var curr_time = Number(new Date());
 
-    if ( (is_active && last_user_action + INACTIVITY_TIME < curr_time) ||
-        (!is_active && last_user_action + ROTATE_TIME < curr_time) ) {
+    if ( (is_active_content && last_user_action_content + CONTENT_INACTIVITY_TIME < curr_time) ||
+        (!is_active_content && last_user_action_content + CONTENT_ROTATE_TIME < curr_time) ) {
         // change_curr_status(dir_status.directory);
 
         var t = curr_status+1;
@@ -1093,11 +1108,20 @@ function check_user_actiivity() {
             t = 0;
         }
         change_curr_status(t);
-        last_user_action = Number(new Date());
-        is_active = false;
+        last_user_action_content = Number(new Date());
+        is_active_content = false;
     }
 
-    setTimeout(check_user_actiivity, 5000);
+
+    if ( (is_active_slideshow && last_user_action_slideshow + SLIDESHOW_INACTIVITY_TIME < curr_time) ||
+        (!is_active_slideshow && last_user_action_slideshow + SLIDESHOW_ROTATE_TIME < curr_time) ) {
+        
+        next();
+        last_user_action_slideshow = Number(new Date());
+        is_active_slideshow = false;
+    }
+
+    setTimeout(check_user_actiivity, 1000);
 }
 
 function testFunc() {
