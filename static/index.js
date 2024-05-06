@@ -49,6 +49,7 @@ function render_content() {
     document.getElementById("news-div").style.display = 'none';
     document.getElementById("content-placeholder").innerHTML = "";
     document.getElementById("traffic-div").style.display = 'none';
+    document.getElementById("content-placeholder").style.display = 'none';
     auto_counter = -1;
 
     if (curr_status == dir_status.testing) {
@@ -57,12 +58,14 @@ function render_content() {
     } else if (curr_status == dir_status.directory) {
         document.getElementById("title").innerHTML = "Directory";
         document.getElementById("content-placeholder").innerHTML = get_directory_HTML();
+        document.getElementById("content-placeholder").style.display = 'block';
     } else if (curr_status == dir_status.news) {
         document.getElementById("title").innerHTML = "News";
         document.getElementById("news-div").style.display = 'block';
     } else if (curr_status == dir_status.weather) {
         document.getElementById("title").innerHTML = "Weather";
         set_weather_HTML();
+        document.getElementById("content-placeholder").style.display = 'block';
     } else if (curr_status == dir_status.traffic) {
         document.getElementById("title").innerHTML = "Local Traffic";
         initMap();
@@ -70,9 +73,11 @@ function render_content() {
     } else if (curr_status == dir_status.amenities) {
         document.getElementById("title").innerHTML = "Amenities";
         set_slideshow_HTML("amenities");
+        document.getElementById("content-placeholder").style.display = 'block';
     } else if (curr_status == dir_status.leasing) {
         document.getElementById("title").innerHTML = "Building Info";
         set_slideshow_HTML("leasing");
+        document.getElementById("content-placeholder").style.display = 'block';
     }
     else {
 
@@ -433,8 +438,10 @@ function set_slideshow_HTML(menu_name) {
             if (file.type == SLIDESHOW_TYPE.IMAGE) {
                 result += `
                         <div class="card" style="width: 25vw; max-height: 70vh; margin: 5px">
-                            <div class="center" style="height:40vh; background-color: grey">
-                                <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
+                            <div style="height:40vh; background-color: grey">
+                                <div class="center" style="width:100%; height:100%; padding: 0.5vh;">
+                                    <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
+                                </div>
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">${file.title}</h5>
@@ -593,7 +600,7 @@ function set_weather_HTML() {
                 <div class="weather-div center" style="">
                     <div class="weather-col" style="max-width: 60%; min-width: 60%;">
 
-                        <div class="card text-white bg-secondary mb-3" style="margin-bottom:0 !important;">
+                        <div class="card text-white bg-secondary mb-3 weather-card" style="margin-bottom:0 !important;">
                             <div class="card-header" style="">
                                 <h4>Today, ${today_data.day}, ${today_data.month}/${today_data.date}</h4>
                             </div>
@@ -615,7 +622,9 @@ function set_weather_HTML() {
                             </div>
                         </div>
 
-                        <div class="card text-white bg-secondary mb-3" style="margin-bottom:0 !important;">
+                        <div style="height:2vh"></div>
+
+                        <div class="card text-white bg-secondary mb-3 weather-card" style="margin-bottom:0 !important;">
                             <div class="card-header" style="">
                                 <h2>Tomorrow, ${d.day}, ${d.month}/${d.date}</h2>
                             </div>
@@ -644,7 +653,7 @@ function set_weather_HTML() {
                 var d = data[i];
                 d.icon = get_weather_icon_code(d.weather_id.toString()[0]);
                 result += `
-                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem; margin-bottom:0 !important;">
+                    <div class="card text-white bg-secondary mb-3 weather-card" style="max-width: 18rem; margin-bottom:0 !important;">
                     
                         <div class="card-header" style="">
                             <h5>${d.day}, ${d.month}/${d.date}</h5>
@@ -661,6 +670,11 @@ function set_weather_HTML() {
                         </div>
                     </div>
                 `;
+                if (i < data.length-1) {
+                    result += `
+                        <div style="height:2vh"></div>
+                    `;
+                }
             }
 
             result += `

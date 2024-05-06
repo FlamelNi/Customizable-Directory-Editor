@@ -187,6 +187,10 @@
   height: 100%;
 }
 
+.weather-card {
+  flex-grow:1;
+}
+
 .weather-card-div {
   display: flex;                  /* establish flex container */
   flex-direction: row;
