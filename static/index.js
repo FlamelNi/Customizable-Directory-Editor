@@ -421,6 +421,21 @@ function set_news_HTML() {
     document.getElementById("news-div").querySelectorAll('rssapp-carousel#mObA35s7fR1nvgeg')[0].shadowRoot.appendChild(style_temp);
 }
 
+function map_update() {
+    var anchors = document.getElementById("traffic-div").getElementsByTagName('a'),
+        l = anchors.length,
+        i,
+        a;
+
+    for (i = 0; i < l; i++) {
+        a = anchors[i];
+        if (a.href.indexOf('maps.google.com/maps?') !== -1) {
+            a.title = ''; 
+            a.onclick = function () { return false; };
+        }
+    }
+}
+
 function set_slideshow_HTML(menu_name) {
     result = `
     <div class="center" style="width:100%; height:100%">
@@ -451,11 +466,6 @@ function set_slideshow_HTML(menu_name) {
                                     <img class="card-img-top" src="${file.name}" alt="Card image cap" style="max-height: 100%; object-fit: contain;">
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <h5 class="card-title">${file.title}</h5>
-                                <p class="card-text">${file.description.replaceAll("\n", "<br>")}</p>
-                            </div>
-                        </div>
                 `;
             } else if (file.type == SLIDESHOW_TYPE.QR_CODE) {
                 
@@ -466,14 +476,20 @@ function set_slideshow_HTML(menu_name) {
                             <div class="center" style="height:40vh; background-color: grey;">
                                 <div id="qrcode_${i}_${j}" class="qr-code-div"></div>
                             </div>
-                            <div class="card-body">
-                                <h5 class="card-title">${file.title}</h5>
-                                <p class="card-text">${file.description.replaceAll("\n", "<br>")}</p>
-                            </div>
-                        </div>
                 `;
                 qrcode_queue.push([menu_name, i, j]);
             }
+
+            result += `
+                <div class="card-body">
+                    <div style="min-height:3vh;">
+                        <h5 class="card-title">${file.title}</h5>
+                    </div>
+                    <p class="card-text">${file.description.replaceAll("\n", "<br>")}</p>
+                </div>
+            </div>
+            `;
+
             j++
         }
         // <img src="${directory_data[menu_name][i].name}" style="max-width:100%; max-width: 60vw;">

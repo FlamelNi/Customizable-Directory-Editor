@@ -91,6 +91,9 @@
                     var map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 13,
                         center: {lat: Number(directory_data.setting.coord.lat), lng: Number(directory_data.setting.coord.lon)},
+                        streetViewControl: false,
+                        fullscreenControl: false,
+                        keyboardShortcuts: false,
                         mapId: "4504f8b37365c3d0",
                     });
 
@@ -110,6 +113,10 @@
                     //     content: priceTag,
                     // });
 
+                    // google.maps.event.addListenerOnce(map, 'idle', function() {
+                    //     map_update();
+                    // });
+                    
                     var trafficLayer = new google.maps.TrafficLayer();
                     trafficLayer.setMap(map);
                 }
@@ -135,7 +142,9 @@
             </div>
         </div>
 
-        <rssapp-ticker id="mObA35s7fR1nvgeg"></rssapp-ticker><script src="https://widget.rss.app/v1/ticker.js" type="text/javascript" async></script>
+        <div style="pointer-events: none;">
+            <rssapp-ticker id="mObA35s7fR1nvgeg"></rssapp-ticker><script src="https://widget.rss.app/v1/ticker.js" type="text/javascript" async></script>
+        </div>
     </div>
     
 </div>
