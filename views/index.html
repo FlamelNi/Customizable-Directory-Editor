@@ -185,7 +185,7 @@
                             if (temp_zip != null) {
                                 console.log(temp_zip)
                                 promise = temp_zip.generateAsync({type : "blob"}).then(function (blob) {
-                                    saveFile(blob, "directory.zip");
+                                    saveFile(blob, directory_filename);
                                 }, function (err) {
                                     console.log(err);
                                     alert("error in download");
@@ -247,7 +247,6 @@
 
             function uploadFile() {
                 curr_zip = new JSZip();
-
                 curr_zip.loadAsync(fileList[0])
                 .then(function(curr_zip) {
                     // you now have every files contained in the loaded zip
@@ -259,6 +258,7 @@
                 });
             }
             uploadFile();
+            directory_filename = fileList[0].name;
         }
     });
 </script>

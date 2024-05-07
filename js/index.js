@@ -1,3 +1,5 @@
+var directory_filename = "directory.zip";
+
 var previous_directory_data = null;
 
 const CURR_VERSION = {
