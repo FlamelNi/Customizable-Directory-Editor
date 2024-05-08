@@ -40,6 +40,35 @@ const server = http.createServer((req, res) => {
     // if (req.url)
     // console.log(req.method)
     // console.log(req.url)
+    
+    // var url_split = req.url.split('/').slice(1);
+    // // console.log(url_split);
+    // if (url_split[0] == 'test') {
+    //     // res.writeHead(200, {"Content-Type": "text/html"});
+    //     // res.write("Hello World!");
+    //     // res.end();
+
+    //     serveFile(path.join(__dirname, 'views', 'index.html'), "text/html", res);
+
+    //     return;
+    // }
+    
+    // if (url_split[0] == 'check_login') {
+    //     console.log(url_split)
+
+    //     return;
+    // }
+    // if (url_split[0] == 't2') {
+    //     // res.writeHead(200, {"Content-Type": "text/html"});
+    //     // res.write(`<a href="/test">link</a>`);
+    //     // res.end();
+
+    //     serveFile(path.join(__dirname, 'views', 'frontpage.html'), "text/html", res);
+
+    //     return;
+    // }
+
+
 
     if (req.method == "POST" && req.url.split('/')[0] == 'upload') {
         console.log('upload test')
@@ -162,6 +191,10 @@ function get_weather(f) {
     // });
 
     return "test weather"
+}
+
+function test_fun() {
+    return "hello world";
 }
 
 

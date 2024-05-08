@@ -402,8 +402,8 @@ function get_directory_HTML() {
             <div class="center" style="flex-grow: 1; flex-shrink: 0;">
                 <div class="directory-btn-div">
                     <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(-1)">&#9665;</button>
-                    <div>
-                        <h1>${directory_page+1}</h1>
+                    <div class="center">
+                        <h1 style="font-size: 2vh; margin: 0px;">${directory_page+1}</h1>
                     </div>
                     <button class="btn btn-primary" type="button" style="width: 7vw; height: 5vh;" onclick="page_change(1)">&#9655;</button>
                 </div>
@@ -1114,7 +1114,6 @@ function user_action() {
 
 function check_user_actiivity() {
     var curr_time = Number(new Date());
-
     if ( (is_active_content && last_user_action_content + CONTENT_INACTIVITY_TIME < curr_time) ||
         (!is_active_content && last_user_action_content + CONTENT_ROTATE_TIME < curr_time) ) {
         // change_curr_status(dir_status.directory);
@@ -1126,15 +1125,22 @@ function check_user_actiivity() {
         change_curr_status(t);
         last_user_action_content = Number(new Date());
         is_active_content = false;
+        
+        last_user_action_slideshow = Number(new Date());
     }
 
-
-    if ( (is_active_slideshow && last_user_action_slideshow + SLIDESHOW_INACTIVITY_TIME < curr_time) ||
+    try {
+        if ( (is_active_slideshow && last_user_action_slideshow + SLIDESHOW_INACTIVITY_TIME < curr_time) ||
         (!is_active_slideshow && last_user_action_slideshow + SLIDESHOW_ROTATE_TIME < curr_time) ) {
-        
-        next();
-        last_user_action_slideshow = Number(new Date());
-        is_active_slideshow = false;
+            if (curr_status == dir_status.amenities || curr_status == dir_status.leasing) {
+                next();
+            }
+            
+            last_user_action_slideshow = Number(new Date());
+            is_active_slideshow = false;
+        }
+    } catch {
+
     }
 
     setTimeout(check_user_actiivity, 1000);

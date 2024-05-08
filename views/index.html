@@ -22,6 +22,31 @@
 
 <!-- <div style="background-image: url('background.jpg');"> -->
 
+<div class="login-div" id="login-div">
+
+    <div>
+        <h1>Login</h1>
+        <h3>Please upload your zip-file and passcode below to proceed</h3>
+        <br><br>
+        <div class="">
+            <div style="width: 400px;">
+                <input class="form-control" type="file" id="file-selector">
+            </div>
+
+            <div class="input-group mb-2" style="width: 400px">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" style="width: 108px">Passcode</div>
+                </div>
+                <input type="text" class="form-control" id="passcode" placeholder="passcode">
+            </div>
+
+            <button class="btn btn-primary" style="width: 120px;" onclick="login()"> Login </button>
+
+        </div>
+    </div>
+
+</div>
+
 <script src="../js/index.js"></script>
 <script src="../js/directory.js"></script>
 <link rel="stylesheet" href="../style/index.css">
@@ -30,23 +55,24 @@
         <h2 class="display-4" style="text-align: center; font-size: 30px;">Directory editor</h1>
     </div>
     <div style="flex-basis: 100px;">
-        <button class="btn btn-light" style="width:100px" onclick="new_directory()"> New </button>
+        <button class="btn btn-light" style="width:100px" onclick="refresh_page()"> Refresh </button>
     </div>
     <div style="flex-basis: 100px;">
         <button class="btn btn-light" style="width:100px" onclick="download_directory()"> Download </button>
     </div>
-    <div style="flex-basis: 300px;">
+    <!-- <div style="flex-basis: 300px;">
         <input class="form-control" type="file" id="file-selector">
-    </div>
+    </div> -->
 </div>
 
-<div id="setting-modal-div"></div>
+<div id="setting-modal-div">
+</div>
 
 <div class="editor-select">
     <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.DIRECTORY)"> Directory </button>
     <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.LEASING)"> Building Info </button>
     <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.AMENITIES)"> Amenities </button>
-    <button class="btn btn-secondary" style="width: 150px;" onclick="" data-toggle="modal" data-target="#setting"> Other settings </button>
+    <button class="btn btn-secondary admin-div" id="setting_btn" style="width: 150px;" onclick="" data-toggle="modal" data-target="#setting"> Other settings </button>
 </div>
 
 <div id="editor_div">
@@ -120,7 +146,7 @@
 <script>
     var curr_zip = null;
 
-    function new_directory() {
+    function refresh_page() {
         window.location.reload();
     }
 
@@ -237,29 +263,32 @@
         }
         if(!alert('This page will be refreshed. To continue editing, please re-upload the zip file that you just downloaded.')){window.location.reload();}
     }
-    const fileSelector = document.getElementById('file-selector');
-    fileSelector.addEventListener('change', (event) => {
-        const fileList = event.target.files;
-        console.log(fileList);
+
+    function uploadFile(file) {
+        curr_zip = new JSZip();
+        curr_zip.loadAsync(file)
+        .then(function(curr_zip) {
+            // you now have every files contained in the loaded zip
+            // zip.file("hello.txt").async("string"); // a promise of "Hello World\n"
+
+            // curr_zip.file("test.txt", "test");
+            import_directory_data(curr_zip);
+            directory_filename = file.name;
+        });
+    }
+
+    function file_upload_event(fileList) {
         curr_zip = null;
         if (fileList.length > 0 && fileList[0].type == "application/x-zip-compressed") {
+            uploadFile(fileList[0]);
             console.log('good');
 
-            function uploadFile() {
-                curr_zip = new JSZip();
-                curr_zip.loadAsync(fileList[0])
-                .then(function(curr_zip) {
-                    // you now have every files contained in the loaded zip
-                    // zip.file("hello.txt").async("string"); // a promise of "Hello World\n"
-
-                    // curr_zip.file("test.txt", "test");
-
-                    import_directory_data(curr_zip);
-                });
-            }
-            uploadFile();
-            directory_filename = fileList[0].name;
         }
+    }
+
+    const fileSelector = document.getElementById('file-selector');
+    fileSelector.addEventListener('change', (event) => {
+        file_upload_event(event.target.files);
     });
 </script>
 

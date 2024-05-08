@@ -2,6 +2,8 @@ var directory_filename = "directory.zip";
 
 var previous_directory_data = null;
 
+var login_status = 0;
+
 const CURR_VERSION = {
     "id": "1.1.3",
     "date": "05/02/2024",
@@ -94,7 +96,12 @@ function empty_data() {
                 lat: "",
                 lon: "",
             }
-        }
+        },
+
+        pass_hash: {
+            client: "937e8d5fbb48bd4949536cd65b8d35c426b80d2f830c5c308e2cdec422ae2244",
+            admin: "77b9d6c28c375c5d496d99e89f6e288b654c75c8aa20431ae739ca30656e940d",
+        },
     };
     return JSON.parse(JSON.stringify(temp));
 }
@@ -119,19 +126,37 @@ function set_test_data() {
 function get_HTML_column(i) {
     col = directory_data.column_row[i];
     col_size = directory_data.column_size[i];
-    result = 
-    `
-        <div class="col">
-            <div id="${i}" class="col-function-row col" style="margin-bottom: 5px;">
-                <button class="btn btn-primary" type="button" style="flex-grow: 0.2;" onclick="swap_col(${i}, ${i-1})">&#9665;</button>
-                <div style="flex-basis: 15px;"></div>
-                <button class="btn btn-warning" type="button" style="" onclick="sort_col(${i})">Sort</button>
-                <div style="flex-basis: 15px;"></div>
-                <button class="btn btn-primary" type="button" style="flex-grow: 0.2" onclick="swap_col(${i}, ${i+1})">&#9655;</button>
-            </div>
+    result = ``;
+
+    if (i < directory_data.column_row.length - 1) {
+        result += `
+            <div class="col">
+                <div id="${i}" class="col-function-row col" style="margin-bottom: 5px;">
+                    <button class="btn btn-primary" type="button" style="flex-grow: 0.2; display:none;" onclick="swap_col(${i}, ${i-1})">&#9665;</button>
+                    <div style="flex-grow: 0.5;"></div>
+                    <div style="flex-basis: 15px;"></div>
+                    <button class="btn btn-warning" type="button" style="" onclick="sort_col(${i})">Sort</button>
+                    <div style="flex-basis: 15px;"></div>
+                    <button class="btn btn-primary" type="button" style="flex-grow: 0.2" onclick="swap_col(${i}, ${i+1})">&#9655;</button>
+                </div>
+        `;
+    } else {
+        result += `
+            <div class="col">
+                <div id="${i}" class="col-function-row col" style="margin-bottom: 5px;">
+                    <div style="flex-grow: 0.5;"></div>
+                    <div style="flex-basis: 15px;"></div>
+                    <button class="btn btn-warning" type="button" style="" onclick="sort_col(${i})">Sort</button>
+                    <div style="flex-basis: 15px;"></div>
+                    <div style="flex-grow: 0.5;"></div>
+                </div>
+        `;
+    }
+
+    result += `
             
             <input id="col_${i}" class="form-control col" type="text" placeholder="column name" value="${col}">
-            <input id="col_size_${i}" class="form-control col" type="text" placeholder="1" value="${col_size}">
+            <input id="col_size_${i}" class="form-control col admin-div" type="text" placeholder="1" value="${col_size}">
         </div>
     `;
 
@@ -146,7 +171,7 @@ function get_HTML_column_row() {
                 <div class="d-grid gap-2" style="min-width: 160px; max-width: 160px;">
                     <h4>Control</h4>
                     <h4>Column Name</h4>
-                    <h4>Column size</h4>
+                    <h4 class="admin-div">Column size</h4>
                 </div>
     `;
 
@@ -324,11 +349,14 @@ function get_render_editor_slideshow_section(menu_name, section_i) {
             <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}', ${section_i})"> Add new image </button>
             <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_QR('${menu_name}', ${section_i})"> Add new QR code </button>
             <button class="btn btn-danger" style="flex-grow: 0.7; margin-right: 30px;" onclick="delete_slideshow_section('${menu_name}', ${section_i})"> Delete this section </button>
-            <h3>${directory_data[menu_name][section_i].section_name}</h3>
+            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="swap_section('${menu_name}', ${section_i}, ${section_i+1})"> &#9661 </button>
+            <h3>Section ${section_i+1}</h3>
         </div>
 
         <div>
     `;
+    // <h3>${directory_data[menu_name][section_i].section_name}</h3>
+
     //todo-----------------------------------------------------------------
 
     if (directory_data[menu_name] == undefined) {
@@ -412,8 +440,10 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
         </div>
 
         <div class="input-row">
+            <button class="btn btn-primary" style="width: 50px; margin-right: 50px;" onclick="swap_media('${menu_name}', ${section_i}, ${i}, ${i+1})"> &#9661 </button>
             <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${section_i}_${i}"> Edit </button>
             <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick="delete_slideshow_entry('${menu_name}', ${section_i}, ${i})"> Delete </button>
+            
             <div>
                 <h3>${files[i].title}</h3>
             </div>
@@ -422,7 +452,6 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
     `;
     return result;
 }
-
 
 function save_slideshow_entry(menu_name, section_i, i) {
     file = directory_data[menu_name][section_i].files[i];
@@ -458,6 +487,13 @@ function save_setting() {
         lat: document.getElementById("lat").value,
         lon: document.getElementById("lon").value,
     }
+    
+    if (document.getElementById("client_passcode").value != "") {
+        hash(document.getElementById("client_passcode").value).then(function (s) {
+            directory_data.pass_hash.client = s;
+        });
+        document.getElementById("client_passcode").value = "";
+    }
 }
 
 function render_others() {
@@ -480,6 +516,9 @@ function render_others() {
                         <input id="lat" class="form-control col" type="text" placeholder="" value="${directory_data.setting.coord.lat}">
                         <label>Longtitude</lable>
                         <input id="lon" class="form-control col" type="text" placeholder="" value="${directory_data.setting.coord.lon}">
+
+                        <label>Client passcode (Changes only if something is entered)</lable>
+                        <input id="client_passcode" class="form-control col" type="text" placeholder="new passcode" value="">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" onclick="save_setting()" data-dismiss="modal">Save changes</button>
@@ -597,6 +636,39 @@ function delete_col() {
     render_editor();
 }
 
+function swap_section(menu_name, i, j) {
+    var size_t = directory_data[menu_name].length;
+    if (i < 0 || size_t <= i || j < 0 || size_t <= j) {
+        return;
+    }
+    read_HTML_to_update();
+
+    var arr = directory_data[menu_name];
+
+    var temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+
+    render_editor();
+}
+
+
+function swap_media(menu_name, section_i, i, j) {
+    var size_t = directory_data[menu_name][section_i].files.length;
+    if (i < 0 || size_t <= i || j < 0 || size_t <= j) {
+        return;
+    }
+    read_HTML_to_update();
+
+    var arr = directory_data[menu_name][section_i].files;
+
+    var temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+
+    render_editor();
+}
+
 function swap_col(i, j) {
     var col_size = directory_data.column_row.length;
     if (i < 0 || col_size <= i || j < 0 || col_size <= j) {
@@ -679,6 +751,9 @@ function import_directory_data(curr_zip) {
         update_version();
 
         render_editor();
+
+        // // test
+        // curr_zip = JSON.parse(JSON.stringify(curr_zip));
     });
 }
 
@@ -763,6 +838,57 @@ function update_version() {
     }
     previous_directory_data = JSON.parse(JSON.stringify(directory_data));
     directory_data.version = CURR_VERSION;
+}
+
+async function sha256(message) {
+    // encode as UTF-8
+    const msgBuffer = new TextEncoder().encode(message);                    
+
+    // hash the message
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+    // convert ArrayBuffer to Array
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    // convert bytes to hex string                  
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+
+function hash(s) {
+    return sha256(s);
+}
+
+function login() {
+    var passcode = document.getElementById("passcode").value;
+
+    hash(passcode).then(function (s) {
+        
+        if (s == directory_data.pass_hash.client) {
+            login_status = 1;
+            
+            var admin_div_arr = document.getElementsByClassName("admin-div");
+            for (var i = 0; i < admin_div_arr.length; i++) {
+                admin_div_arr[i].style.display = "none";
+            }
+
+            document.getElementById("login-div").style.display = "none";
+        } else if (s == directory_data.pass_hash.admin) {
+            login_status = 2;
+            
+            var admin_div_arr = document.getElementsByClassName("admin-div");
+            for (var i = 0; i < admin_div_arr.length; i++) {
+                admin_div_arr[i].style.display = "block";
+            }
+
+            document.getElementById("login-div").style.display = "none";
+        } else {
+            alert("Wrong passcode was entered. Please try again");
+            document.getElementById("passcode").value = "";
+        }
+        console.log(s);
+    });
 }
 
 

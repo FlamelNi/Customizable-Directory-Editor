@@ -80,3 +80,31 @@
   /* background-color: lightblue; */
 }
 
+.login-div {
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+
+  padding: 100px;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rows {
+  display: flex;                  /* establish flex container */
+  flex-direction: row;            /* default value; can be omitted */
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  /* switched from default (flex-start, see below) */
+  justify-content: space-between;
+  /* background-color: lightblue; */
+}
+
+
