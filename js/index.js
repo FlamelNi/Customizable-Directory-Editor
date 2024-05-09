@@ -2,6 +2,12 @@ var directory_filename = "directory.zip";
 
 var previous_directory_data = null;
 
+const LOGIN = {
+    LOGGED_OUT: 0,
+    CLIENT: 1,
+    ADMIN: 2,
+
+}
 var login_status = 0;
 
 const CURR_VERSION = {
@@ -23,6 +29,21 @@ const ALL_EDITORS = {
     AMENITIES: 1,
     LEASING: 2,
 };
+
+const ERROR_CODE = {
+    F1: {
+        title: "Wrong file format",
+        description: "Input file format was not matching",
+        message: "It seems like wrong file was selected. Please try again with the right zip file.",
+    },
+    F2: {
+        title: "Wrong file version",
+        description: "Input file version is outdated",
+        message: "It seems like file is outdated. Please contact us with this zip file to receive new file.",
+    },
+
+
+}
 
 SLIDESHOW_FIELD_NAME = {};
 
@@ -132,14 +153,16 @@ function get_HTML_column(i) {
         result += `
             <div class="col">
                 <div id="${i}" class="col-function-row col" style="margin-bottom: 5px;">
-                    <button class="btn btn-primary" type="button" style="flex-grow: 0.2; display:none;" onclick="swap_col(${i}, ${i-1})">&#9665;</button>
+                    <button class="btn btn-primary" type="button" style="flex-grow: 0.2; display: none;" onclick="swap_col(${i}, ${i-1})">&#9665;</button>
                     <div style="flex-grow: 0.5;"></div>
                     <div style="flex-basis: 15px;"></div>
                     <button class="btn btn-warning" type="button" style="" onclick="sort_col(${i})">Sort</button>
                     <div style="flex-basis: 15px;"></div>
-                    <button class="btn btn-primary" type="button" style="flex-grow: 0.2" onclick="swap_col(${i}, ${i+1})">&#9655;</button>
+                    <button class="btn btn-primary" type="button" style="flex-grow: 0.2; display: none;" onclick="swap_col(${i}, ${i+1})">&#9655;</button>
+                    <button class="btn btn-primary" type="button" style="flex-grow: 0.2" onclick="swap_col(${i}, ${i+1})">&#8644;</button>
                 </div>
         `;
+        // &#10231;
     } else {
         result += `
             <div class="col">
@@ -345,12 +368,22 @@ function render_editor_slideshow(menu_name) {
 function get_render_editor_slideshow_section(menu_name, section_i) {
     result = ``;
     result += `
-        <div style="background-color: Grey">
-            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}', ${section_i})"> Add new image </button>
-            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_slideshow_QR('${menu_name}', ${section_i})"> Add new QR code </button>
-            <button class="btn btn-danger" style="flex-grow: 0.7; margin-right: 30px;" onclick="delete_slideshow_section('${menu_name}', ${section_i})"> Delete this section </button>
-            <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="swap_section('${menu_name}', ${section_i}, ${section_i+1})"> &#9661 </button>
+        <div style="background-color: Grey; padding: 10px;">
             <h3>Section ${section_i+1}</h3>
+            <div class="flex-row" style="margin-top:10px;">
+                <button class="btn btn-primary" style="width: 170px; margin-right: 30px;" onclick="new_slideshow_entry('${menu_name}', ${section_i})"> Add new image </button>
+                <button class="btn btn-primary" style="width: 170px; margin-right: 30px;" onclick="new_slideshow_QR('${menu_name}', ${section_i})"> Add new QR code </button>
+                <button class="btn btn-danger" style="width: 170px; margin-right: 30px;" onclick="delete_slideshow_section('${menu_name}', ${section_i})"> Delete this section </button>
+    `;
+
+    if (section_i < directory_data[menu_name].length - 1) {
+        result += `
+            <button class="btn btn-primary" style="width: 170px; margin-right: 30px;" onclick="swap_section('${menu_name}', ${section_i}, ${section_i+1})"> &#8645; </button>
+        `;
+    }
+
+    result += `
+            </div>
         </div>
 
         <div>
@@ -440,7 +473,6 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
         </div>
 
         <div class="input-row">
-            <button class="btn btn-primary" style="width: 50px; margin-right: 50px;" onclick="swap_media('${menu_name}', ${section_i}, ${i}, ${i+1})"> &#9661 </button>
             <button class="btn btn-warning" style="width: 80px; margin-right: 10px;" onclick="" data-toggle="modal" data-target="#row_info_${section_i}_${i}"> Edit </button>
             <button class="btn btn-danger" style="width: 80px; margin-right: 50px;" onclick="delete_slideshow_entry('${menu_name}', ${section_i}, ${i})"> Delete </button>
             
@@ -448,8 +480,15 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
                 <h3>${files[i].title}</h3>
             </div>
         </div>
-
     `;
+    if (i < files.length - 1) {
+        result += `
+            <div>
+                <button class="btn btn-primary" style="width: 170px; margin-left: 10px;" onclick="swap_media('${menu_name}', ${section_i}, ${i}, ${i+1})"> &#8645; </button>
+            </div>
+        `;
+    }
+
     return result;
 }
 
@@ -536,6 +575,16 @@ function close_modal() {
     render_editor();
 }
 
+
+function render_curr_editor_div() {
+    if (curr_editor == ALL_EDITORS.DIRECTORY) {
+        document.getElementById("curr_editor_div").innerText = "Directory";
+    } else {
+        var s = SLIDESHOW_FIELD_NAME[curr_editor];
+        document.getElementById("curr_editor_div").innerText = s.charAt(0).toUpperCase() + s.slice(1);
+    }
+}
+
 function render_editor() {
     if (curr_editor == ALL_EDITORS.DIRECTORY) {
         render_editor_directory();
@@ -547,7 +596,9 @@ function render_editor() {
     else {
 
     }
+    render_curr_editor_div();
     render_others();
+    check_login_mode();
 }
 
 function change_editor(x) {
@@ -742,19 +793,28 @@ function import_image_files() {
 }
 
 function import_directory_data(curr_zip) {
-    curr_zip.file("directory").async("string").then(function(result) {
-        directory_data = JSON.parse(result);
-        console.log(directory_data)
-        
-        import_image_files();
+    try {
+        curr_zip.file("directory").async("string").then(function(result) {
+            directory_data = JSON.parse(result);
+            console.log(directory_data)
+            
+            import_image_files();
+    
+            update_version();
+    
+            render_editor();
+    
+            // // test
+            // curr_zip = JSON.parse(JSON.stringify(curr_zip));
+        });
+    } catch {
+        error_alert(ERROR_CODE.F1);
+    }
+}
 
-        update_version();
-
-        render_editor();
-
-        // // test
-        // curr_zip = JSON.parse(JSON.stringify(curr_zip));
-    });
+function error_alert(err, is_reload=true) {
+    console.log(err);
+    if(!alert(err.message) && is_reload){window.location.reload();}
 }
 
 function export_directory_data_string() {
@@ -860,34 +920,46 @@ function hash(s) {
     return sha256(s);
 }
 
+function check_login_mode() {
+    var admin_div_arr = document.getElementsByClassName("admin-div");
+    if (login_status == LOGIN.CLIENT) {
+        for (var i = 0; i < admin_div_arr.length; i++) {
+            admin_div_arr[i].style.display = "none";
+        }
+    } else if (login_status == LOGIN.ADMIN) {
+        var admin_div_arr = document.getElementsByClassName("admin-div");
+        for (var i = 0; i < admin_div_arr.length; i++) {
+            admin_div_arr[i].style.display = "block";
+        }
+    }
+}
+
 function login() {
     var passcode = document.getElementById("passcode").value;
 
     hash(passcode).then(function (s) {
-        
-        if (s == directory_data.pass_hash.client) {
-            login_status = 1;
-            
-            var admin_div_arr = document.getElementsByClassName("admin-div");
-            for (var i = 0; i < admin_div_arr.length; i++) {
-                admin_div_arr[i].style.display = "none";
-            }
+        try {
+            if (s == directory_data.pass_hash.client) {
+                login_status = LOGIN.CLIENT;
+                
+                check_login_mode();
+    
+                document.getElementById("login-div").style.display = "none";
+            } else if (s == directory_data.pass_hash.admin) {
+                login_status = LOGIN.ADMIN;
+                
+                check_login_mode();
 
-            document.getElementById("login-div").style.display = "none";
-        } else if (s == directory_data.pass_hash.admin) {
-            login_status = 2;
-            
-            var admin_div_arr = document.getElementsByClassName("admin-div");
-            for (var i = 0; i < admin_div_arr.length; i++) {
-                admin_div_arr[i].style.display = "block";
+                document.getElementById("login-div").style.display = "none";
+            } else {
+                alert("Wrong passcode was entered. Please try again");
+                document.getElementById("passcode").value = "";
             }
-
-            document.getElementById("login-div").style.display = "none";
-        } else {
-            alert("Wrong passcode was entered. Please try again");
-            document.getElementById("passcode").value = "";
+            console.log(s);
+        } catch {
+            error_alert(ERROR_CODE.F2);
         }
-        console.log(s);
+
     });
 }
 

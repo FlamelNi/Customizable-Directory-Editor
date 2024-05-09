@@ -33,14 +33,32 @@
                 <input class="form-control" type="file" id="file-selector">
             </div>
 
-            <div class="input-group mb-2" style="width: 400px">
+            <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+            <form id="login_form" action="" target="dummyframe">
+                <div class="form-group" style="width: 400px">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text" style="min-width: 107px; max-width: 107px;">Passcode</div>
+                        <input type="password" class="form-control" id="passcode" placeholder="passcode">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <script>
+                document.getElementById("login_form").addEventListener("submit", function () {
+                    event.preventDefault();
+                    login();
+                });
+            </script>
+
+            <!-- <div class="input-group mb-2" style="width: 400px">
                 <div class="input-group-prepend">
                     <div class="input-group-text" style="width: 108px">Passcode</div>
                 </div>
                 <input type="text" class="form-control" id="passcode" placeholder="passcode">
             </div>
 
-            <button class="btn btn-primary" style="width: 120px;" onclick="login()"> Login </button>
+            <button class="btn btn-primary" style="width: 120px;" onclick="login()"> Login </button> -->
 
         </div>
     </div>
@@ -52,13 +70,13 @@
 <link rel="stylesheet" href="../style/index.css">
 <div class="top-menu-bar">
     <div style="flex-basis: 200px;">
-        <h2 class="display-4" style="text-align: center; font-size: 30px;">Directory editor</h1>
+        <h2 class="display-4" style="text-align: center; font-size: 30px;">Web editor</h2>
     </div>
-    <div style="flex-basis: 100px;">
-        <button class="btn btn-light" style="width:100px" onclick="refresh_page()"> Refresh </button>
+    <div style="flex-basis: 120px;">
+        <button class="btn btn-light" style="width:120px" onclick="download_directory()"> Download </button>
     </div>
-    <div style="flex-basis: 100px;">
-        <button class="btn btn-light" style="width:100px" onclick="download_directory()"> Download </button>
+    <div style="flex-basis: 120px;">
+        <button class="btn btn-light" style="width:120px" onclick="refresh_page()"> Exit </button>
     </div>
     <!-- <div style="flex-basis: 300px;">
         <input class="form-control" type="file" id="file-selector">
@@ -68,11 +86,22 @@
 <div id="setting-modal-div">
 </div>
 
-<div class="editor-select">
-    <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.DIRECTORY)"> Directory </button>
-    <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.LEASING)"> Building Info </button>
-    <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.AMENITIES)"> Amenities </button>
-    <button class="btn btn-secondary admin-div" id="setting_btn" style="width: 150px;" onclick="" data-toggle="modal" data-target="#setting"> Other settings </button>
+<div class="editor-select" style="padding: 10px;">
+    <div style="width: 200px;">
+        <h2 class="display-4" id="curr_editor_div" style="text-align: center; font-size: 30px;">Directory</h2>
+    </div>
+    <div>
+        <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.DIRECTORY)"> Directory </button>
+    </div>
+    <div>
+        <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.LEASING)"> Building Info </button>
+    </div>
+    <div>
+        <button class="btn btn-secondary" style="width: 120px;" onclick="change_editor(ALL_EDITORS.AMENITIES)"> Amenities </button>
+    </div>
+    <div>
+        <button class="btn btn-secondary admin-div" id="setting_btn" style="width: 150px;" onclick="" data-toggle="modal" data-target="#setting"> Other settings </button>
+    </div>
 </div>
 
 <div id="editor_div">
@@ -282,7 +311,8 @@
         if (fileList.length > 0 && fileList[0].type == "application/x-zip-compressed") {
             uploadFile(fileList[0]);
             console.log('good');
-
+        } else {
+            error_alert(ERROR_CODE.F1);
         }
     }
 
