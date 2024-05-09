@@ -76,6 +76,9 @@
   /* switched from default (flex-start, see below) */
   justify-content: space-between;
 }
+.date-container h1{
+  font-size: 2vw;
+}
 
 .sky-blue {
   background-color: #4285F4;
@@ -87,6 +90,7 @@
 
 .directory-btn-font {
   font-family: serif;
+  font-size: 3vw;
 }
 
 .main-font {
@@ -121,6 +125,9 @@
 
   flex-grow: 0;
   flex-shrink: 0;
+}
+.directory-div h1 {
+  font-size:calc(1vh + 1.5vw);
 }
 
 .directory-btn-div {

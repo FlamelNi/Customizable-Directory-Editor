@@ -22,12 +22,12 @@
         
         <div class="menu-btn-div">
             
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.directory)"><h1 class="display-4 directory-btn-font">Directory</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.news)"><h1 class="display-4 directory-btn-font">News</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.traffic)"><h1 class="display-4 directory-btn-font">Local Traffic</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.weather)"><h1 class="display-4 directory-btn-font">Weather</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.amenities)"><h1 class="display-4 directory-btn-font">Amenities</h1></button>
-            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.leasing)"><h1 class="display-4 directory-btn-font">Building Info</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.directory)"><h1 class="directory-btn-font">Directory</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.news)"><h1 class="directory-btn-font">News</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.traffic)"><h1 class="directory-btn-font">Local Traffic</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.weather)"><h1 class="directory-btn-font">Weather</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.amenities)"><h1 class="directory-btn-font">Amenities</h1></button>
+            <button class="btn btn-dark btn-block menu-btn" type="button" onclick="change_curr_status(dir_status.leasing)"><h1 class="directory-btn-font">Building Info</h1></button>
         </div>
     </div>
 
@@ -36,8 +36,8 @@
 
     <div class="main-window" style="max-width: 74%;">
         <div class="main-top" style="height: 15%;">
-            <div style="margin: 2%;">
-                <h1 class="display-2 directory-btn-font" id="title">Directory</h1>
+            <div class="center" style="margin-left: 2%;">
+                <h1 class="directory-btn-font" id="title" style="font-size: 4vw;">Directory</h1>
             </div>
             
             <!-- <div style="width: 60%"> -->
@@ -52,12 +52,9 @@
                 </div>
 
                 <div class='time' style="margin-top: 2%;"></div>
-                <div style="margin-top: 2%; margin-right: 2%;">
-                      <!-- <div class='date-container'>
-                    </div> -->
+                <div class="date-container" style="margin-top: 2%; margin-right: 2%;">
                     <div class='date'></div>
                     <div class='day'></div>
-                    <!-- <div class='date-day'></div> -->
                 </div>
             </div>
 

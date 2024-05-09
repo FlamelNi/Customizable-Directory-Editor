@@ -11,8 +11,8 @@ const LOGIN = {
 var login_status = 0;
 
 const CURR_VERSION = {
-    "id": "1.1.3",
-    "date": "05/02/2024",
+    "id": "1.1.4",
+    "date": "05/09/2024",
 };
 
 
@@ -888,8 +888,6 @@ function update_version() {
                 directory_data.amenities = directory_data.ammenities;
                 delete directory_data.ammenities;
             }
-        case "1.1.3":
-            break;
         case "1.1.4":
             break;
         case "1.1.5":
