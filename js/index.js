@@ -351,12 +351,41 @@ function render_editor_slideshow(menu_name) {
     while (i < directory_data[menu_name].length) {
         j = 0;
         while (j < directory_data[menu_name][i].files.length) {
-            imageSelector = document.getElementById(`image-selector_${i}_${j}`);
+            // document.getElementById(`image-selector_${section_i}_${i}`).click();
+            var image_upload_btn = document.getElementById(`image-selector-btn_${i}_${j}`);
+            var imageSelector = document.getElementById(`image-selector_${i}_${j}`);
+
+            if (image_upload_btn) {
+                image_upload_btn.selector = imageSelector;
+                image_upload_btn.onclick = function () {
+                    this.selector.click();
+                }
+
+                var files = directory_data[menu_name][i].files;
+                
+                var curr_name_file = "File not selected";
+                if (files[j].data != null) {
+                    curr_name_file = files[j].name;
+                }
+                document.getElementById(`name_${i}_${j}`).innerHTML = `<h4>${curr_name_file}</h4>`;
+
+            }
+
             if (imageSelector) {
-                imageSelector.addEventListener('change', (event) => {
+                imageSelector.upload_file_name = document.getElementById(`name_${i}_${j}`);
+                // imageSelector.addEventListener('change', (event) => {
+  
+                imageSelector.addEventListener('change', function (event) {
+
                     const fileList = event.target.files;
                     temp_image = fileList[0];
+
+                    if (temp_image) {
+                        event.target.upload_file_name.innerHTML = `<h4>${temp_image.name}</h4>`;
+                        // document.getElementById(`name_${i_temp}_${j_temp}`).innerHTML = `<h4>${curr_name_file}</h4>`;
+                    }
                 });
+
             }
             j++;
         }
@@ -423,6 +452,24 @@ function get_render_editor_slideshow_section(menu_name, section_i) {
     return result;
 }
 
+// function get_upload_file_name_HTML(curr_name_file, file_i, section_i, i) {
+//     if (file_i.data != null) {
+//         curr_name_file = file_i.name;
+//     }
+//     var result = `
+//         <div class="flex-row">
+//             <input class="form-control" type="file" id="image-selector_${section_i}_${i}" style="display:none;" placeholder="test">
+//             <button class="btn btn-warning" id="image-selector-btn_${section_i}_${i}" type="button" style="margin-right: 10px;" onclick="">
+//                 Upload
+//             </button>
+//             <div id="name_${section_i}_${i}">
+//                 <h4>${curr_name_file}</h4>
+//             </div>
+//         </div>
+//     `;
+//     return result;
+// }
+
 function get_slideshow_modal_HTML(menu_name, section_i, i) {
     var files = directory_data[menu_name][section_i].files;
     result = `
@@ -444,17 +491,36 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
     
     if (files[i].type == SLIDESHOW_TYPE.IMAGE) {
         // <input id="description_${i}" class="form-control col" type="text" placeholder="description" value="${directory_data[menu_name][i].description}">
-        if (files[i].data == null) {
-            result += `
-                <input class="form-control" type="file" id="image-selector_${section_i}_${i}" placeholder="test">
-            `;
-        } else {
-            result += `
-                <div id="name_${section_i}_${i}">
-                    <h4>${files[i].name}</h4>
-                </div>
-            `;
+
+
+        var curr_name_file = "File not selected";
+        // result += get_upload_file_name_HTML(curr_name_file, file[i], section_i, i);
+        if (files[i].data != null) {
+            curr_name_file = files[i].name;
         }
+        result += `
+            <div class="flex-row">
+                <input class="form-control" type="file" id="image-selector_${section_i}_${i}" style="display:none;" placeholder="test">
+                <button class="btn btn-warning" id="image-selector-btn_${section_i}_${i}" type="button" style="margin-right: 10px;" onclick="">
+                    Upload
+                </button>
+                <div id="name_${section_i}_${i}">
+                    <h4>${curr_name_file}</h4>
+                </div>
+            </div>
+        `;
+
+        // if (files[i].data == null) {
+        //     result += `
+        //         <input class="form-control" type="file" id="image-selector_${section_i}_${i}" placeholder="test">
+        //     `;
+        // } else {
+        //     result += `
+        //         <div id="name_${section_i}_${i}">
+        //             <h4>${files[i].name}</h4>
+        //         </div>
+        //     `;
+        // }
     } else if (files[i].type == SLIDESHOW_TYPE.QR_CODE) {
         result += `
             <input id="qr_code_${section_i}_${i}" class="form-control col" type="text" placeholder="QR code url" value="${files[i].url}">
