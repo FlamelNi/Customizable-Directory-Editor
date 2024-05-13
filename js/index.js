@@ -477,7 +477,7 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit description</h5>
+                        <h5 class="modal-title"></h5>
                         <button type="button" class="close" onclick="close_modal()" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -607,12 +607,15 @@ function render_others() {
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit description</h5>
+                        <h5 class="modal-title">Admin Setting</h5>
                         <button type="button" class="close" onclick="close_modal()" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
+                        <label>Version: ${CURR_VERSION.id}</lable>
+                        <label>Last update: ${CURR_VERSION.date}</lable>
+                        
                         <label>Site Name</lable>
                         <input id="greeting_1" class="form-control col" type="text" placeholder="" value="${directory_data.setting.greeting_1}">
                         <input id="greeting_2" class="form-control col" type="text" placeholder="" value="${directory_data.setting.greeting_2}">
