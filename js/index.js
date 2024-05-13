@@ -483,8 +483,12 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
                     <div class="modal-body">
     `;
     result += `
+                        <label>Title</label>
                         <input id="title_${section_i}_${i}" class="form-control col" type="text" placeholder="title" value="${files[i].title}">
+                        <br>
+                        <label>Description</label>
                         <textarea id="description_${section_i}_${i}" class="form-control col" placeholder="description">${files[i].description}</textarea>
+                        <br>
     `;
     
     if (files[i].type == SLIDESHOW_TYPE.IMAGE) {
@@ -497,6 +501,7 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
             curr_name_file = files[i].name;
         }
         result += `
+            <label>Image</label>
             <div class="flex-row">
                 <input class="form-control" type="file" id="image-selector_${section_i}_${i}" style="display:none;" placeholder="test">
                 <button class="btn btn-warning" id="image-selector-btn_${section_i}_${i}" type="button" style="margin-right: 10px;" onclick="">
@@ -521,6 +526,7 @@ function get_slideshow_modal_HTML(menu_name, section_i, i) {
         // }
     } else if (files[i].type == SLIDESHOW_TYPE.QR_CODE) {
         result += `
+            <label>URL</label>
             <input id="qr_code_${section_i}_${i}" class="form-control col" type="text" placeholder="QR code url" value="${files[i].url}">
         `;
     }
