@@ -257,8 +257,6 @@ function render_editor_directory() {
             <button class="btn btn-primary" style="flex-grow: 0.7; margin-right: 30px;" onclick="new_row_at(0)"> Add new row </button>
             <button class="btn btn-primary" style="flex-grow: 0.7" onclick="add_col()"> Add new column </button>
             <button class="btn btn-danger" style="flex-grow: 0.7;" onclick="delete_col()"> Delete last column </button>
-            <button class="btn btn-secondary" style="flex-grow: 0.7; margin-left: 300px;" onclick="testFunction()"> Test </button>
-            <button class="btn btn-secondary" style="flex-grow: 0.7;" onclick="set_test_data()"> Test data </button>
         </div>
 
         <div id="render_div">
